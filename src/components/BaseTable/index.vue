@@ -1,17 +1,19 @@
 <template>
   <div class="audio-page">
     <vxe-grid
-      class="p-0"
+      ref="xTable"
+      class="p-0 sortable-row"
       :data="list"
       v-bind="[mergeOptions, $listeners]"
       :loading="loading"
       :columns="columns"
     >
-      <template
-        v-for="item in slotNames"
-        #[item]="slotData"
-      >
-        <CRender :key="item" :render-fn="$scopedSlots[item]" :slot-data="slotData" />
+      <template v-for="item in slotNames" #[item]="slotData">
+        <CRender
+          :key="item"
+          :render-fn="$scopedSlots[item]"
+          :slot-data="slotData"
+        />
       </template>
       <template v-if="isPager" #pager>
         <pagination
@@ -38,9 +40,14 @@
  * pager    分页模板
  */
 import Pagination from '@/components/Pagination'
+import Sortable from 'sortablejs'
 import CRender from './render.vue'
 import { clone, merge } from 'xe-utils'
-import { deleteCourseByIdApi, getCourseListApi, updateCourseStatusApi } from '@/api/course'
+import {
+  deleteCourseByIdApi,
+  getCourseListApi,
+  updateCourseStatusApi
+} from '@/api/course'
 export default {
   name: 'BaseTable',
   components: { Pagination, CRender },
@@ -66,6 +73,14 @@ export default {
     isPager: {
       type: Boolean,
       default: true
+    },
+    drag: {
+      type: Boolean,
+      default: false
+    },
+    dragHandleClass: {
+      type: String,
+      default: ''
     },
     total: {
       type: Number,
@@ -122,8 +137,7 @@ export default {
         //   types: ['xlsx'],
         //   modes: ['current', 'selected', 'all']
         // },
-        columns: [
-        ]
+        columns: []
       }
     }
   },
@@ -136,6 +150,9 @@ export default {
     }
   },
   mounted() {
+    if (this.drag) {
+      this.rowDrop()
+    }
   },
   methods: {
     handleSizeChange(val) {
@@ -149,9 +166,35 @@ export default {
     },
     importMethod(e) {
       console.log(e)
+    },
+    // 初始化拖拽
+    rowDrop() {
+      this.$nextTick(() => {
+        const xTable = this.$refs.xTable
+        this.sortable1 = Sortable.create(
+          xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'),
+          {
+            handle: '.' + this.dragHandleClass,
+            onEnd: ({ newIndex, oldIndex }) => {
+              const list = clone(this.list, true)
+              const currRow = list.splice(oldIndex, 1)[0]
+              list.splice(newIndex, 0, currRow)
+              this.$emit('dragEnd', list)
+            }
+          }
+        )
+      })
     }
   }
 }
 </script>
 <style scoped lang="scss">
+::v-deep .sortable-row .drag-btn {
+  cursor: move;
+  font-size: 12px;
+}
+::v-deep .sortable-row .vxe-body--row.sortable-ghost,
+::v-deep .sortable-row .vxe-body--row.sortable-chosen {
+  background-color: #dfecfb;
+}
 </style>

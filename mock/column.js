@@ -1,5 +1,5 @@
 const Mock = require('mockjs')
-const { uniqueId, range } = require('xe-utils')
+const { uniqueId, range, shuffle, random } = require('xe-utils')
 
 const List = []
 const count = 100
@@ -191,14 +191,14 @@ function getColumnsCourseList() {
   for (let i = 0; i < 10; i++) {
     const item = {}
     item.course_id = uniqueId()
-    item.title = Mock.ctitle()
+    item.title = '标题' + i
     item.cover = 'http://dummyimage.com/200x100'
-    item.price = range(1, 9) + ''
-    item.t_price = range(10, 21) + ''
-    item.status = range(0, 1)
+    item.price = random(1, 9) + ''
+    item.t_price = random(10, 21) + ''
+    item.status = random(0, 1)
     item.type = 'media'
     item.id = uniqueId()
-    item.sub_count = 0
+    item.sub_count = random(1, 1000)
     item.orderby = 1
     list.push(item)
   }
