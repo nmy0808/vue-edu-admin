@@ -150,7 +150,7 @@ export default {
         const cloneOptions = this.temp = clone(updateObj, true)
         this.coverFileList = [{ name: cloneOptions.cover, url: cloneOptions.cover }]
         setTimeout(() => {
-          this.$refs.tinymce1.setContent(updateObj.content)
+          this.$refs.tinymce1.setContent(updateObj.try)
         }, 100)
       }
       this.dialogVisible = true

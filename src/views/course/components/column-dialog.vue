@@ -20,7 +20,7 @@
         label-width="120px"
         style="width: 400px; margin-left: 50px"
       >
-        <el-form-item label="标题" prop="title">
+        <el-form-item label="专题标题" prop="title">
           <el-input v-model="temp.title" />
         </el-form-item>
         <el-form-item label="封面">
@@ -37,21 +37,11 @@
             <i class="el-icon-plus" />
           </el-upload>
         </el-form-item>
-        <el-form-item label="课程介绍" prop="try">
+        <el-form-item label="专栏介绍" prop="try">
           <tinymce ref="tinymce1" v-model="temp.try" :height="300" />
         </el-form-item>
-        <el-form-item label="视频文件" prop="content">
-          <el-upload
-            accept=".mp4,.avi,.wmv,.mov,.flv,.rmvb,.3gp,.m4v,.mkv"
-            :multiple="false"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-change="handleContentChange"
-            :file-list="contentFileList"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">
-              支持mp4，avi，wmv，mov，flv，rmvb，3gp，m4v，mkv格式；文件最大不超过5G。 当前店铺版本最大支持720高清转码</div>
-          </el-upload>
+        <el-form-item label="专栏内容" prop="content">
+          <tinymce ref="tinymce2" v-model="temp.content" :height="300" />
         </el-form-item>
         <el-form-item label="课程价格">
           <el-input-number v-model="temp.price" :min="0" />
@@ -65,6 +55,12 @@
             <el-radio :label="0">下架</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="更新状态">
+          <el-radio-group v-model="temp.isend">
+            <el-radio :label="0">连载中</el-radio>
+            <el-radio :label="1">已完结</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -74,7 +70,7 @@ import { clone, omit, pick } from 'xe-utils'
 import Tinymce from '@/components/Tinymce'
 
 export default {
-  name: 'AudioDialog',
+  name: 'ColumnDialog',
   components: { Tinymce },
   data() {
     return {
@@ -87,8 +83,8 @@ export default {
         content: '',
         price: 0,
         t_price: 0,
-        type: 'video',
-        status: 1
+        status: 1,
+        isend: 1
       },
       coverFileList: [], // 封面_文件
       contentFileList: [], // 课程内容_文件
@@ -96,9 +92,9 @@ export default {
         title: [
           { required: true, message: '标题内容不能为空', trigger: 'blur' }
         ],
-        try: [{ required: true, message: '课程介绍不能为空', trigger: 'blur' }],
+        try: [{ required: true, message: '专栏介绍不能为空', trigger: 'blur' }],
         content: [
-          { required: true, message: '视频文件不能为空', trigger: 'blur' }
+          { required: true, message: '专栏内容不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -106,7 +102,7 @@ export default {
   computed: {
     // 整理请求参数
     fetchParams() {
-      const keys = ['id', 'title', 'cover', 'try', 'content', 'price', 't_price', 'type', 'status']
+      const keys = ['id', 'title', 'cover', 'try', 'isend', 'content', 'price', 't_price', 'status']
       const params = pick(this.temp, keys)
       if (params.id === '' || params.id === null || params.id === undefined) {
         delete params['id']
@@ -138,19 +134,13 @@ export default {
     handleRemoveCover(response) {
       this.coverFileList = []
     },
-    //  mp3_文件处理
-    handleUploadContentChange(response) {
-      this.temp.content = response.data
-    },
-    handleContentChange() {
-      console.log('change')
-    },
     show(updateObj) {
       if (updateObj) {
         const cloneOptions = this.temp = clone(updateObj, true)
         this.coverFileList = [{ name: cloneOptions.cover, url: cloneOptions.cover }]
         setTimeout(() => {
           this.$refs.tinymce1.setContent(updateObj.try)
+          this.$refs.tinymce2.setContent(updateObj.content)
         }, 100)
       }
       this.dialogVisible = true
@@ -162,6 +152,7 @@ export default {
       this.$refs.editFormCom.resetFields()
       this.$refs.editFormCom.clearValidate()
       this.$refs.tinymce1.setContent('')
+      this.$refs.tinymce2.setContent('')
       this.coverFileList = []
       this.contentFileList = []
       Object.assign(this.temp, this.$options.data().temp)
@@ -169,3 +160,7 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.dialog {
+}
+</style>
