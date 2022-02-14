@@ -40,9 +40,9 @@
         <el-form-item label="课程介绍" prop="try">
           <tinymce ref="tinymce1" v-model="temp.try" :height="300" />
         </el-form-item>
-        <el-form-item label="音频文件" prop="content">
+        <el-form-item label="视频文件" prop="content">
           <el-upload
-            accept=".mp3,.m4a"
+            accept=".mp4,.avi,.wmv,.mov,.flv,.rmvb,.3gp,.m4v,.mkv"
             :multiple="false"
             action="https://jsonplaceholder.typicode.com/posts/"
             :on-change="handleContentChange"
@@ -50,7 +50,7 @@
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">
-              格式支持mp3、m4a，为保证音频加载与播放的流畅性，建议上传大小不超过500M</div>
+              支持mp4，avi，wmv，mov，flv，rmvb，3gp，m4v，mkv格式；文件最大不超过5G。 当前店铺版本最大支持720高清转码</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="课程价格">
@@ -87,7 +87,7 @@ export default {
         content: '',
         price: 0,
         t_price: 0,
-        type: 'audio',
+        type: 'video',
         status: 1
       },
       coverFileList: [], // 封面_文件
@@ -98,7 +98,7 @@ export default {
         ],
         try: [{ required: true, message: '课程介绍不能为空', trigger: 'blur' }],
         content: [
-          { required: true, message: '音配文件不能为空', trigger: 'blur' }
+          { required: true, message: '视频文件不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -169,7 +169,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-.dialog {
-}
-</style>
