@@ -62,7 +62,12 @@
       @dragEnd="handleDragEnd"
     >
       <template #form>
-        <el-button class="mb-4" icon="el-icon-edit" type="primary">新增目录</el-button>
+        <el-button
+          class="mb-4"
+          icon="el-icon-edit"
+          type="primary"
+          @click="handleOpenAddDialog"
+        >新增目录</el-button>
       </template>
       <template #col_content="{row}">
         <div class="d-flex">
@@ -100,10 +105,16 @@
         </div>
       </template>
     </base-table>
+    <!-- 新建目录 -->
+    <course-choose
+      ref="courseChooseCom"
+      @confirm="handleConfirmChoose"
+    />
   </div>
 </template>
 <script>
 import {
+  addColumnCourseApi,
   deleteColumnCourseApi,
   getColumnCourseListApi,
   getColumnDetailApi,
@@ -112,10 +123,11 @@ import {
   updateColumnStatusApi
 } from '@/api/column'
 import BaseTable from '@/components/BaseTable'
-
+import CourseChoose from '@/components/CourseChoose'
+import axios from 'axios'
 export default {
   name: '',
-  components: { BaseTable },
+  components: { BaseTable, CourseChoose },
   data() {
     return {
       columns: [
@@ -258,6 +270,28 @@ export default {
         message: '删除成功',
         type: 'success',
         duration: 600
+      })
+    },
+    // 新建目录, 打开窗口选择
+    handleOpenAddDialog() {
+      this.$refs['courseChooseCom'].show()
+    },
+    // 打开窗口后, 触发的确认事件
+    async handleConfirmChoose(rows) {
+      const params = []
+      rows.map(it => {
+        const param = {}
+        param.column_id = this.column_id
+        param.course_id = it.id
+        params.push(param)
+      })
+      const fetches = params.map(it => addColumnCourseApi(it))
+      axios.all(fetches).then(res => {
+        this.list = this.list.concat(rows)
+      })
+      this.$message({
+        message: '添加成功',
+        type: 'success'
       })
     }
   }

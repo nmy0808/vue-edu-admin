@@ -37,29 +37,29 @@ module.exports = [
     response: (config) => {
       // { page, type, status, title }
       // const {  type, title, page = 1, limit = 20, sort } = config.query
-      const { page = 1, type, status = 1, title, limit } = config.query
-      const mockList = List.filter((item) => {
-        // if (type && item.type !== type) return false
-        if (title && item.title.indexOf(title) < 0) return false
-        if (status !== item.status) {
-          return false
-        }
-        return true
-      })
+      // const { page = 1, type, status = 1, title, limit } = config.query
+      // const mockList = List.filter((item) => {
+      //   // if (type && item.type !== type) return false
+      //   // if (title && item.title.indexOf(title) < 0) return false
+      //   // if (status !== item.status) {
+      //   //   return false
+      //   // }
+      //   return true
+      // })
 
       // if (sort === '-id') {
       //   mockList = mockList.reverse()
       // }
 
-      const pageList = mockList.filter(
-        (item, index) => index < limit * page && index >= limit * (page - 1)
-      )
+      // const pageList = mockList.filter(
+      //   (item, index) => index < limit * page && index >= limit * (page - 1)
+      // )
 
       return {
         code: 20000,
         data: {
-          total: mockList.length,
-          items: pageList
+          total: List.length,
+          items: List.slice(0, 10)
         }
       }
     }

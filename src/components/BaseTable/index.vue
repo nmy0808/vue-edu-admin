@@ -7,6 +7,7 @@
       v-bind="[mergeOptions, $listeners]"
       :loading="loading"
       :columns="columns"
+      @checkbox-change="handleCheckboxChange"
     >
       <template v-for="item in slotNames" #[item]="slotData">
         <CRender
@@ -137,6 +138,11 @@ export default {
         //   types: ['xlsx'],
         //   modes: ['current', 'selected', 'all']
         // },
+        checkboxConfig: {
+          showHeader: true,
+          trigger: 'default',
+          highlight: true
+        },
         columns: []
       }
     }
@@ -155,6 +161,14 @@ export default {
     }
   },
   methods: {
+    // 用于 type=checkbox，设置所有行的选中状态
+    setAllCheckboxRow() {
+      this.$refs.xTable.setAllCheckboxRow()
+    },
+    // 当手动勾选并且值发生改变时触发的事件
+    handleCheckboxChange(...arg) {
+      this.$emit('checkbox-change', ...arg)
+    },
     handleSizeChange(val) {
       this.$emit('update:limit', val)
     },
