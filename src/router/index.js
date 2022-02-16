@@ -184,6 +184,23 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: { name: 'User' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'user',
+        name: 'User',
+        meta: {
+          icon: 'el-icon-user-solid',
+          title: '用户',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/user')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
