@@ -171,6 +171,16 @@ export const asyncRoutes = [
         meta: {
           title: '音频'
         }
+      },
+      {
+        path: 'column_detail',
+        hidden: true,
+        component: () => import('@/views/course/column_detail.vue'),
+        name: 'ColumnDetail',
+        meta: {
+          title: '专栏详情',
+          activeMenu: '/course/column'
+        }
       }
     ]
   },
