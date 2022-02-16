@@ -15,10 +15,10 @@ for (let i = 0; i < count; i++) {
       id: '@increment()',
       title: '@ctitle(5)',
       cover: '@image("200x100")',
-      try: '试看内容',
-      content: '图文内容',
-      price: '@integer(1, 20)',
-      t_price: '@integer(21, 2000)',
+      try: '@cparagraph(2,3)',
+      content: '@cparagraph(3,5)',
+      price: '@integer(23,40)" + ".00',
+      t_price: '@integer(123,335)" + ".00',
       type: 'media',
       school_id: '@id()',
       'status|1': [0, 1],
@@ -86,23 +86,24 @@ module.exports = [
     url: '/admin/s/column/read',
     type: 'get',
     response: (_) => {
+      const data = Mock.mock({
+        id: '@id',
+        title: '@ctitle()',
+        cover: 'http://dummyimage.com/200x100',
+        try: '@cparagraph(3,5)',
+        content: '@cparagraph(3,5)',
+        price: '@integer(23,35)' + '.00',
+        t_price: '@integer(123,135)' + '.00',
+        school_id: '@integer(1,222)',
+        status: '@integer(0,1)',
+        isend: '@integer(0,1)',
+        sub_count: '@integer(0,100)',
+        created_time: '2021-02-28T15:21:51.000Z',
+        updated_time: '2021-03-21T10:55:05.000Z'
+      })
       return {
         code: 20000,
-        data: {
-          id: 3,
-          title: '第一个专栏3',
-          cover: 'http://dummyimage.com/200x100',
-          try: '简单介绍',
-          content: '图文内容',
-          price: '9.98',
-          t_price: '20.00',
-          school_id: 11,
-          status: 1,
-          isend: 1,
-          sub_count: 0,
-          created_time: '2021-02-28T15:21:51.000Z',
-          updated_time: '2021-03-21T10:55:05.000Z'
-        }
+        data: data
       }
     }
   },
