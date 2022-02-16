@@ -149,13 +149,13 @@ export default {
     // 批量评论处理
     handleBatchSetCommentStatus(val) {
       if (this.checkedList.length > 0) {
-        const fetches = this.checkedList.map(it => {
+        const fetches = this.checkedList.filter(it => it.no_comment !== val).map(it => {
           const params = {}
           params.id = it.userId
-          params.no_comment = it.val
+          params.no_comment = val
           return setSchoolUserCommentApi(params)
         })
-        axios.all(fetches.filter(it => it.no_comment !== val))
+        axios.all(fetches)
           .then(res => {
             this.$message({
               message: val ? '已批量禁止评论' : '已批量开启评论',
@@ -170,13 +170,13 @@ export default {
     // 批量访问处理
     handleBatchSetCommentAccess(val) {
       if (this.checkedList.length > 0) {
-        const fetches = this.checkedList.map(it => {
+        const fetches = this.checkedList.filter(it => it.no_access !== val).map(it => {
           const params = {}
           params.id = it.userId
-          params.no_access = it.val
+          params.no_access = val
           return setSchoolUserAccessApi(params)
         })
-        axios.all(fetches.filter(it => it.no_access !== val))
+        axios.all(fetches)
           .then(res => {
             this.$message({
               message: val ? '已批量禁止访问' : '已批量开启访问',
