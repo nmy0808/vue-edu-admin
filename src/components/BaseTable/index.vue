@@ -3,12 +3,18 @@
     <vxe-grid
       ref="xTable"
       class="p-0 sortable-row"
+      :height="height?height:undefined"
       :data="list"
       v-bind="[mergeOptions, $listeners]"
       :loading="loading"
       :columns="columns"
       @checkbox-change="handleCheckboxChange"
+      @checkbox-all="handleCheckboxChange"
     >
+      <!-- <template type="expand" width="80">
+        <template #content="{ row, rowIndex }">1231322</template>
+      </template> -->
+
       <template v-for="item in slotNames" #[item]="slotData">
         <CRender
           :key="item"
@@ -83,6 +89,10 @@ export default {
       type: String,
       default: ''
     },
+    height: {
+      type: Number,
+      default: 0
+    },
     total: {
       type: Number,
       default: 0
@@ -143,13 +153,16 @@ export default {
           trigger: 'default',
           highlight: true
         },
-        columns: []
+        columns: [
+          // { type: 'expand', slots: { default: 'col_3_expend' }}
+        ]
       }
     }
   },
   computed: {
     mergeOptions() {
-      return merge(clone(this.gridOptions, true), this.options)
+      const result = merge(clone(this.gridOptions, true), this.options)
+      return result
     },
     slotNames() {
       return Object.keys(this.$scopedSlots)
@@ -161,6 +174,10 @@ export default {
     }
   },
   methods: {
+    // 刷新列配置
+    refreshColumn() {
+      this.$refs.xTable.refreshColumn()
+    },
     // 用于 type=checkbox，设置所有行的选中状态
     setAllCheckboxRow() {
       this.$refs.xTable.setAllCheckboxRow()
@@ -168,6 +185,10 @@ export default {
     // 当手动勾选并且值发生改变时触发的事件
     handleCheckboxChange(...arg) {
       this.$emit('checkbox-change', ...arg)
+    },
+    // 用于 type=checkbox，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）
+    getCheckboxRecords() {
+      return this.$refs.xTable.getCheckboxRecords()
     },
     handleSizeChange(val) {
       this.$emit('update:limit', val)

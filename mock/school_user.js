@@ -1,4 +1,5 @@
 const Mock = require('mockjs')
+const { shuffle } = require('xe-utils')
 
 const count = 100
 const { list } = Mock.mock({
@@ -12,7 +13,7 @@ const { list } = Mock.mock({
       total_consume: '@integer(13,435)' + '.00',
       created_time: '@date(yyyy-MM-dd hh:mm:ss)',
       updated_time: '@date(yyyy-MM-dd hh:mm:ss)',
-      userId: 3,
+      userId: '@guid()',
       user: {
         id: '@guid()',
         username: '@title(1)',
@@ -49,7 +50,7 @@ const { list: orderList } = Mock.mock({
       total_price: '@integer(123,135)' + '.00',
       type: 'default',
       pay_method: null,
-      pay_time: null,
+      pay_time: '@date(yyyy-MM-dd hh:mm:ss)',
       title: '[专栏]' + '@ctitle()',
       'goods|2-8': [
         {
@@ -74,52 +75,37 @@ const { list: historyList } = Mock.mock({
   ]
 })
 module.exports = [
-  // 网校用户列表
-  {
-    url: '/admin/s/school_user',
-    type: 'get',
-    response: (config) => {
-      return {
-        msg: 'ok',
-        code: 20000,
-        data: {
-          total: list.length,
-          items: list
-        }
-      }
-    }
-  },
   // 查询网校用户详细信息
   {
-    url: '/admin/s/school_user/read?id=(d*)',
+    url: '/admin/s/school_user/read',
     type: 'get',
     response: ({ query }) => {
       const id = query.id
       return {
         msg: 'ok',
         code: 20000,
-        data: list.find((it) => it.id === id)
+        data: list.filter((it) => it.userId === id)[0]
       }
     }
   },
   // 查看网校用户订阅列表
   {
-    url: '/admin/s/order_item?page=(d*)&user_id=(d*)',
+    url: '/admin/s/order_item',
     type: 'get',
     response: (_) => {
       return {
         msg: 'ok',
         code: 20000,
         data: {
-          total: subList.length,
-          items: subList
+          total: 100,
+          items: shuffle(subList)
         }
       }
     }
   },
   // 查看网校用户订单列表
   {
-    url: '/admin/s/order?page=(d*)',
+    url: '/admin/s/order',
     type: 'get',
     response: (_) => {
       return {
@@ -168,6 +154,21 @@ module.exports = [
         msg: 'ok',
         code: 20000,
         data: true
+      }
+    }
+  },
+  // 网校用户列表
+  {
+    url: '/admin/s/school_user',
+    type: 'get',
+    response: (config) => {
+      return {
+        msg: 'ok',
+        code: 20000,
+        data: {
+          total: 100,
+          items: shuffle(list)
+        }
       }
     }
   }

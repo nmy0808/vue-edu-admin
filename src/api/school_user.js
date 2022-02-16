@@ -29,7 +29,7 @@ export function getSchoolUserSubApi({
   page,
   user_id,
   type = 'column',
-  comment
+  comment = 0
 }) {
   return request({
     url: '/admin/s/order_item',
@@ -70,12 +70,12 @@ export function setSchoolUserAccessApi({ id, no_access }) {
 }
 /**
  * 禁止/开启评论
- * no_access:是否禁止访问：0否，1是
+ * no_comment:是否禁止访问：0否，1是
  */
-export function setSchoolUserCommentApi({ id, no_access }) {
+export function setSchoolUserCommentApi({ id, no_comment }) {
   return request({
     url: '/admin/s/school_user/updatecomment',
     method: 'post',
-    data: { id, no_access }
+    data: { id, no_comment }
   })
 }
