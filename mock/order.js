@@ -37,7 +37,7 @@ module.exports = [
         code: 20000,
         data: {
           total: 100,
-          items: []
+          items: list
         }
       }
     }
