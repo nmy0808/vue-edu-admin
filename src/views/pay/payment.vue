@@ -50,7 +50,7 @@
 </template>
 <script>
 import BaseTable from '@/components/BaseTable/'
-import { deleteBankAccountByIdsApi, getOrderListApi } from '@/api/payment'
+import { deleteBankAccountByIdsApi, getBankAccountListApi } from '@/api/payment'
 import PaymentEditDialog from './components/PaymentEditDialog.vue'
 export default {
   name: '',
@@ -94,7 +94,7 @@ export default {
       const params = {}
       params.page = this.listQuery.page
       params.status = this.listQuery.status
-      const { data } = await getOrderListApi(params)
+      const { data } = await getBankAccountListApi(params)
       this.list = data.items
       this.total = data.total
       this.listLoading = false

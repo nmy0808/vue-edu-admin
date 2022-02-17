@@ -4,11 +4,11 @@ import request from '@/utils/request'
  * 收款账户列表
  * 状态：0禁用 1启用
  */
-export function getOrderListApi({ page, status }) {
+export function getBankAccountListApi({ page, limit = 10, status }) {
   return request({
     url: '/admin/s/cash',
     method: 'get',
-    data: { page, status }
+    data: { page, status, limit }
   })
 }
 /**

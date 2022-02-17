@@ -10,6 +10,7 @@ const column = require('./column')
 const school_user = require('./school_user')
 const order = require('./order')
 const payment = require('./payment')
+const cash = require('./cash')
 
 const mocks = [
   ...user,
@@ -20,7 +21,8 @@ const mocks = [
   ...column,
   ...school_user,
   ...order,
-  ...payment
+  ...payment,
+  ...cash
 ]
 
 // for front mock
