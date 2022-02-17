@@ -201,6 +201,41 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/pay',
+    component: Layout,
+    meta: { title: '交易', icon: 'el-icon-s-finance' },
+    redirect: { name: 'Order' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'order',
+        name: 'Order',
+        meta: {
+          title: '订单管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/pay/order.vue')
+      },
+      {
+        path: 'assets',
+        name: 'Assets',
+        meta: {
+          title: '资产管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/pay/assets.vue')
+      },
+      {
+        path: 'payment',
+        name: 'Payment',
+        meta: {
+          title: '支付设置',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/pay/payment.vue')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
