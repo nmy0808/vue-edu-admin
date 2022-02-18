@@ -49,7 +49,7 @@
 import Pagination from '@/components/Pagination'
 import Sortable from 'sortablejs'
 import CRender from './render.vue'
-import { clone, merge } from 'xe-utils'
+import { clone, isEqual, merge } from 'xe-utils'
 import {
   deleteCourseByIdApi,
   getCourseListApi,
@@ -111,6 +111,11 @@ export default {
       default: () => {
         console.warn('缺少 getList 方法')
       }
+    },
+    // 打印配置
+    exportConfig: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -162,6 +167,16 @@ export default {
   computed: {
     mergeOptions() {
       const result = merge(clone(this.gridOptions, true), this.options)
+      // 判断是否配置导出功能
+      if (this.exportConfig) {
+        const defaultExportConfig = {
+          // remote: true,
+          types: ['xlsx'],
+          modes: ['current', 'selected', 'all']
+        }
+        const mergeExportConfig = merge(defaultExportConfig, this.exportConfig)
+        result.exportConfig = mergeExportConfig
+      }
       return result
     },
     slotNames() {
@@ -201,6 +216,13 @@ export default {
     },
     importMethod(e) {
       console.log(e)
+    },
+    // 导出文件
+    exportEvent() {
+      this.$refs.xTable.openExport({
+        // 默认勾选源
+        original: true
+      })
     },
     // 初始化拖拽
     rowDrop() {

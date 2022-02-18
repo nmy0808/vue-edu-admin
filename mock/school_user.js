@@ -49,6 +49,9 @@ const { list: orderList } = Mock.mock({
       price: '@integer(23,35)' + '.00',
       total_price: '@integer(123,135)' + '.00',
       type: 'default',
+      balance: '@integer(2223,9935)' + '.00',
+      w_balance: '@integer(2223,9935)' + '.00',
+      t_balance: '@integer(2223,9935)' + '.00',
       pay_method: null,
       pay_time: '@date(yyyy-MM-dd hh:mm:ss)',
       title: '[专栏]' + '@ctitle()',
@@ -84,7 +87,7 @@ module.exports = [
       return {
         msg: 'ok',
         code: 20000,
-        data: list.filter((it) => it.userId === id)[0]
+        data: id ? list.filter((it) => it.userId === id)[0] : list[0]
       }
     }
   },

@@ -12,6 +12,7 @@ export function getSchoolUserListApi({ page, keyword = '' }) {
 }
 /**
  * 查询网校用户详细信息
+ * 参数: 网校id
  */
 export function getSchoolUserInfoApi(id) {
   return request({
