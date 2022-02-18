@@ -26,7 +26,7 @@
           slot="reference"
           size="mini"
           type="primary"
-          @click="handleToPageRenovation(row)"
+          @click="handleToPageRenovation(row.id)"
         >
           装修
         </el-button>
@@ -119,8 +119,8 @@ export default {
       this.$refs.titleDialogCom.show(this.listQuery.ismobile)
     },
     // 跳转到装修页面
-    handleToPageRenovation() {
-      this.$router.push({ name: 'MobileEdit' })
+    handleToPageRenovation(id) {
+      this.$router.push({ name: 'MobileEdit', params: { id }})
     }
   }
 }

@@ -252,7 +252,7 @@ export const asyncRoutes = [
         component: () => import('@/views/renovation/mobile/index.vue')
       },
       {
-        path: 'mobile/edit',
+        path: 'mobile/edit/:id',
         name: 'MobileEdit',
         hidden: true,
         meta: {
@@ -271,7 +271,7 @@ export const asyncRoutes = [
         component: () => import('@/views/renovation/pc/index.vue')
       },
       {
-        path: 'pc/edit',
+        path: 'pc/edit/:id',
         name: 'PcEdit',
         hidden: true,
         meta: {
