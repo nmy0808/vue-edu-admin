@@ -30,7 +30,7 @@
           :limit="limit"
           @pagination="pagination"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @update:page="handleCurrentChange"
         />
       </template>
     </vxe-grid>
@@ -209,7 +209,8 @@ export default {
       this.$emit('update:limit', val)
     },
     handleCurrentChange(val) {
-      this.$emit('update:size', val)
+      console.log(val)
+      this.$emit('update:page', val)
     },
     exportMethod(e) {
       console.log(e)
