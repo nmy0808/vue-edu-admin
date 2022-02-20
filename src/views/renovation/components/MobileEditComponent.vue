@@ -50,6 +50,10 @@
           </template>
         </el-form-item>
       </template>
+      <!-- swiper -->
+      <div v-else-if="type === 'swiper'">
+        <mobile-swiper-drag :list="swiper.data" @change="handleDragSwiper" />
+      </div>
     </el-form>
     <course-choose ref="courseChooseCom" @confirm="handleSelectCourseConfirm" />
     <renovation-choose ref="selectPageChooseCom" @confirm="handleSelectPageConfirm" />
@@ -60,8 +64,9 @@ import CourseChoose from '@/components/CourseChoose'
 import RenovationChoose from '@/components/RenovationChoose'
 import MobileListDrag from './MobileListDrag.vue'
 import { clone } from 'xe-utils'
+import MobileSwiperDrag from './MobileSwiperDrag.vue'
 export default {
-  components: { MobileListDrag, CourseChoose, RenovationChoose },
+  components: { MobileListDrag, CourseChoose, RenovationChoose, MobileSwiperDrag },
   props: {
     type: {
       type: String,
@@ -140,6 +145,11 @@ export default {
       const obj = Object.assign({}, this[this.type], { more })
       this[this.type] = obj
       this.$emit('bindPage', more)
+    },
+    // 监听并发送 swiper 事件
+    handleDragSwiper(newData) {
+      // this['swiper'].data = newData
+      this.$emit('swiperChange', newData)
     }
   }
 }

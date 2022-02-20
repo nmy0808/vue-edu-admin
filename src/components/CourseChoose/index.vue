@@ -27,9 +27,10 @@
             ref="baseTableCom"
             class="mt-0 border--none"
             :options="{ height: height , checkboxConfig:{
+              highlight: !isRadio,
               trigger: 'row'
-            }}"
-            :columns="columns"
+            }, radioConfig:{highlight: false, trigger: 'row'}}"
+            :columns="columnsComputed"
             :list="list"
             :pagination="getList"
             :total.sync="total"
@@ -66,6 +67,12 @@ import { getCourseListApi } from '@/api/course'
 export default {
   name: 'CourseChoose',
   components: { BaseTable },
+  props: {
+    isRadio: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       height: 0,
@@ -78,14 +85,27 @@ export default {
       },
       total: 0,
       activeIndex: 'media',
-      menuSelectList: [],
-      columns: [
-        { type: 'checkbox', title: '', width: '43' },
-        { title: '内容', slots: { default: 'col_content' }}
-      ]
+      menuSelectList: []
+      // columns: [
+      //   { title: '内容', slots: { default: 'col_content' }}
+      // ]
     }
   },
   computed: {
+    columnsComputed() {
+      const columns = [
+        { title: '内容', slots: { default: 'col_content' }}
+      ]
+      const checkbox = { type: 'checkbox', title: '', width: '43' }
+      const radio = { type: 'radio', title: '', width: '43' }
+      if (this.isRadio) {
+        columns.unshift(radio)
+      } else {
+        columns.unshift(checkbox)
+      }
+      console.log(columns)
+      return columns
+    }
   },
   watch: {
     'dialogVisible': {
@@ -139,9 +159,16 @@ export default {
       this.$refs.baseTableCom.setAllCheckboxRow()
     },
     confirm() {
-      const len = this.menuSelectList.length
-      if (len > 0) {
-        this.$emit('confirm', this.menuSelectList)
+      if (this.isRadio) {
+        const row = this.$refs.baseTableCom.getRadioRecord()
+        if (row) {
+          this.$emit('confirm', row)
+        }
+      } else {
+        const len = this.menuSelectList.length
+        if (len > 0) {
+          this.$emit('confirm', this.menuSelectList)
+        }
       }
       this.dialogVisible = false
     },

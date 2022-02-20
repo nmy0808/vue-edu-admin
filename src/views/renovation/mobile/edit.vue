@@ -40,7 +40,13 @@
           <template v-if="item.type ==='list'">
             <list :data="item.data" :title="item.title" :show-more="item.showMore" :list-type="item.listType" />
           </template>
+          <!-- swiper -->
+          <template v-if="item.type ==='swiper'">
+            <swiper :data="item.data" />
+          </template>
           <div>123</div>
+
+          <!--  -->
           <!-- 右侧上下移动操作面板 -->
           <div
             v-if="item.checked"
@@ -76,6 +82,7 @@
           @move="handleMove"
           @add="handleAddData"
           @bindPage="handBindPage"
+          @swiperChange="handleSwiperChange"
         />
       </div>
     </div>
@@ -88,8 +95,9 @@ import Search from '../components/Search.vue'
 import List from '../components/List.vue'
 import { moveDown, moveUp } from '@/utils'
 import { clone } from 'xe-utils'
+import Swiper from '../components/Swiper.vue'
 export default {
-  components: { MobileEditComponent, Search, List },
+  components: { MobileEditComponent, Search, List, Swiper },
   data() {
     return {
       temp: {
@@ -267,7 +275,6 @@ export default {
       this.temp.template = []
       this.$nextTick(() => {
         this.temp.template = newTemplate
-        console.log(this.temp.template)
       })
     },
     // 删除该项
@@ -306,6 +313,10 @@ export default {
     // 监听右侧面板绑定页面事件
     handBindPage(page) {
       this.temp.template[this.activeIndex].more = page
+    },
+    // 监听 swiper 事件
+    handleSwiperChange(newData) {
+      this.temp.template[this.activeIndex].data = newData
     }
   }
 }

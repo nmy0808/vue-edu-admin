@@ -164,7 +164,14 @@ module.exports = [
             {
               data: [
                 {
-                  src: 'blob:http://localhost:9527/81f6bcea-d7d0-497a-8148-b1a6e9e141bd',
+                  src: 'https://dummyimage.com/365x150',
+                  type: '',
+                  course_title: '',
+                  course_id: '',
+                  url: ''
+                },
+                {
+                  src: 'https://dummyimage.com/366x150',
                   type: '',
                   course_title: '',
                   course_id: '',
