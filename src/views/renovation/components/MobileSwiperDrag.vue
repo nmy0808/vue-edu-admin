@@ -14,7 +14,7 @@
       <div
         v-for="(item, index) in tempList"
         :key="index"
-        class="mb-2 list-item bg-light border"
+        class="mb-2 list-item bg-light"
         style="height:92px;position: relative;"
       >
         <el-popconfirm
@@ -30,7 +30,20 @@
           />
         </el-popconfirm>
         <div class="list-item d-flex cursor-move">
-          <img width="140px" height="90px" :src="item.src" alt="">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            @click.native="handleClickActiveIndex(index)"
+          >
+            <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar"> -->
+            <img v-if="item.src" class="avatar" width="140px" height="90px" :src="item.src" alt="">
+            <div v-else style="width: 140px; height:90px; background-color: #eee;" class="d-flex align-items-center justify-content-center">
+              <i class="h3 el-icon-plus avatar-uploader-icon" />
+            </div>
+          </el-upload>
           <div class="ps-2">
             <el-select
               v-model="item.type"
@@ -53,7 +66,7 @@
                 type="primary"
                 placeholder="请输入url"
                 icon="el-icon-plus"
-                @click="handleSelectCourse(index)"
+                @click.stop="handleSelectCourse(index)"
               >
                 {{ item.course_title?item.course_title:'关联课程' }}
               </el-button>
@@ -150,6 +163,28 @@ export default {
       item.course_id = course.id
       item.url = ''
       this.$emit('change', this.tempList)
+    },
+    // 点击激活index事件
+    handleClickActiveIndex(index) {
+      this.activeIndex = index
+    },
+    // 上传成功事件
+    handleAvatarSuccess(res, file) {
+      const item = this.tempList[this.activeIndex]
+      item.src = URL.createObjectURL(file.raw)
+      this.$emit('change', this.tempList)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
     }
   }
 }
