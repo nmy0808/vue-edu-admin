@@ -49,16 +49,16 @@
             <i
               class="el-icon-top"
               :class="{disable:index===0}"
-              @click="handleMoveUp(index)"
+              @click.stop="handleMoveUp(index)"
             />
             <i
               class="el-icon-bottom"
               :class="{disable:index===temp.template.length-1}"
-              @click="handleMoveDown(index)"
+              @click.stop="handleMoveDown(index)"
             />
             <i
               class="el-icon-close"
-              @click="handleClose(index)"
+              @click.stop="handleClose(index)"
             />
           </div>
         </div>
@@ -257,6 +257,7 @@ export default {
       this.temp.template = []
       this.$nextTick(() => {
         this.temp.template = newTemplate
+        console.log(this.temp.template)
       })
     },
     // moveTo下移
@@ -266,6 +267,7 @@ export default {
       this.temp.template = []
       this.$nextTick(() => {
         this.temp.template = newTemplate
+        console.log(this.temp.template)
       })
     },
     // 删除该项
