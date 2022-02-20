@@ -136,7 +136,8 @@ export default {
         //   }
         // },
         rowConfig: {
-          height: 80
+          height: 80,
+          isCurrent: true, isHover: true
         },
         // printConfig: {
         //   title: '123'
@@ -200,6 +201,10 @@ export default {
     // 当手动勾选并且值发生改变时触发的事件
     handleCheckboxChange(...arg) {
       this.$emit('checkbox-change', ...arg)
+    },
+    // 获取单选选中
+    getRadioRecord() {
+      return this.$refs.xTable.getRadioRecord()
     },
     // 用于 type=checkbox，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）
     getCheckboxRecords() {

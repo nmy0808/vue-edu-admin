@@ -86,31 +86,80 @@ module.exports = [
               type: 'search'
             },
             {
-              listType: 'one',
+              type: 'list',
               title: '最新列表',
+              listType: 'two',
               showMore: true,
-              more: false,
+              more: {
+                title: '演示页面',
+                url: ''
+              },
               data: [
                 {
-                  id: 12,
-                  title: 'unicloud商城全栈开发',
                   cover:
-                    'http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png',
-                  try: '<p>unicloud商城全栈开发</p>',
-                  content: '<p>unicloud商城全栈开发</p>',
-                  price: '10.00',
-                  t_price: '20.00',
-                  type: 'media',
-                  school_id: 11,
-                  status: 1,
-                  sub_count: 0,
-                  is_single: 1,
-                  created_time: '2021-03-28T22:40:18.000Z',
-                  updated_time: '2021-04-07T00:32:09.000Z'
+                    'https://edu-image.nosdn.127.net/561821cf12524f69bde0c6e9d3f3b030.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app实战视频点播app小程序',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/9d416f92eb9f4b0f99673914671a6805.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app多端企业网盘全栈开发',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/9769ffd1157747c9b0f668276cf559cc.png?imageView&quality=100&crop=0_0_1280_719&thumbnail=223y124',
+                  title: 'VueCli 实战商城后台管理系统',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/b4d2d9f9e6fe41d696133254133178d9.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app实战商城类app和小程序',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/561821cf12524f69bde0c6e9d3f3b030.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app实战视频点播app小程序',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/9d416f92eb9f4b0f99673914671a6805.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app多端企业网盘全栈开发',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/9769ffd1157747c9b0f668276cf559cc.png?imageView&quality=100&crop=0_0_1280_719&thumbnail=223y124',
+                  title: 'VueCli 实战商城后台管理系统',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
+                },
+                {
+                  cover:
+                    'https://edu-image.nosdn.127.net/b4d2d9f9e6fe41d696133254133178d9.png?imageView&quality=100&crop=0_0_900_499&thumbnail=223y124',
+                  title: 'uni-app实战商城类app和小程序',
+                  try: '一句话推荐',
+                  price: 100,
+                  t_price: 299
                 }
-              ],
-              checked: false,
-              type: 'list'
+              ]
             },
             {
               data: [

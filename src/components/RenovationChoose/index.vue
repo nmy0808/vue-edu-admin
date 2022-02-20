@@ -1,34 +1,21 @@
 <template>
   <div class="course-choose">
     <el-dialog
-      title="选择课程"
+      title="选择页面"
       :visible.sync="dialogVisible"
       width="80%"
       top="5%"
       @closed="handleClosed"
     >
       <div class="d-flex">
-        <!-- left -->
-        <div class="" style="width: 100px; height: 70vh; overflow-y: auto">
-          <el-menu
-            class="h-100 bg-light"
-            :default-active="activeIndex"
-            mode="vertical"
-            @select="menuSelect"
-          >
-            <el-menu-item index="media">图文</el-menu-item>
-            <el-menu-item index="audio">音频</el-menu-item>
-            <el-menu-item index="video">视频</el-menu-item>
-          </el-menu>
-        </div>
-        <!-- right -->
+        <!-- main -->
         <div class="flex-fill ps-2 py-0" style="height: 70vh; overflow: hidden; overflow-y: auto">
           <base-table
             ref="baseTableCom"
             class="mt-0 border--none"
-            :options="{ height: height , checkboxConfig:{
+            :options="{ height: height, radioConfig:{
               trigger: 'row'
-            }}"
+            } }"
             :columns="columns"
             :list="list"
             :pagination="getList"
@@ -36,18 +23,9 @@
             :page.sync="listQuery.page"
             :size.sync="listQuery.size"
             :loading="listLoading"
-            @checkbox-change="handleCheckboxChange"
           >
-            <template #col_content="{row}">
-              <div class="d-flex">
-                <img :src="row.cover" alt="" width="100px">
-                <div class="ms-2 d-flex flex-column h7">
-                  <p class="p-0 m-0">
-                    {{ row.title }}
-                  </p>
-                  <p class="p-0 m-0 mt-3 text-red">¥ {{ (row.price -0 ).toFixed(2) }}</p>
-                </div>
-              </div>
+            <template #col_type="{row}">
+              {{ row.type == 'index' ? '首页' : '自定义页面' }}
             </template>
           </base-table>
         </div>
@@ -62,6 +40,7 @@
 <script>
 import BaseTable from '@/components/BaseTable'
 import { getCourseListApi } from '@/api/course'
+import { getRenovationListApi } from '@/api/renovation'
 
 export default {
   name: 'CourseChoose',
@@ -74,18 +53,17 @@ export default {
       list: [],
       listQuery: {
         page: 0,
-        limit: 10
+        limit: 10,
+        ismobile: 0
       },
       total: 0,
-      activeIndex: 'media',
-      menuSelectList: [],
+      menuSelectList: null,
       columns: [
-        { type: 'checkbox', title: '', width: '43' },
-        { title: '内容', slots: { default: 'col_content' }}
+        { type: 'radio', width: 50, align: 'center' },
+        { title: '页面', field: 'title', width: 200 },
+        { title: '类型', slots: { default: 'col_type' }}
       ]
     }
-  },
-  computed: {
   },
   watch: {
     'dialogVisible': {
@@ -99,12 +77,6 @@ export default {
         }
       },
       immediate: true
-    },
-    'activeIndex': {
-      handler(type) {
-        this.getList()
-      },
-      immediate: true
     }
   },
   mounted() {
@@ -115,11 +87,8 @@ export default {
       this.listLoading = true
       const params = {}
       params.page = this.listQuery.page
-      params.limit = this.listQuery.limit
-      params.type = this.activeIndex
-      params.status = null
-      params.title = ''
-      const { items, total } = (await getCourseListApi(params)).data
+      params.ismobile = this.ismobile
+      const { items, total } = (await getRenovationListApi(params)).data
       this.list = []
       setTimeout(() => {
         this.list = items
@@ -127,7 +96,8 @@ export default {
       this.total = total
       this.listLoading = false
     },
-    show() {
+    show(ismobile) {
+      this.listQuery.ismobile = ismobile
       this.dialogVisible = true
     },
     close() {
@@ -135,23 +105,14 @@ export default {
     },
     handleClosed() {
       // 清空所有行的选中状态
-      this.menuSelectList = []
-      this.$refs.baseTableCom.setAllCheckboxRow()
     },
     confirm() {
-      const len = this.menuSelectList.length
-      if (len > 0) {
-        this.$emit('confirm', this.menuSelectList)
-      }
+      const row = this.$refs.baseTableCom.getRadioRecord()
+      if (row) this.$emit('confirm', row)
       this.dialogVisible = false
     },
     menuSelect(type) {
-      this.activeIndex = type
       this.listQuery.page = 1
-    },
-    // 当手动勾选并且值发生改变时触发的事件
-    handleCheckboxChange({ records }) {
-      this.menuSelectList = records
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex renovation-edit-page" style="background: #eeeeee;">
-    <div class="item flex-grow-1 px-3 py-3">
+  <div class="d-flex renovation-edit-page app-container" style="background: #eeeeee; overflow-y: auto;">
+    <div class="item px-3 py-3" style="width: 500px;">
       <div class="shadow-sm rounded-1 bg-white item-inner">
         <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
           <p class="p-0 m-0 font-size-14 text-weight-bold">组件列表</p>
@@ -22,25 +22,73 @@
         </div>
       </div>
     </div>
-    <div class="item edit-item px-3 py-3">
+    <div class="item edit-item px-3 py-3 mx-5 pb-5" style="width: 500px;">
       <div class="shadow-sm rounded-1 bg-white item-inner">
-        1
+        <!-- 中间面板区域 -->
+        <div
+          v-for="(item, index) in temp.template"
+          :key="index"
+          class="mb-1"
+          :class="{'middle-item-active':item.checked, 'cursor-pointer':true}"
+          @click="handleSelectChange(item)"
+        >
+          <!-- search -->
+          <template v-if="item.type ==='search'">
+            <search :placeholder="item.placeholder" />
+          </template>
+          <!-- list -->
+          <template v-if="item.type ==='list'">
+            <list :data="item.data" :title="item.title" :show-more="item.showMore" :list-type="item.listType" />
+          </template>
+          <div>123</div>
+          <!-- 右侧上下移动操作面板 -->
+          <div
+            v-if="item.checked"
+            class="actions-panel d-flex flex-column"
+          >
+            <i
+              class="el-icon-top"
+              :class="{disable:index===0}"
+              @click="handleMoveUp(index)"
+            />
+            <i
+              class="el-icon-bottom"
+              :class="{disable:index===temp.template.length-1}"
+              @click="handleMoveDown(index)"
+            />
+            <i
+              class="el-icon-close"
+              @click="handleClose(index)"
+            />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="item flex-grow-1 px-3 py-3">
+    <div class="item  px-3 py-3" style="width: 500px;">
       <div class="shadow-sm rounded-1 bg-white item-inner">
         <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
           <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
         </div>
+        <MobileEditComponent
+          ref="editComponent"
+          :type="activeItem.type"
+          @change="handleChange"
+          @move="handleMove"
+          @add="handleAddData"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import { getRenovationDetailApi } from '@/api/renovation'
+import MobileEditComponent from '../components/MobileEditComponent.vue'
+import Search from '../components/Search.vue'
+import List from '../components/List.vue'
+import { moveDown, moveUp } from '@/utils'
+import { clone } from 'xe-utils'
 export default {
-  name: '',
-  components: {},
+  components: { MobileEditComponent, Search, List },
   data() {
     return {
       temp: {
@@ -157,6 +205,15 @@ export default {
         }]
     }
   },
+  computed: {
+    // 中间面板区:当前激活的组件项
+    activeItem() {
+      return this.temp.template.find(it => it.checked) || {}
+    },
+    activeIndex() {
+      return this.temp.template.findIndex(it => it.checked)
+    }
+  },
   created() {
     this.getRenovationDetail()
   },
@@ -169,21 +226,79 @@ export default {
       this.temp.title = data.title
       this.temp.ismobile = data.ismobile
       this.temp.template = data.template
-      console.log(data)
     },
     // 添加组件
     addComponentItem(template) {
       template.checked = false
       this.temp.template.push(template)
+    },
+    // 在中间面板选中组件的事件
+    handleSelectChange(row) {
+      this.temp.template.forEach(it => {
+        it.checked = false
+      })
+      row.checked = true
+      this.$refs.editComponent.initVal(row)
+      // this.temp.template = newTemp
+    },
+    // moveTo上移
+    handleMoveUp(index) {
+      if (index === 0) return
+      const newTemplate = moveUp(this.temp.template, index)
+      this.temp.template = []
+      this.$nextTick(() => {
+        this.temp.template = newTemplate
+      })
+    },
+    // moveTo下移
+    handleMoveDown(index) {
+      if (index === this.temp.template.length - 1) return
+      const newTemplate = moveDown(this.temp.template, index)
+      this.temp.template = []
+      this.$nextTick(() => {
+        this.temp.template = newTemplate
+      })
+    },
+    // 删除该项
+    handleClose(index) {
+      this.$msgbox({
+        title: '删除',
+        message: '是否删除?',
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(action => {
+        const copy = clone(this.temp.template, true)
+        copy.splice(index, 1)
+        setTimeout(() => {
+          copy.forEach(it => {
+            it.checked = false
+          })
+          this.temp.template = copy
+        }, 100)
+      }).catch(err => err)
+    },
+    // 监听: 右侧值改变事件
+    handleChange({ key, value }) {
+      this.temp.template[this.activeIndex][key] = value
+    },
+    // 监听: 列表拖拽事件
+    handleMove(list) {
+      this.temp.template[this.activeIndex].data = list
+    },
+    // 监听: 列表添加事件
+    handleAddData(items) {
+      const list = this.temp.template[this.activeIndex].data
+      this.temp.template[this.activeIndex].data = list.concat(items)
+      this.$refs.editComponent.initVal(this.temp.template[this.activeIndex])
     }
   }
 }
 </script>
 <style scoped lang='scss'>
 .renovation-edit-page{
-  height: calc(100vh - 85px);
+  min-height: calc(100vh - 85px);
   .edit-item{
-    width: 40%;
   }
   .item{
     .item-inner{
@@ -194,6 +309,35 @@ export default {
     color: #448ef7;
     border: 1px solid #448ef7 !important;
     transition: all 0.3s;
+  }
+  .middle-item-active{
+    border: 1px dashed #448ef7;
+    padding: 3px 0;
+    position: relative;
+    cursor: pointer;
+    .actions-panel{
+      height: 90px;
+      position:absolute;
+      right: -2.1em;
+      top: -1px;
+      z-index: 10;
+      background: #fff;
+       i{
+         width: 2em;
+         height: 2em;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         &:not(.disable):hover{
+           background: #448ef7;
+           color: white;
+         }
+         &.disable{
+           color: #ccc;
+           cursor: not-allowed;
+         }
+       }
+    }
   }
 }
 
