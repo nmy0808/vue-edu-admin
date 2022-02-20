@@ -25,7 +25,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="更多链接">
-          <el-button :type="list.more && 'default'" @click="handleSelectPage">
+          <el-button :type="list.more ? 'default':'primary'" @click="handleSelectPage">
             {{ list.more?list.more.title:'选择页面' }}</el-button>
         </el-form-item>
         <el-form-item label="课程列表">
@@ -139,6 +139,7 @@ export default {
       // this[this.type].more = page
       const obj = Object.assign({}, this[this.type], { more })
       this[this.type] = obj
+      this.$emit('bindPage', more)
     }
   }
 }

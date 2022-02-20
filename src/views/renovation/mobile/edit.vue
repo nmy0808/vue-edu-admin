@@ -30,7 +30,7 @@
           :key="index"
           class="mb-1"
           :class="{'middle-item-active':item.checked, 'cursor-pointer':true}"
-          @click="handleSelectChange(item)"
+          @click="handleSelectChange(index)"
         >
           <!-- search -->
           <template v-if="item.type ==='search'">
@@ -75,6 +75,7 @@
           @change="handleChange"
           @move="handleMove"
           @add="handleAddData"
+          @bindPage="handBindPage"
         />
       </div>
     </div>
@@ -208,7 +209,7 @@ export default {
   computed: {
     // 中间面板区:当前激活的组件项
     activeItem() {
-      return this.temp.template.find(it => it.checked) || {}
+      return this.temp.template[this.activeIndex] || {}
     },
     activeIndex() {
       return this.temp.template.findIndex(it => it.checked)
@@ -230,16 +231,24 @@ export default {
     // 添加组件
     addComponentItem(template) {
       template.checked = false
-      this.temp.template.push(template)
+      const obj = { ...template.default }
+      obj.type = template.type
+      obj.title = template.title
+      obj.checked = false
+      this.temp.template.push(obj)
     },
     // 在中间面板选中组件的事件
-    handleSelectChange(row) {
-      this.temp.template.forEach(it => {
-        it.checked = false
+    handleSelectChange(index) {
+      const newTemp = this.temp.template.map(it => {
+        return {
+          ...it,
+          checked: false
+        }
       })
-      row.checked = true
-      this.$refs.editComponent.initVal(row)
-      // this.temp.template = newTemp
+      newTemp[index].checked = true
+      this.temp.template = newTemp
+
+      this.$refs.editComponent.initVal(newTemp[index])
     },
     // moveTo上移
     handleMoveUp(index) {
@@ -291,6 +300,10 @@ export default {
       const list = this.temp.template[this.activeIndex].data
       this.temp.template[this.activeIndex].data = list.concat(items)
       this.$refs.editComponent.initVal(this.temp.template[this.activeIndex])
+    },
+    // 监听右侧面板绑定页面事件
+    handBindPage(page) {
+      this.temp.template[this.activeIndex].more = page
     }
   }
 }
