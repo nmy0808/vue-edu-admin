@@ -4,6 +4,7 @@
       <el-carousel trigger="click" height="150px">
         <el-carousel-item v-for="(item, index) in data" :key="index">
           <img width="100%" :src="item.src" alt="">
+          暂无图片, 请在右侧添加/编辑
         </el-carousel-item>
       </el-carousel>
     </template>

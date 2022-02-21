@@ -54,6 +54,9 @@
       <div v-else-if="type === 'swiper'">
         <mobile-swiper-drag :list="swiper.data" @change="handleDragSwiper" />
       </div>
+      <div v-else-if="type === 'icons'">
+        <mobile-icons-drag :list="icons.data" @change="handleDragIcons" />
+      </div>
     </el-form>
     <course-choose ref="courseChooseCom" @confirm="handleSelectCourseConfirm" />
     <renovation-choose ref="selectPageChooseCom" @confirm="handleSelectPageConfirm" />
@@ -65,8 +68,9 @@ import RenovationChoose from '@/components/RenovationChoose'
 import MobileListDrag from './MobileListDrag.vue'
 import { clone } from 'xe-utils'
 import MobileSwiperDrag from './MobileSwiperDrag.vue'
+import MobileIconsDrag from './MobileIconsDrag.vue'
 export default {
-  components: { MobileListDrag, CourseChoose, RenovationChoose, MobileSwiperDrag },
+  components: { MobileListDrag, CourseChoose, RenovationChoose, MobileSwiperDrag, MobileIconsDrag },
   props: {
     type: {
       type: String,
@@ -150,6 +154,9 @@ export default {
     handleDragSwiper(newData) {
       // this['swiper'].data = newData
       this.$emit('swiperChange', newData)
+    },
+    handleDragIcons(newData) {
+      this.$emit('iconsChange', newData)
     }
   }
 }

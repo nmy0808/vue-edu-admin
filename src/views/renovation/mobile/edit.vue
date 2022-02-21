@@ -44,6 +44,10 @@
           <template v-if="item.type ==='swiper'">
             <swiper :data="item.data" />
           </template>
+          <!-- icons -->
+          <template v-if="item.type ==='icons'">
+            <Icons :data="item.data"/>
+          </template>
           <div>123</div>
 
           <!--  -->
@@ -83,6 +87,7 @@
           @add="handleAddData"
           @bindPage="handBindPage"
           @swiperChange="handleSwiperChange"
+          @iconsChange="handleIconsChange"
         />
       </div>
     </div>
@@ -96,8 +101,9 @@ import List from '../components/List.vue'
 import { moveDown, moveUp } from '@/utils'
 import { clone } from 'xe-utils'
 import Swiper from '../components/Swiper.vue'
+import Icons from '../components/Icons.vue'
 export default {
-  components: { MobileEditComponent, Search, List, Swiper },
+  components: { MobileEditComponent, Search, List, Swiper, Icons },
   data() {
     return {
       temp: {
@@ -316,6 +322,11 @@ export default {
     },
     // 监听 swiper 事件
     handleSwiperChange(newData) {
+      this.temp.template[this.activeIndex].data = newData
+    },
+    //
+    handleIconsChange(newData) {
+      console.log(13123)
       this.temp.template[this.activeIndex].data = newData
     }
   }
