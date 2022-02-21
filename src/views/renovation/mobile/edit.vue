@@ -1,28 +1,34 @@
 <template>
-  <div class="d-flex renovation-edit-page app-container" style="background: #eeeeee; overflow-y: auto;">
-    <div class="item px-3 py-3" style="width: 500px;">
-      <div class="shadow-sm rounded-1 bg-white item-inner">
-        <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
-          <p class="p-0 m-0 font-size-14 text-weight-bold">组件列表</p>
-          <small class="text-opacity-25 text-dark font-size-12">点击组件，添加至页面</small>
-        </div>
-        <div class="d-flex px-3 flex-wrap pt-3 justify-content-between">
-          <!-- 组件列表 -->
-          <div
-            v-for="(item, index) in componentOptions"
-            :key="index"
-            class="cursor-pointer p-3 py-2 border
+  <div class="d-flex justify-content-around renovation-edit-page app-container" style="background: #eeeeee; overflow-y: auto;">
+    <sticky style="width: 20%; min-width: 295px;">
+      <div>
+        <div class="shadow-sm rounded-1 bg-white item-inner">
+          <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
+            <p class="p-0 m-0 font-size-14 text-weight-bold">组件列表</p>
+            <small class="text-opacity-25 text-dark font-size-12">点击组件，添加至页面</small>
+          </div>
+          <div class="d-flex px-3 flex-wrap pt-3 justify-content-between">
+            <!-- 组件列表 -->
+            <div
+              v-for="(item, index) in componentOptions"
+              :key="index"
+              class="cursor-pointer p-3 py-2 border
             d-flex align-items-center mb-3 component-item"
-            style="width: 48%;"
-            @click="addComponentItem(item)"
-          >
-            <i class="me-1" :class="item.icon" />
-            <span>{{ item.title }}</span>
+              style="width: 48%;"
+              @click="addComponentItem(item)"
+            >
+              <i class="me-1" :class="item.icon" />
+              <span class="fs-7">{{ item.title }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="item edit-item px-3 py-3 mx-5 pb-5" style="width: 500px;">
+    </sticky>
+
+    <div
+      class="wrapper-main item edit-item px-3 py-3 pb-5"
+      style="width: 500px;"
+    >
       <div class="shadow-sm rounded-1 bg-white item-inner">
         <!-- 中间面板区域 -->
         <div
@@ -46,7 +52,10 @@
           </template>
           <!-- icons -->
           <template v-if="item.type ==='icons'">
-            <Icons :data="item.data"/>
+            <Icons :data="item.data" />
+          </template>
+          <template v-if="item.type ==='coupon'">
+            <Coupon :data="item.data" />
           </template>
           <div>123</div>
 
@@ -74,23 +83,25 @@
         </div>
       </div>
     </div>
-    <div class="item  px-3 py-3" style="width: 500px;">
-      <div class="shadow-sm rounded-1 bg-white item-inner">
-        <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
-          <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
+    <sticky style="width: 450px;">
+      <div class="wrapper-right item ">
+        <div class="rounded-1 bg-white item-inner">
+          <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
+            <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
+          </div>
+          <MobileEditComponent
+            ref="editComponent"
+            :type="activeItem.type"
+            @change="handleChange"
+            @move="handleMove"
+            @add="handleAddData"
+            @bindPage="handBindPage"
+            @swiperChange="handleSwiperChange"
+            @iconsChange="handleIconsChange"
+          />
         </div>
-        <MobileEditComponent
-          ref="editComponent"
-          :type="activeItem.type"
-          @change="handleChange"
-          @move="handleMove"
-          @add="handleAddData"
-          @bindPage="handBindPage"
-          @swiperChange="handleSwiperChange"
-          @iconsChange="handleIconsChange"
-        />
       </div>
-    </div>
+    </sticky>
   </div>
 </template>
 <script>
@@ -102,8 +113,10 @@ import { moveDown, moveUp } from '@/utils'
 import { clone } from 'xe-utils'
 import Swiper from '../components/Swiper.vue'
 import Icons from '../components/Icons.vue'
+import Coupon from '../components/Coupon.vue'
+import Sticky from '@/components/Sticky'
 export default {
-  components: { MobileEditComponent, Search, List, Swiper, Icons },
+  components: { Sticky, MobileEditComponent, Search, List, Swiper, Icons, Coupon },
   data() {
     return {
       temp: {
@@ -335,6 +348,26 @@ export default {
 <style scoped lang='scss'>
 .renovation-edit-page{
   min-height: calc(100vh - 85px);
+  overflow-x: auto !important;
+  .wrapper-left{
+    // position:fixed;
+    // top: 100px;
+    // left: 180px;
+     width: 20%;
+     min-width: 295px;
+
+  }
+  .wrapper-main{
+    // position: relative;
+    // left: 500px;
+    // top:15px;
+    // background: #fff;
+  }
+  .wrapper-right{
+    height: 80vh;
+    overflow-y: auto;
+    // background: #fff;
+  }
   .edit-item{
   }
   .item{

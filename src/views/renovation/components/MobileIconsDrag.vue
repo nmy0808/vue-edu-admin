@@ -20,7 +20,7 @@
         <el-popconfirm
           class="cursor-pointer"
           title="这是一段内容确定删除吗？"
-          style="position:absolute;left: 210px; bottom: 10px"
+          style="position:absolute;left:37%; bottom: 10px"
           @onConfirm="deleteItem"
         >
           <div
