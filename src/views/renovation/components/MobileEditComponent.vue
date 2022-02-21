@@ -54,8 +54,26 @@
       <div v-else-if="type === 'swiper'">
         <mobile-swiper-drag :list="swiper.data" @change="handleDragSwiper" />
       </div>
+      <!-- icons -->
       <div v-else-if="type === 'icons'">
         <mobile-icons-drag :list="icons.data" @change="handleDragIcons" />
+      </div>
+      <!-- imageAd -->
+      <div v-else-if="type === 'imageAd'">
+        <mobile-imageAd-drag :list="imageAd.data" @change="handleDragImageAd" />
+      </div>
+      <!-- Promotion -->
+      <div v-else-if="type === 'promotion'">
+        <el-form-item label="类型">
+          <el-radio-group v-model="promotion.listType" @input="handleChange('listType')">
+            <el-radio label="group">拼团</el-radio>
+            <el-radio label="flash">限时活动</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="标题">
+          <el-input v-model="promotion.title" placeholder="请输入列表标题" @input="handleChange('title')" />
+        </el-form-item>
+        <MobilePromotionDrag :list="promotion.data" @change="handleDragPromotion" />
       </div>
     </el-form>
     <course-choose ref="courseChooseCom" @confirm="handleSelectCourseConfirm" />
@@ -68,9 +86,11 @@ import RenovationChoose from '@/components/RenovationChoose'
 import MobileListDrag from './MobileListDrag.vue'
 import { clone } from 'xe-utils'
 import MobileSwiperDrag from './MobileSwiperDrag.vue'
+import MobileImageAdDrag from './MobileImageAdDrag.vue'
+import MobilePromotionDrag from './MobilePromotionDrag.vue'
 import MobileIconsDrag from './MobileIconsDrag.vue'
 export default {
-  components: { MobileListDrag, CourseChoose, RenovationChoose, MobileSwiperDrag, MobileIconsDrag },
+  components: { MobileListDrag, CourseChoose, RenovationChoose, MobileSwiperDrag, MobileIconsDrag, MobileImageAdDrag, MobilePromotionDrag },
   props: {
     type: {
       type: String,
@@ -157,6 +177,13 @@ export default {
     },
     handleDragIcons(newData) {
       this.$emit('iconsChange', newData)
+    },
+    //
+    handleDragImageAd(newData) {
+      this.$emit('imageAdChange', newData)
+    },
+    handleDragPromotion(newData) {
+      this.$emit('promotionChange', newData)
     }
   }
 }

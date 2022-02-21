@@ -5,6 +5,8 @@
       :visible.sync="dialogVisible"
       width="80%"
       top="5%"
+      :modal-append-to-body="false"
+      append-to-body
       @closed="handleClosed"
     >
       <div class="d-flex">

@@ -1,20 +1,33 @@
 <template>
-  <div class="d-flex justify-content-around renovation-edit-page app-container" style="background: #eeeeee; overflow-y: auto;">
-    <sticky style="width: 20%; min-width: 295px;">
+  <div
+    class="d-flex justify-content-around renovation-edit-page app-container"
+    style="background: #eeeeee; overflow-y: auto"
+  >
+    <sticky style="width: 20%; min-width: 295px">
       <div>
         <div class="shadow-sm rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
             <p class="p-0 m-0 font-size-14 text-weight-bold">组件列表</p>
-            <small class="text-opacity-25 text-dark font-size-12">点击组件，添加至页面</small>
+            <small
+              class="text-opacity-25 text-dark font-size-12"
+            >点击组件，添加至页面</small>
           </div>
           <div class="d-flex px-3 flex-wrap pt-3 justify-content-between">
             <!-- 组件列表 -->
             <div
               v-for="(item, index) in componentOptions"
               :key="index"
-              class="cursor-pointer p-3 py-2 border
-            d-flex align-items-center mb-3 component-item"
-              style="width: 48%;"
+              class="
+                cursor-pointer
+                p-3
+                py-2
+                border
+                d-flex
+                align-items-center
+                mb-3
+                component-item
+              "
+              style="width: 48%"
               @click="addComponentItem(item)"
             >
               <i class="me-1" :class="item.icon" />
@@ -27,7 +40,7 @@
 
     <div
       class="wrapper-main item edit-item px-3 py-3 pb-5"
-      style="width: 500px;"
+      style="width: 500px"
     >
       <div class="shadow-sm rounded-1 bg-white item-inner">
         <!-- 中间面板区域 -->
@@ -35,56 +48,65 @@
           v-for="(item, index) in temp.template"
           :key="index"
           class="mb-1"
-          :class="{'middle-item-active':item.checked, 'cursor-pointer':true}"
+          :class="{
+            'middle-item-active': item.checked,
+            'cursor-pointer': true
+          }"
           @click="handleSelectChange(index)"
         >
           <!-- search -->
-          <template v-if="item.type ==='search'">
+          <template v-if="item.type === 'search'">
             <search :placeholder="item.placeholder" />
           </template>
           <!-- list -->
-          <template v-if="item.type ==='list'">
-            <list :data="item.data" :title="item.title" :show-more="item.showMore" :list-type="item.listType" />
+          <template v-if="item.type === 'list'">
+            <list
+              :data="item.data"
+              :title="item.title"
+              :show-more="item.showMore"
+              :list-type="item.listType"
+            />
           </template>
           <!-- swiper -->
-          <template v-if="item.type ==='swiper'">
+          <template v-if="item.type === 'swiper'">
             <swiper :data="item.data" />
           </template>
           <!-- icons -->
-          <template v-if="item.type ==='icons'">
+          <template v-if="item.type === 'icons'">
             <Icons :data="item.data" />
           </template>
-          <template v-if="item.type ==='coupon'">
+          <!-- coupon -->
+          <template v-if="item.type === 'coupon'">
             <Coupon :data="item.data" />
           </template>
-          <div>123</div>
-
+          <!-- imageAd 图片广告 -->
+          <template v-if="item.type === 'imageAd'">
+            <ImageAd :data="item.data" />
+          </template>
+          <!-- promotion 拼团  -->
+          <template v-if="item.type === 'promotion'">
+            <Promotion :data="item.data" :title="item.title" :list-type="item.listType" />
+          </template>
           <!--  -->
           <!-- 右侧上下移动操作面板 -->
-          <div
-            v-if="item.checked"
-            class="actions-panel d-flex flex-column"
-          >
+          <div v-if="item.checked" class="actions-panel d-flex flex-column">
             <i
               class="el-icon-top"
-              :class="{disable:index===0}"
+              :class="{ disable: index === 0 }"
               @click.stop="handleMoveUp(index)"
             />
             <i
               class="el-icon-bottom"
-              :class="{disable:index===temp.template.length-1}"
+              :class="{ disable: index === temp.template.length - 1 }"
               @click.stop="handleMoveDown(index)"
             />
-            <i
-              class="el-icon-close"
-              @click.stop="handleClose(index)"
-            />
+            <i class="el-icon-close" @click.stop="handleClose(index)" />
           </div>
         </div>
       </div>
     </div>
-    <sticky style="width: 450px;">
-      <div class="wrapper-right item ">
+    <sticky style="width: 450px">
+      <div class="wrapper-right item">
         <div class="rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
             <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
@@ -98,6 +120,8 @@
             @bindPage="handBindPage"
             @swiperChange="handleSwiperChange"
             @iconsChange="handleIconsChange"
+            @imageAdChange="handleImageAdChange"
+            @promotionChange="handlePromotionChange"
           />
         </div>
       </div>
@@ -114,9 +138,21 @@ import { clone } from 'xe-utils'
 import Swiper from '../components/Swiper.vue'
 import Icons from '../components/Icons.vue'
 import Coupon from '../components/Coupon.vue'
+import ImageAd from '../components/ImageAd.vue'
+import Promotion from '../components/Promotion.vue'
 import Sticky from '@/components/Sticky'
 export default {
-  components: { Sticky, MobileEditComponent, Search, List, Swiper, Icons, Coupon },
+  components: {
+    Sticky,
+    MobileEditComponent,
+    Search,
+    List,
+    Swiper,
+    Icons,
+    Coupon,
+    ImageAd,
+    Promotion
+  },
   data() {
     return {
       temp: {
@@ -138,83 +174,98 @@ export default {
             more: false,
             data: []
           }
-        }, {
+        },
+        {
           icon: 'el-icon-search',
           title: '搜索框',
           type: 'search',
           default: {
             placeholder: '请输入搜索关键词'
           }
-        }, {
+        },
+        {
           icon: 'el-icon-s-help',
           title: '轮播图',
           type: 'swiper',
           default: {
             data: []
           }
-        }, {
+        },
+        {
           icon: 'el-icon-menu',
           title: '图标分类',
           type: 'icons',
           default: {
-            data: [{
-              src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-              name: '分类',
-              type: '',
-              url: '',
-              page_id: 0,
-              page_title: '',
-              course_title: '',
-              course_id: ''
-            }, {
-              src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-              name: '分类',
-              type: '',
-              url: '',
-              page_id: 0,
-              page_title: '',
-              course_title: '',
-              course_id: ''
-            }, {
-              src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-              name: '分类',
-              type: '',
-              url: '',
-              page_id: 0,
-              page_title: '',
-              course_title: '',
-              course_id: ''
-            }, {
-              src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-              name: '分类',
-              type: '',
-              url: '',
-              page_id: 0,
-              page_title: '',
-              course_title: '',
-              course_id: ''
-            }]
+            data: [
+              {
+                src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                name: '分类',
+                type: '',
+                url: '',
+                page_id: 0,
+                page_title: '',
+                course_title: '',
+                course_id: ''
+              },
+              {
+                src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                name: '分类',
+                type: '',
+                url: '',
+                page_id: 0,
+                page_title: '',
+                course_title: '',
+                course_id: ''
+              },
+              {
+                src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                name: '分类',
+                type: '',
+                url: '',
+                page_id: 0,
+                page_title: '',
+                course_title: '',
+                course_id: ''
+              },
+              {
+                src: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+                name: '分类',
+                type: '',
+                url: '',
+                page_id: 0,
+                page_title: '',
+                course_title: '',
+                course_id: ''
+              }
+            ]
           }
-        }, {
+        },
+        {
           icon: 'el-icon-s-finance',
           title: '优惠券',
           type: 'coupon',
           default: {
-            data: [{
-              price: 100,
-              condition: '满￥200可用'
-            }, {
-              price: 100,
-              condition: '满￥200可用'
-            }, {
-              price: 100,
-              condition: '满￥200可用'
-            }, {
-              price: 100,
-              condition: '满￥200可用'
-            }]
+            data: [
+              {
+                price: 100,
+                condition: '满￥200可用'
+              },
+              {
+                price: 100,
+                condition: '满￥200可用'
+              },
+              {
+                price: 100,
+                condition: '满￥200可用'
+              },
+              {
+                price: 100,
+                condition: '满￥200可用'
+              }
+            ]
           }
-        }, {
+        },
+        {
           icon: 'el-icon-s-order',
           title: '限时拼团',
           type: 'promotion',
@@ -223,14 +274,16 @@ export default {
             title: '拼团',
             data: []
           }
-        }, {
+        },
+        {
           icon: 'el-icon-picture-outline',
           title: '图片广告',
           type: 'imageAd',
           default: {
             data: []
           }
-        }]
+        }
+      ]
     }
   },
   computed: {
@@ -239,7 +292,7 @@ export default {
       return this.temp.template[this.activeIndex] || {}
     },
     activeIndex() {
-      return this.temp.template.findIndex(it => it.checked)
+      return this.temp.template.findIndex((it) => it.checked)
     }
   },
   created() {
@@ -266,7 +319,7 @@ export default {
     },
     // 在中间面板选中组件的事件
     handleSelectChange(index) {
-      const newTemp = this.temp.template.map(it => {
+      const newTemp = this.temp.template.map((it) => {
         return {
           ...it,
           checked: false
@@ -304,16 +357,18 @@ export default {
         showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消'
-      }).then(action => {
-        const copy = clone(this.temp.template, true)
-        copy.splice(index, 1)
-        setTimeout(() => {
-          copy.forEach(it => {
-            it.checked = false
-          })
-          this.temp.template = copy
-        }, 100)
-      }).catch(err => err)
+      })
+        .then((action) => {
+          const copy = clone(this.temp.template, true)
+          copy.splice(index, 1)
+          setTimeout(() => {
+            copy.forEach((it) => {
+              it.checked = false
+            })
+            this.temp.template = copy
+          }, 100)
+        })
+        .catch((err) => err)
     },
     // 监听: 右侧值改变事件
     handleChange({ key, value }) {
@@ -339,76 +394,79 @@ export default {
     },
     //
     handleIconsChange(newData) {
-      console.log(13123)
+      this.temp.template[this.activeIndex].data = newData
+    },
+    handleImageAdChange(newData) {
+      this.temp.template[this.activeIndex].data = newData
+    },
+    handlePromotionChange(newData) {
       this.temp.template[this.activeIndex].data = newData
     }
   }
 }
 </script>
 <style scoped lang='scss'>
-.renovation-edit-page{
+.renovation-edit-page {
   min-height: calc(100vh - 85px);
   overflow-x: auto !important;
-  .wrapper-left{
+  .wrapper-left {
     // position:fixed;
     // top: 100px;
     // left: 180px;
-     width: 20%;
-     min-width: 295px;
-
+    width: 20%;
+    min-width: 295px;
   }
-  .wrapper-main{
+  .wrapper-main {
     // position: relative;
     // left: 500px;
     // top:15px;
     // background: #fff;
   }
-  .wrapper-right{
+  .wrapper-right {
     height: 80vh;
     overflow-y: auto;
     // background: #fff;
   }
-  .edit-item{
+  .edit-item {
   }
-  .item{
-    .item-inner{
-    min-height: 500px;
+  .item {
+    .item-inner {
+      min-height: 500px;
     }
   }
-  .component-item:hover{
+  .component-item:hover {
     color: #448ef7;
     border: 1px solid #448ef7 !important;
     transition: all 0.3s;
   }
-  .middle-item-active{
+  .middle-item-active {
     border: 1px dashed #448ef7;
     padding: 3px 0;
     position: relative;
     cursor: pointer;
-    .actions-panel{
+    .actions-panel {
       height: 90px;
-      position:absolute;
+      position: absolute;
       right: -2.1em;
       top: -1px;
       z-index: 10;
       background: #fff;
-       i{
-         width: 2em;
-         height: 2em;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         &:not(.disable):hover{
-           background: #448ef7;
-           color: white;
-         }
-         &.disable{
-           color: #ccc;
-           cursor: not-allowed;
-         }
-       }
+      i {
+        width: 2em;
+        height: 2em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:not(.disable):hover {
+          background: #448ef7;
+          color: white;
+        }
+        &.disable {
+          color: #ccc;
+          cursor: not-allowed;
+        }
+      }
     }
   }
 }
-
 </style>

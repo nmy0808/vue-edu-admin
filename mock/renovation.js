@@ -292,7 +292,7 @@ module.exports = [
             {
               data: [
                 {
-                  src: 'blob:http://localhost:9527/a9b7d759-6730-4e26-8fb3-5843bc7db43a',
+                  src: 'https://dummyimage.com/365x150',
                   type: '',
                   course_title: '',
                   course_id: '',
