@@ -47,8 +47,9 @@
           <div class="ps-2">
             <el-select
               v-model="item.type"
+              size="mini"
               placeholder="请选择关联"
-              class="mt-2"
+              class="mt-2 mb-3"
               style="width: 120px;"
               @change="handleTypeChange"
             >
@@ -60,9 +61,10 @@
               />
             </el-select>
             <div class="mt-1">
-              <el-input v-if="item.type === 'webview'" v-model="item.url" style="width: 210px;" placeholder="请输入url" @change="handleTypeChange" />
+              <el-input v-if="item.type === 'webview'" v-model="item.url" size="mini" style="width: 195px;" placeholder="请输入url" @change="handleTypeChange" />
               <el-button
                 v-if="item.type === 'course'"
+                size="mini"
                 type="primary"
                 placeholder="请输入url"
                 icon="el-icon-plus"

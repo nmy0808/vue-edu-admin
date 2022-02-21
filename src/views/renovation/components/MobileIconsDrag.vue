@@ -74,7 +74,7 @@
                 v-if="item.type === 'course'"
                 size="mini"
                 :type="'primary'"
-                :plain="item.course_title"
+                :plain="!!item.course_title"
                 placeholder="请输入url"
                 :icon="item.course_title ? '':'el-icon-plus' "
                 @click.stop="handleSelectCourse(index)"
@@ -84,7 +84,7 @@
               <el-button
                 v-if="item.type === 'page'"
                 size="mini"
-                :plain="item.page_title"
+                :plain="!!item.page_title"
                 :type="'primary'"
                 placeholder="请输入url"
                 :icon="item.page_title ? '' :'el-icon-plus' "
