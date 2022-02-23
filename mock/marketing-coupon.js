@@ -9,7 +9,9 @@ const { list } = Mock.mock({
       type: '@pick(["course", "column"])',
       goods_id: '@guid()',
       price: '@integer(23,35)' + '.00',
-      p_num: '@integer(18,29)',
+      c_num: '@integer(18,29)',
+      received_num: '@integer(18,29)', //已领取
+      used_num: '@integer(18,29)', //已使用
       auto: '@integer(0,1)',
       expire: '@pick([24, 48])',
       status: '@integer(0,3)',
@@ -27,10 +29,10 @@ const { list } = Mock.mock({
     }
   ]
 })
-// 拼团列表
+// 优惠券列表
 module.exports = [
   {
-    url: '/admin/s/group',
+    url: '/admin/s/coupon',
     type: 'get',
     response: (_) => {
       return {
@@ -42,9 +44,9 @@ module.exports = [
       }
     }
   },
-  // 更新拼团
+  // 更新优惠券
   {
-    url: '/admin/s/group/update',
+    url: '/admin/s/coupon/update',
     type: 'post',
     response: (_) => {
       return {
@@ -53,9 +55,9 @@ module.exports = [
       }
     }
   },
-  // 新增拼团
+  // 新增优惠券
   {
-    url: '/admin/s/group/save',
+    url: '/admin/s/coupon/save',
     type: 'post',
     response: (_) => {
       return {
@@ -64,9 +66,9 @@ module.exports = [
       }
     }
   },
-  // 上架/下架拼团
+  // 上架/下架优惠券
   {
-    url: '/admin/s/group/updatestatus',
+    url: '/admin/s/coupon/updatestatus',
     type: 'post',
     response: (_) => {
       return {

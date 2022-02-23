@@ -14,6 +14,7 @@ const cash = require('./cash')
 const renovation = require('./renovation')
 const marketingGroup = require('./marketing-group')
 const marketingFlashsale = require('./marketing-flashsale')
+const marketingCoupon = require('./marketing-coupon')
 
 const mocks = [
   ...user,
@@ -28,7 +29,8 @@ const mocks = [
   ...cash,
   ...renovation,
   ...marketingGroup,
-  ...marketingFlashsale
+  ...marketingFlashsale,
+  ...marketingCoupon
 ]
 
 // for front mock

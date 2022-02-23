@@ -7,7 +7,11 @@
     >
       <el-form ref="formCom" :model="temp" :rules="rules" label-width="130px">
         <el-form-item label="类型" prop="type">
-          <el-select v-model="temp.type" placeholder="placeholder">
+          <el-select
+            v-model="temp.type"
+            placeholder="选择关联类型"
+            @change="temp.value = null"
+          >
             <el-option label="课程" value="course" />
             <el-option label="专栏" value="column" />
           </el-select>
@@ -48,8 +52,7 @@
         <el-form-item label="秒杀价" prop="price">
           <el-input-number
             v-model="temp.price"
-            :min="1"
-            :max="10"
+            :min="0"
             :precision="2"
           />
         </el-form-item>
@@ -57,7 +60,6 @@
           <el-input-number
             v-model="temp.s_num"
             :min="1"
-            :max="10"
           />
         </el-form-item>
         <el-form-item label="活动时间范围">
@@ -121,13 +123,6 @@ export default {
       },
       get() {
         return [this.temp.start_time, this.temp.end_time]
-      }
-    }
-  },
-  watch: {
-    'temp.type': {
-      handler() {
-        this.temp.value = null
       }
     }
   },

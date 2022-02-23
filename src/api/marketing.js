@@ -95,7 +95,7 @@ export function getFlashsaleListApi(page) {
   })
 }
 /**
- * 更新拼团
+ * 更新秒杀
  */
 export function updateFlashsaleApi({
   id,
@@ -123,7 +123,7 @@ export function updateFlashsaleApi({
   })
 }
 /**
- * 新增拼团
+ * 新增秒杀
  */
 export function addFlashsaleApi({
   type, // 类型：course课程，column专栏
@@ -149,7 +149,7 @@ export function addFlashsaleApi({
   })
 }
 /**
- * 上架/下架拼团
+ * 上架/下架秒杀
  * 状态：0禁用1启用
  */
 export function setFlashsaleStatusApi({ id, status }) {
@@ -163,4 +163,85 @@ export function setFlashsaleStatusApi({ id, status }) {
   })
 }
 // ----- 优惠券 --------
-
+/**
+ * 优惠券列表
+ */
+export function getCouponListApi(page) {
+  return request({
+    url: '/admin/s/coupon',
+    method: 'get',
+    params: { page }
+  })
+}
+/**
+ * 更新优惠券
+ */
+export function updateCouponApi({
+  id,
+  type, // 类型：course课程，column专栏
+  goods_id, // 课程/专栏id
+  condition, // 优惠券条件（满多少元）
+  price,
+  c_num, // 限制数量
+  status, // 状态：0禁用1启用
+  start_time,
+  end_time
+}) {
+  return request({
+    url: '/admin/s/coupon/update',
+    method: 'post',
+    data: {
+      id,
+      type,
+      goods_id,
+      price,
+      condition,
+      c_num,
+      status,
+      start_time,
+      end_time
+    }
+  })
+}
+/**
+ * 新增优惠券
+ */
+export function addCouponApi({
+  type, // 类型：course课程，column专栏
+  goods_id, // 课程/专栏id
+  condition, // 优惠券条件（满多少元）
+  price,
+  c_num, // 限制数量
+  status, // 状态：0禁用1启用
+  start_time,
+  end_time
+}) {
+  return request({
+    url: '/admin/s/coupon/save',
+    method: 'post',
+    data: {
+      type,
+      goods_id,
+      price,
+      condition,
+      c_num,
+      status,
+      start_time,
+      end_time
+    }
+  })
+}
+/**
+ * 上架/下架优惠券
+ * 状态：0禁用1启用
+ */
+export function setCouponStatusApi({ id, status }) {
+  return request({
+    url: '/admin/s/coupon/updatestatus',
+    method: 'post',
+    data: {
+      id,
+      status
+    }
+  })
+}

@@ -35,7 +35,7 @@ module.exports = [
       return {
         code: 20000,
         data: {
-          total: list.length,
+          total: 100,
           items: shuffle(list)
         }
       }

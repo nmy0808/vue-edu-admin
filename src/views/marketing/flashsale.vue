@@ -28,7 +28,7 @@
             </p>
             <div>
               <p class="p-0 m-0 fs-7 text-decoration-line-through text-secondary opacity-50">原始价格: ¥{{ row.value.price }}</p>
-              <p class="p-0 m-0 fs-7 text-red">拼团价格: ¥{{ row.price }}</p>
+              <p class="p-0 m-0 fs-7 text-red">秒杀价格: ¥{{ row.price }}</p>
             </div>
           </div>
         </div>
