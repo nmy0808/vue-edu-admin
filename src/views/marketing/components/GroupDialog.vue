@@ -1,7 +1,7 @@
 <template>
   <div class="dialog">
     <el-dialog
-      title=""
+      :title="temp.id?'编辑':'新增'"
       :visible.sync="dialogVisible"
       @closed="handleClosed"
     >

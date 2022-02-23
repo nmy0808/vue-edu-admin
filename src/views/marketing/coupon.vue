@@ -16,15 +16,15 @@
             type="primary"
             icon="el-icon-plus"
             @click="handleAdd"
-          >创建秒杀</el-button>
+          >创建优惠券</el-button>
         </div>
       </template>
       <template #col_content="{ row }">
         {{ row.value.title }}
       </template>
       <template #col_date_range="{ row }">
-         <div>起始: {{row.start_time}}</div>
-         <div>结束: {{row.end_time}}</div>
+        <div>起始: {{ row.start_time }}</div>
+        <div>结束: {{ row.end_time }}</div>
       </template>
       <template #col_status="{ row }">
         <el-tag :type="row.status === 1 ? 'danger' : 'info'">
