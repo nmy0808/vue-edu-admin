@@ -11,6 +11,7 @@ const school_user = require('./school_user')
 const order = require('./order')
 const payment = require('./payment')
 const cash = require('./cash')
+const renovation = require('./renovation')
 
 const mocks = [
   ...user,
@@ -22,7 +23,8 @@ const mocks = [
   ...school_user,
   ...order,
   ...payment,
-  ...cash
+  ...cash,
+  ...renovation
 ]
 
 // for front mock

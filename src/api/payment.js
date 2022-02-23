@@ -8,7 +8,7 @@ export function getBankAccountListApi({ page, limit = 10, status }) {
   return request({
     url: '/admin/s/cash',
     method: 'get',
-    data: { page, status, limit }
+    params: { page, status, limit }
   })
 }
 /**

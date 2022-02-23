@@ -30,7 +30,7 @@
           :limit="limit"
           @pagination="pagination"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @update:page="handleCurrentChange"
         />
       </template>
     </vxe-grid>
@@ -136,7 +136,8 @@ export default {
         //   }
         // },
         rowConfig: {
-          height: 80
+          height: 80,
+          isCurrent: true, isHover: true
         },
         // printConfig: {
         //   title: '123'
@@ -201,6 +202,10 @@ export default {
     handleCheckboxChange(...arg) {
       this.$emit('checkbox-change', ...arg)
     },
+    // 获取单选选中
+    getRadioRecord() {
+      return this.$refs.xTable.getRadioRecord()
+    },
     // 用于 type=checkbox，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）
     getCheckboxRecords() {
       return this.$refs.xTable.getCheckboxRecords()
@@ -209,7 +214,8 @@ export default {
       this.$emit('update:limit', val)
     },
     handleCurrentChange(val) {
-      this.$emit('update:size', val)
+      console.log(val)
+      this.$emit('update:page', val)
     },
     exportMethod(e) {
       console.log(e)

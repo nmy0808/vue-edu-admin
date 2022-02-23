@@ -236,6 +236,52 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/renovation',
+    component: Layout,
+    meta: { title: '可视化', icon: 'el-icon-s-open' },
+    redirect: { name: 'Mobile' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'mobile',
+        name: 'Mobile',
+        meta: {
+          title: '移动端',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/renovation/mobile/index.vue')
+      },
+      {
+        path: 'mobile/edit/:id',
+        name: 'MobileEdit',
+        hidden: true,
+        meta: {
+          title: '移动端装修',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/renovation/mobile/edit.vue')
+      },
+      {
+        path: 'pc',
+        name: 'Pc',
+        meta: {
+          title: 'PC端',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/renovation/pc/index.vue')
+      },
+      {
+        path: 'pc/edit/:id',
+        name: 'PcEdit',
+        hidden: true,
+        meta: {
+          title: 'PC端装修',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/renovation/pc/edit.vue')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,

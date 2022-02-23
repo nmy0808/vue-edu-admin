@@ -7,7 +7,7 @@ export function getCashListApi({ page }) {
   return request({
     url: '/admin/s/cashconfirm',
     method: 'get',
-    data: { page }
+    params: { page }
   })
 }
 /**
