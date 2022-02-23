@@ -282,6 +282,41 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/marketing',
+    component: Layout,
+    meta: { title: '营销', icon: 'el-icon-s-order' },
+    redirect: { name: 'Group' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'group',
+        name: 'Group',
+        meta: {
+          title: '拼团',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/marketing/group.vue')
+      },
+      {
+        path: 'flashsale',
+        name: 'Flashsale',
+        meta: {
+          title: '秒杀',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/marketing/flashsale.vue')
+      },
+      {
+        path: 'coupon',
+        name: 'Coupon',
+        meta: {
+          title: '优惠券',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/marketing/coupon.vue')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
