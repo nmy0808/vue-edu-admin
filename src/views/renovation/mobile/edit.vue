@@ -337,7 +337,6 @@ export default {
       this.temp.template = []
       this.$nextTick(() => {
         this.temp.template = newTemplate
-        console.log(this.temp.template)
       })
     },
     // moveTo下移

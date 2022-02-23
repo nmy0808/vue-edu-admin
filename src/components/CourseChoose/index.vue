@@ -105,7 +105,6 @@ export default {
       } else {
         columns.unshift(checkbox)
       }
-      console.log(columns)
       return columns
     }
   },

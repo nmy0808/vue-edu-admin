@@ -112,7 +112,6 @@ export default {
     },
     // list: 选择关联课程的确认事件
     handleSelectCourseConfirm(list) {
-      // console.log(list)
       this.tempList = this.tempList.concat(list)
       this.$emit('change', this.tempList.concat(list))
     }
