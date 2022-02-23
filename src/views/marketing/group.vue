@@ -58,7 +58,7 @@
 import BaseTable from '@/components/BaseTable'
 import GroupDialog from './components/GroupDialog.vue'
 import { clone, merge } from 'xe-utils'
-import { getGroupListApi } from '@/api/marketing'
+import { getGroupListApi, setGroupStatusApi } from '@/api/marketing'
 export default {
   name: '',
   components: { BaseTable, GroupDialog },
@@ -140,6 +140,9 @@ export default {
       } else {
         params.status = 3
       }
+      await setGroupStatusApi(params)
+      const targetRow = this.list.find(it => it.id === row.id) || {}
+      targetRow.status = params.status
       const message = params.status === 1 ? '已上架' : '已下架'
       const type = params.status === 1 ? 'success' : 'info'
       this.$message({

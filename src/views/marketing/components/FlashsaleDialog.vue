@@ -45,7 +45,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="拼团价" prop="price">
+        <el-form-item label="秒杀价" prop="price">
           <el-input-number
             v-model="temp.price"
             :min="1"
@@ -53,24 +53,12 @@
             :precision="2"
           />
         </el-form-item>
-        <el-form-item label="拼团人数" prop="p_num">
+        <el-form-item label="秒杀人数" prop="s_num">
           <el-input-number
-            v-model="temp.p_num"
+            v-model="temp.s_num"
             :min="1"
             :max="10"
           />
-        </el-form-item>
-        <el-form-item label="拼团时限" prop="expire">
-          <el-radio-group v-model="temp.expire">
-            <el-radio :label="24">24小时</el-radio>
-            <el-radio :label="48">48小时</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否开启凑团" prop="auto">
-          <el-radio-group v-model="temp.auto">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="活动时间范围">
           <el-date-picker
@@ -93,10 +81,10 @@
   </div>
 </template>
 <script>
-import { clone, get, omit, pick, set } from 'xe-utils'
+import { clone } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
-import { addGroupApi, updateGroupApi } from '@/api/marketing'
+import { addFlashsaleApi, updateFlashsaleApi } from '@/api/marketing'
 
 export default {
   name: 'MediaDialog',
@@ -106,12 +94,11 @@ export default {
     return {
       dialogVisible: false,
       temp: {
+        id: null,
         type: 'course', // 类型：course课程，column专栏
         goods_id: null, // 课程/专栏id
         price: 0,
-        p_num: 1, // 成团人数
-        auto: 1, // 自动成团：0否1是
-        expire: 24, // 拼团时间
+        s_num: 1, //  秒杀人数
         status: 1, // 状态：0禁用1启用
         start_time: '', //
         end_time: '',
@@ -158,16 +145,16 @@ export default {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            await updateGroupApi(this.temp)
+            await updateFlashsaleApi(this.temp)
           } else {
           // 添加提交
-            await addGroupApi(this.temp)
+            await addFlashsaleApi(this.temp)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',
             type: 'success'
           })
-          this.getList()
+          await this.getList()
           this.dialogVisible = false
         }
       })
