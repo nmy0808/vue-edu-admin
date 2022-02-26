@@ -317,6 +317,50 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/tool',
+    component: Layout,
+    meta: { title: '工具', icon: 'el-icon-s-order' },
+    redirect: { name: 'Bbs' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'bbs',
+        name: 'Bbs',
+        meta: {
+          title: '小社群',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/bbs.vue')
+      },
+      {
+        path: 'question',
+        name: 'Question',
+        meta: {
+          title: '题库',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/question.vue')
+      },
+      {
+        path: 'testpaper',
+        name: 'Testpaper',
+        meta: {
+          title: '试卷',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/testpaper.vue')
+      },
+      {
+        path: 'book',
+        name: 'Book',
+        meta: {
+          title: '电子书',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/book.vue')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,
