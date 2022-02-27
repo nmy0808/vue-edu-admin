@@ -137,7 +137,8 @@ export default {
         // },
         rowConfig: {
           height: 80,
-          isCurrent: true, isHover: true
+          isCurrent: true,
+          isHover: true
         },
         // printConfig: {
         //   title: '123'

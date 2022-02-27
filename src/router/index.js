@@ -320,7 +320,7 @@ export const asyncRoutes = [
   {
     path: '/tool',
     component: Layout,
-    meta: { title: '工具', icon: 'el-icon-s-order' },
+    meta: { title: '工具', icon: 'el-icon-s-platform' },
     redirect: { name: 'Bbs' }, // 重定向地址，在面包屑中点击会重定向去的地址
     children: [
       {
