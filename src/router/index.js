@@ -348,7 +348,25 @@ export const asyncRoutes = [
           title: '试卷',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/testpaper.vue')
+        component: () => import('@/views/tool/testpaper/index.vue')
+      },
+      {
+        path: 'testpaper_form',
+        name: 'TestpaperForm',
+        meta: {
+          title: '组卷',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/testpaper/testpaper_form.vue')
+      },
+      {
+        path: 'testpaper_manage',
+        name: 'TestpaperManage',
+        meta: {
+          title: '考试管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/testpaper/testpaper_manage.vue')
       },
       {
         path: 'book',
