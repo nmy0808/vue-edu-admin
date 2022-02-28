@@ -34,7 +34,18 @@
       </template>
       <template #col_actions="{ row }">
         <el-button type="primary" size="mini" @click="toPageTestpaperForm(row)">编辑</el-button>
-        <el-button type="danger" size="mini">删除</el-button>
+        <el-popconfirm
+          title="这是一段内容确定删除吗？"
+          @onConfirm="handleDeleteRow(row)"
+        >
+          <el-button
+            slot="reference"
+            size="mini"
+            type="danger"
+          >
+            删除
+          </el-button>
+        </el-popconfirm>
       </template>
     </base-table>
   </div>
@@ -90,6 +101,15 @@ export default {
       this.list = data.items
       this.total = data.total
       this.listLoading = false
+    },
+    async handleDeleteRow(row) {
+      const params = [row.id]
+      await deleteTestpaperByIdsApi(params)
+      this.$message({
+        message: '删除成功',
+        type: 'success'
+      })
+      this.getList()
     },
     // 跳转至组卷页面
     toPageTestpaperForm(row) {
