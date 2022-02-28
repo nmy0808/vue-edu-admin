@@ -18,7 +18,7 @@
             icon="el-icon-plus"
             @click="$router.push({name: 'TestpaperForm'})"
           >手动组卷</el-button>
-          <el-button type="primary">考试管理</el-button>
+          <el-button type="primary" @click="$router.push({name: 'TestpaperManage'})">考试管理</el-button>
           <el-input
             v-model="listQuery.title"
             class="w-25 me-2 ms-auto"
@@ -33,7 +33,7 @@
         <el-tag v-else type="danger">否</el-tag>
       </template>
       <template #col_actions="{ row }">
-        <el-button type="primary" size="mini" @click="toPageTestpaperForm(row)">编辑</el-button>
+        <el-button class="me-2" type="primary" size="mini" @click="toPageTestpaperForm(row)">编辑</el-button>
         <el-popconfirm
           title="这是一段内容确定删除吗？"
           @onConfirm="handleDeleteRow(row)"

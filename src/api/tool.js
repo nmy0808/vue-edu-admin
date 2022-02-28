@@ -146,7 +146,38 @@ export function getTestpaperByIdsApi(id) {
     params: { id }
   })
 }
-// 考试列表
-// 删除考试
-// 查看考试详情
-// 考试阅卷
+// ----------------------------------------------------------------
+// 考试管理列表
+//  回答状态：0否1是
+//  阅卷状态：0否1是
+export function getUserTestListApi({ page, answer_status, read_status }) {
+  return request({
+    url: '/admin/s/user_test',
+    method: 'get',
+    params: { page, answer_status, read_status }
+  })
+}
+// 删除考试管理
+export function deleteUserTestByIdsApi(ids) {
+  return request({
+    url: '/admin/s/user_test/delete',
+    method: 'post',
+    data: { ids }
+  })
+}
+// 查看考试管理详情
+export function getUserTestByIdApi(id) {
+  return request({
+    url: '/admin/s/user_test/read',
+    method: 'get',
+    params: { id }
+  })
+}
+// 设置考试管理阅卷状态
+export function getUserTestReadApi({ id, scores }) {
+  return request({
+    url: '/admin/s/user_test/update_readstatus',
+    method: 'get',
+    params: { id, scores }
+  })
+}

@@ -353,6 +353,7 @@ export const asyncRoutes = [
       {
         path: 'testpaper_form',
         name: 'TestpaperForm',
+        hidden: true,
         meta: {
           title: '组卷',
           roles: ['admin', 'editor']
@@ -362,6 +363,7 @@ export const asyncRoutes = [
       {
         path: 'testpaper_manage',
         name: 'TestpaperManage',
+        hidden: true,
         meta: {
           title: '考试管理',
           roles: ['admin', 'editor']

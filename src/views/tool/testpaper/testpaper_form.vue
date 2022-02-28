@@ -73,23 +73,30 @@
             :class="[aIndex === item.question.value.options.length -1?'mb-0':'mb-3']"
           >
             <div class="d-flex">
-              <el-tag v-if="item.question.type === 'answer'" type="info" class="me-2">解答</el-tag>
+              <el-tag
+                v-if="item.question.type === 'answer'"
+                type="success"
+                class="me-2"
+                style="transform:translateY(3px);"
+              >正确解答</el-tag>
               <el-tag
                 v-else-if="item.question.type === 'completion'"
-                type="info"
+                type="success"
                 class="me-2"
+                style="transform:translateY(3px);"
               >{{ aIndex +1 }}</el-tag>
               <el-tag
                 v-else
                 :type="judgeCurrentCorrect(item.question.value.value,aIndex)? 'success':'info'"
                 class="me-2"
+                style="transform:translateY(3px);"
               >{{ wordMap[aIndex] }}</el-tag>
               <p v-html="answer" />
             </div>
           </div>
           <!-- cart-footer 答案-->
           <div v-if="item.question.value.value || item.question.value.value === 0" class="mt-2 pt-3 border-top">
-            答案: <span class="fw-bold">{{ convertAnswerFormat(item.question.value.value) }}</span>
+            答案: <span class="fw-bold">{{ convertAnswerFormat(item.question.type,item.question.value.value) }}</span>
           </div>
         </el-card>
         <el-button
@@ -191,10 +198,23 @@ export default {
     /**
      * 转换的答案数组的格式
      */
-    convertAnswerFormat(value) {
-      if (Array.isArray(value)) {
+    // convertAnswerFormat(value) {
+    //   if (Array.isArray(value)) {
+    //     return value.map(it => wordMap[it]).join(', ')
+    //   } else {
+    //     return wordMap[value]
+    //   }
+    // },
+    convertAnswerFormat(type, value) {
+      if (type === 'checkbox') {
         return value.map(it => wordMap[it]).join(', ')
-      } else {
+      } else if (type === 'radio') {
+        return wordMap[value]
+      } else if (type === 'answer') {
+        return Array.isArray(value) ? value.join(',') : value
+      } else if (type === 'completion') {
+        return clone(value, true).map((it, index) => index + 1 + '.' + it).join(' ')
+      } else if (type === 'trueOrfalse') {
         return wordMap[value]
       }
     },
