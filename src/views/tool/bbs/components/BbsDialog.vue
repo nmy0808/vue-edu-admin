@@ -5,8 +5,8 @@
     width="70%"
     @closed="handleClosed"
   >
-    <el-form ref="form" :model="temp" label-width="80px">
-      <el-form-item label="社区标题">
+    <el-form ref="formCom" :model="temp" label-width="80px" :rules="rules">
+      <el-form-item label="社区标题" prop="title">
         <el-input v-model="temp.title" />
       </el-form-item>
       <el-form-item label="状态">
@@ -45,25 +45,35 @@ export default {
         id: null,
         title: '',
         status: 1
+      },
+      rules: {
+        title: [
+          { required: true, message: '标题内容不能为空', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     // 提交
     async handleConfirm() {
-      const params = {}
-      params.id = this.temp.id
-      params.title = this.temp.title
-      params.status = this.temp.status
-      if (this.temp.id) {
-        await updateBbsApi(params)
-      } else {
-        await addBbsApi(params)
-      }
-      this.getList()
-      this.$message({
-        message: this.temp.id ? '编辑成功' : '新增成功',
-        type: 'success'
+      this.$refs['formCom'].validate(async(valid) => {
+        if (valid) {
+          const params = {}
+          params.id = this.temp.id
+          params.title = this.temp.title
+          params.status = this.temp.status
+          if (this.temp.id) {
+            await updateBbsApi(params)
+          } else {
+            await addBbsApi(params)
+          }
+          this.getList()
+          this.$message({
+            message: this.temp.id ? '编辑成功' : '新增成功',
+            type: 'success'
+          })
+          this.close()
+        }
       })
     },
     open(temp) {

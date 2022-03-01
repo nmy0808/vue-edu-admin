@@ -37,10 +37,12 @@ const { list: postList } = Mock.mock({
       school_id: '@guid()',
       bbs_id: '@guid()',
       desc: '{"text":"88888","images":[]}',
-      content: [
+      'content|2-3': [
         {
           text: '@ctitle(6,11)',
-          images: []
+          'images|5': [
+            "@image('200x200','#f4f6f9','#2c384c','jpg','img')"
+          ]
         }
       ],
       user_id: '@guid()',

@@ -335,9 +335,11 @@ export const asyncRoutes = [
       {
         path: 'bbs_post/:id',
         name: 'BbsPost',
+        hidden: true,
         meta: {
           title: '小社群帖子列表',
-          roles: ['admin', 'editor']
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/bbs'
         },
         component: () => import('@/views/tool/bbs/bbs-post.vue')
       },
@@ -365,7 +367,8 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: '组卷',
-          roles: ['admin', 'editor']
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/testpaper'
         },
         component: () => import('@/views/tool/testpaper/testpaper_form.vue')
       },
@@ -375,7 +378,8 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: '考试管理',
-          roles: ['admin', 'editor']
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/testpaper'
         },
         component: () => import('@/views/tool/testpaper/testpaper_manage.vue')
       },

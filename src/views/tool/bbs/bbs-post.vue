@@ -14,32 +14,60 @@
       <template #form>
         <div class="d-flex pb-3">
           <el-button
-            type="success"
-            icon="el-icon-plus"
-            @click="$router.push({name: 'TestpaperForm'})"
-          >手动组卷</el-button>
-          <el-button type="primary" @click="$router.push({name: 'TestpaperManage'})">考试管理</el-button>
-          <el-input
-            v-model="listQuery.title"
-            class="w-25 me-2 ms-auto"
-            clearable
-            placeholder="请输入标题"
-          />
-          <el-button type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
+            type="primary"
+            icon="el-icon-back"
+            @click="$router.push({name: 'Bbs'})"
+          >返回社区列表</el-button>
         </div>
       </template>
-      <template #col_status="{ row }">
-        <el-tag v-if="row.status" type="success">是</el-tag>
-        <el-tag v-else type="danger">否</el-tag>
+      <template #col_content="{ row }">
+        <el-popover
+          v-for="(item,index) in row.content"
+          :key="index"
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          content="这是一段内容"
+        >
+          <p class="fs-6">{{ item.text }}</p>
+          <template v-for="(image,iIndex) in item.images">
+            <img :key="iIndex" height="80px" width="80px" class="me-2 mb-2" :src="image" alt="">
+          </template>
+          <el-tag slot="reference" effect="light" class="me-2 cursor-pointer" type="">{{ item.text }}</el-tag>
+        </el-popover>
+        <!-- <div v-for="(item,index) in row.content" :key="index">
+          <div style="height: 50px;">
+            <template v-for="(image,iIndex) in item.images">
+              <img :key="iIndex" height="100%" class="me-2" :src="image" alt="">
+            </template>
+          </div>
+        </div> -->
+      </template>
+      <template #col_date="{ row }">
+        {{ conversionTimeFormat(row.created_time) }}
       </template>
       <template #col_actions="{ row }">
-        <el-button class="me-2" type="primary" size="mini" @click="toPageTestpaperForm(row)">编辑</el-button>
+        <el-button
+          style="width: 80px;"
+          type=""
+          size="mini"
+          @click="handleSeeRep(row)"
+        >查看回复</el-button>
+        <el-button
+          style="width: 80px;"
+          class="me-2"
+          :plain="!!row.is_top"
+          type="primary"
+          size="mini"
+          @click="setPostTopStatus(row)"
+        >{{ row.is_top ? '取消置顶' : '置顶' }}</el-button>
         <el-popconfirm
           title="这是一段内容确定删除吗？"
           @onConfirm="handleDeleteRow(row)"
         >
           <el-button
             slot="reference"
+            style="width: 80px;"
             size="mini"
             type="danger"
           >
@@ -48,15 +76,18 @@
         </el-popconfirm>
       </template>
     </base-table>
+    <post-dialog ref="postDialogCom" />
   </div>
 </template>
 <script>
 
 import BaseTable from '@/components/BaseTable'
-import { deleteTestpaperByIdsApi, getTestpaperListApi } from '@/api/tool'
+import PostDialog from './components/PostDialog'
+import { deletePostByIdApi, getPostCommentApi, getPostListApi, setPostTopStatusApi } from '@/api/tool'
+import { toDateString } from 'xe-utils'
 export default {
   name: 'QuestionPage',
-  components: { BaseTable },
+  components: { BaseTable, PostDialog },
   provide() {
     return {
       getList: this.getList
@@ -74,15 +105,18 @@ export default {
       },
       total: 0,
       columns: [
-        { title: 'ID', field: 'id', width: '90', align: 'center' },
-        { title: '试卷标题 ', field: 'title', align: 'left' },
-        { title: '是否公开 ', width: 120, align: 'center', slots: { default: 'col_status' }},
-        { title: '总分', field: 'total_score', width: 120, align: 'center' },
-        { title: '及格分', field: 'pass_score', width: 120, align: 'center' },
-        { title: '时长(分钟)', field: 'expire', width: 120, align: 'center' },
-        { title: '操作 ', width: 210, align: 'center', slots: { default: 'col_actions' }}
-      ],
-      typeOptions: { 'radio': '单选题', 'checkbox': '多选题', 'trueOrfalse': '判断题', 'answer': '问答题', 'completion': '填空题' }
+        { title: '帖子内容 (鼠标滑过显示详情)', field: 'content', minWidth: '190', height: 800, align: 'left', slots: { default: 'col_content' }},
+        { title: '用户', field: 'user.username', width: '190', align: 'center' },
+        { title: '创建时间', width: '210', align: 'center', slots: { default: 'col_date' }},
+        { title: '点赞数', field: 'support_count', width: '120', align: 'center' },
+        { title: '评论数', field: 'comment_count', width: '120', align: 'center' },
+        { title: '操作 ', width: 290, align: 'center', slots: { default: 'col_actions' }}
+      ]
+    }
+  },
+  computed: {
+    bbs_id() {
+      return this.$route.params.id
     }
   },
   created() {
@@ -94,25 +128,43 @@ export default {
       this.list = []
       const params = {}
       params.page = this.listQuery.page
-      params.type = this.listQuery.type
-      params.title = this.listQuery.title
-      const { data } = await getTestpaperListApi(params)
+      params.bbs_id = this.bbs_id
+      const { data } = await getPostListApi(params)
       this.list = data.items
       this.total = data.total
       this.listLoading = false
     },
     async handleDeleteRow(row) {
-      const params = [row.id]
-      await deleteTestpaperByIdsApi(params)
+      const params = {}
+      params.ids = [row.id]
+      params.bbs_id = this.bbs_id
+      await deletePostByIdApi(params)
       this.$message({
         message: '删除成功',
         type: 'success'
       })
       this.getList()
     },
-    // 跳转至组卷页面
-    toPageTestpaperForm(row) {
-      this.$router.push({ name: 'TestpaperForm', query: { id: row.id }})
+    // 置顶
+    async setPostTopStatus(row) {
+      const params = {}
+      params.id = row.id
+      params.is_top = !row.is_top
+      await setPostTopStatusApi(params)
+      this.list.find(it => it.id === row.id).is_top = params.is_top
+      this.$message({
+        message: params.is_top ? '已置顶' : '取消置顶',
+        type: params.is_top ? 'success' : 'info'
+      })
+    },
+    // 查看回复(帖子评论列表)
+    async handleSeeRep(row) {
+      const id = row.id
+      this.$refs.postDialogCom.open(id)
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }
