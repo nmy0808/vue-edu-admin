@@ -181,3 +181,123 @@ export function getUserTestReadApi({ id, scores }) {
     params: { id, scores }
   })
 }
+// ----------------------------------------------------------------
+// 社区模块
+/**
+ * 新增社区
+ */
+export function addBbsApi(options) {
+  const data = {}
+  data.title = options.title
+  data.status = options.status
+  return request({
+    url: '/admin/s/bbs/save',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 更新社区
+ */
+export function updateBbsApi(options) {
+  const data = {}
+  data.id = options.id
+  data.title = options.title
+  data.status = options.status
+  return request({
+    url: '/admin/s/bbs/update',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 社区列表
+ */
+export function getBbsListApi(page) {
+  return request({
+    url: '/admin/s/bbs',
+    method: 'get',
+    params: { page }
+  })
+}
+/**
+ * 显示/隐藏社区
+ * 状态：0禁用1启用
+ */
+export function setBbsStatusApi({ id, status }) {
+  return request({
+    url: '/admin/s/bbs/updatestatus',
+    method: 'post',
+    data: { id, status }
+  })
+}
+/**
+ *删除社区
+ */
+export function deleteBbsByIdsApi(ids) {
+  return request({
+    url: '/admin/s/bbs/delete',
+    method: 'post',
+    data: { ids }
+  })
+}
+/**
+ * 给社区分配管理员
+ */
+export function setBbsManagerApi({ id, user_ids }) {
+  return request({
+    url: '/admin/s/bbs/setmanagers',
+    method: 'post',
+    data: { id, user_ids }
+  })
+}
+/**
+ * 帖子列表
+ */
+export function getPostListApi({ page, bbs_id }) {
+  return request({
+    url: '/admin/s/post',
+    method: 'get',
+    params: { page, bbs_id }
+  })
+}
+/**
+ * 取消/置顶帖子
+ */
+export function setPostTopStatusApi({ id, is_top }) {
+  return request({
+    url: '/admin/s/post/updateistop',
+    method: 'post',
+    data: { id, is_top }
+  })
+}
+/**
+ * 删除帖子
+ */
+export function deletePostByIdApi({ ids, bbs_id }) {
+  return request({
+    url: '/admin/s/post/delete',
+    method: 'post',
+    data: { ids, bbs_id }
+  })
+}
+/**
+ * 帖子评论列表
+ */
+export function getPostCommentApi({ page, post_id }) {
+  return request({
+    url: '/admin/s/post_comment',
+    method: 'get',
+    params: { page, post_id }
+  })
+}
+/**
+ * 删除评论
+ */
+export function deletePostCommentByIdApi({ ids, bbs_id }) {
+  return request({
+    url: '/admin/s/post_comment/delete',
+    method: 'post',
+    data: { ids, bbs_id }
+  })
+}

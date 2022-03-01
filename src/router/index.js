@@ -330,7 +330,16 @@ export const asyncRoutes = [
           title: '小社群',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/bbs.vue')
+        component: () => import('@/views/tool/bbs/bbs.vue')
+      },
+      {
+        path: 'bbs_post/:id',
+        name: 'BbsPost',
+        meta: {
+          title: '小社群帖子列表',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/tool/bbs/bbs-post.vue')
       },
       {
         path: 'question',
