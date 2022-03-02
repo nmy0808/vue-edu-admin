@@ -405,6 +405,42 @@ export const asyncRoutes = [
       }
     ]
   },
+  // setting
+  {
+    path: '/setting',
+    component: Layout,
+    meta: { title: '员工设置', icon: 'el-icon-setting' },
+    redirect: { name: 'SettingIndex' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'setting_index',
+        name: 'SettingIndex',
+        meta: {
+          title: '店铺设置',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/setting_index.vue')
+      },
+      {
+        path: 'staffs',
+        name: 'Staffs',
+        meta: {
+          title: '用户管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/staffs.vue')
+      },
+      {
+        path: 'role',
+        name: 'Role',
+        meta: {
+          title: '角色管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/role.vue')
+      }
+    ]
+  },
   // {
   //   path: '/permission',
   //   component: Layout,

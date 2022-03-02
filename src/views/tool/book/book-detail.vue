@@ -29,7 +29,7 @@
             :key="item.id"
             class="list-group-item chapter-item w-100 cursor-pointer
         justify-content-between items-center py-3 px-2 border-bottom"
-            :class="[activeIndex === index?'active':'']"
+            :class="[activeIndex === index?'selected':'']"
             @click="handleChangeMenu(item,index)"
           >
             <div class="d-inline-block" style="width: 93%;">
@@ -238,8 +238,9 @@ export default {
       width: 400px;
       font-size: 14px;
       overflow-y: auto;
-      .chapter-item.active{
+      .chapter-item.selected{
           color: #2f80ff;
+          border: none;
           background: #f9f9f9;
           font-weight: bold;
       }

@@ -1,38 +1,59 @@
 import request from '@/utils/request'
 
-export function getRoutes() {
+// export function getRoutes() {
+//   return request({
+//     url: '/vue-element-admin/routes',
+//     method: 'get'
+//   })
+// }
+
+// export function getRoles() {
+//   return request({
+//     url: '/vue-element-admin/roles',
+//     method: 'get'
+//   })
+// }
+
+// export function addRole(data) {
+//   return request({
+//     url: '/vue-element-admin/role',
+//     method: 'post',
+//     data
+//   })
+// }
+
+// export function updateRole(id, data) {
+//   return request({
+//     url: `/vue-element-admin/role/${id}`,
+//     method: 'put',
+//     data
+//   })
+// }
+
+// export function deleteRole(id) {
+//   return request({
+//     url: `/vue-element-admin/role/${id}`,
+//     method: 'delete'
+//   })
+// }
+
+/**
+ * 角色列表
+ */
+export function getRoleListApi(page) {
   return request({
-    url: '/vue-element-admin/routes',
-    method: 'get'
+    url: '/admin/role',
+    method: 'get',
+    params: { page }
   })
 }
-
-export function getRoles() {
+/**
+ * 查看角色权限
+ */
+export function getRolePermissionApi(id) {
   return request({
-    url: '/vue-element-admin/roles',
-    method: 'get'
-  })
-}
-
-export function addRole(data) {
-  return request({
-    url: '/vue-element-admin/role',
-    method: 'post',
-    data
-  })
-}
-
-export function updateRole(id, data) {
-  return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'put',
-    data
-  })
-}
-
-export function deleteRole(id) {
-  return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'delete'
+    url: '/admin/role/read',
+    method: 'get',
+    params: { id }
   })
 }
