@@ -19,6 +19,7 @@ const toolQuestion = require('./tool-question')
 const toolTestpaper = require('./tool-testpaper')
 const toolUserTest = require('./tool-user-test')
 const toolBbs = require('./tool-bbs')
+const toolBook = require('./tool-book')
 
 const mocks = [
   ...user,
@@ -38,7 +39,8 @@ const mocks = [
   ...toolQuestion,
   ...toolTestpaper,
   ...toolUserTest,
-  ...toolBbs
+  ...toolBbs,
+  ...toolBook
 ]
 
 // for front mock

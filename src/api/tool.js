@@ -25,7 +25,7 @@ export function addQuestionApi(options) {
   data.value = options.value
   return request({
     url: '/admin/s/question/save',
-    method: 'post',
+    method: 'get',
     data
   })
 }
@@ -299,5 +299,152 @@ export function deletePostCommentByIdApi({ ids, bbs_id }) {
     url: '/admin/s/post_comment/delete',
     method: 'post',
     data: { ids, bbs_id }
+  })
+}
+// ----------------------------------------------------------------
+// 电子书
+/**
+ * 新增电子书
+ * 	状态：0禁用1启用
+ */
+export function addBookApi(options) {
+  const params = {}
+  params.title = options.title
+  params.cover = options.cover
+  params.try = options.try
+  params.price = options.price
+  params.t_price = options.t_price
+  params.status = options.status
+  return request({
+    url: '/admin/s/book/save',
+    method: 'post',
+    params
+  })
+}
+/**
+ * 更新电子书
+ * 	状态：0禁用1启用
+ */
+export function updateBookApi(options) {
+  const params = {}
+  params.id = options.id
+  params.title = options.title
+  params.cover = options.cover
+  params.try = options.try
+  params.price = options.price
+  params.t_price = options.t_price
+  params.status = options.status
+  return request({
+    url: '/admin/s/book/update',
+    method: 'post',
+    params
+  })
+}
+/**
+ * 电子书列表
+ */
+export function getBookListApi(options) {
+  const params = {}
+  params.page = options.page
+  params.status = options.status
+  params.keyword = options.keyword
+  return request({
+    url: '/admin/s/book',
+    method: 'get',
+    params
+  })
+}
+/**
+ * 上架/下架电子书
+ */
+export function setBookStatusApi(options) {
+  const data = {}
+  data.id = options.id
+  data.status = options.status
+  return request({
+    url: '/admin/s/book/updatestatus',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 电子书章节列表
+ */
+export function getBookChapterListApi(options) {
+  const params = {}
+  params.page = options.page
+  params.book_id = options.book_id
+  return request({
+    url: '/admin/s/book_detail',
+    method: 'get',
+    params
+  })
+}
+/**
+ * 新增电子书章节
+ */
+export function addBookChapterApi(options) {
+  const data = {}
+  // 	电子书id
+  data.book_id = options.book_id
+  // 	章节名称
+  data.title = options.title
+  // 	是否免费：0否1是
+  data.isfree = options.isfree
+  return request({
+    url: '/admin/s/book_detail/save',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 更新电子书章节
+ */
+export function updateBookChapterApi(options) {
+  const data = {}
+  // 	章节id
+  data.id = options.id
+  // 	电子书id
+  data.book_id = options.book_id
+  // 	章节名称
+  data.title = options.title
+  // 	是否免费：0否1是
+  data.isfree = options.isfree
+  // 	章节内容
+  data.content = options.content
+  return request({
+    url: '/admin/s/book_detail/update',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 电子书章节排序
+ */
+export function sortBookChapterApi(options) {
+  const data = {}
+  // 章节id组成的一维数组
+  data.ids = options.ids
+  // 电子书id
+  data.book_id = options.book_id
+  return request({
+    url: '/admin/s/book_detail/sort',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 删除电子书章节
+ */
+export function deleteBookChapterApi(options) {
+  const data = {}
+  // 章节id组成的一维数组
+  data.id = options.ids
+  // 电子书id
+  data.book_id = options.book_id
+  return request({
+    url: '/admin/s/book_detail/delete',
+    method: 'post',
+    data
   })
 }

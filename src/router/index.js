@@ -390,7 +390,18 @@ export const asyncRoutes = [
           title: '电子书',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/book.vue')
+        component: () => import('@/views/tool/book/index.vue')
+      },
+      {
+        path: 'book_detail/:id',
+        name: 'BookDetail',
+        hidden: true,
+        meta: {
+          title: '电子书章节管理',
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/book'
+        },
+        component: () => import('@/views/tool/book/book-detail.vue')
       }
     ]
   },
