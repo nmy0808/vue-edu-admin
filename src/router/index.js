@@ -71,15 +71,20 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/school_select',
+    meta: { title: '选择网校', icon: 'tree-table' },
+    component: () => import('@/views/school/index')
+  },
+  {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: { name: 'Dashboard' },
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '概览', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -425,7 +430,7 @@ export const asyncRoutes = [
         path: 'staffs',
         name: 'Staffs',
         meta: {
-          title: '用户管理',
+          title: '员工管理',
           roles: ['admin', 'editor']
         },
         component: () => import('@/views/setting/staffs.vue')

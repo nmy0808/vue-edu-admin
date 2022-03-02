@@ -42,7 +42,7 @@ export default {
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: 'Dashboard' }}].concat(
+        matched = [{ path: '/dashboard', meta: { title: '概览' }}].concat(
           matched
         )
       }

@@ -1,20 +1,16 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-
+    <template v-if="!isSchoolPage">
+      <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      <breadcrumb id="breadcrumb-container" class="" />
+    </template>
+    <div v-else class="ms-3">
+      我的网校列表
+    </div>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
-
         <error-log class="errLog-container right-menu-item hover-effect" />
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-        <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
 
       </template>
 
@@ -55,6 +51,7 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 
 export default {
+  name: 'Navbar',
   components: {
     Breadcrumb,
     Hamburger,
@@ -62,6 +59,12 @@ export default {
     Screenfull,
     SizeSelect,
     Search
+  },
+  props: {
+    isSchoolPage: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters([
@@ -84,6 +87,8 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
+  display: flex;
+  align-items: center;
   height: 50px;
   overflow: hidden;
   position: relative;
@@ -91,11 +96,10 @@ export default {
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
-    line-height: 46px;
     height: 100%;
-    float: left;
     cursor: pointer;
     transition: background .3s;
+    margin-top: 3px;
     -webkit-tap-highlight-color:transparent;
 
     &:hover {
@@ -104,25 +108,34 @@ export default {
   }
 
   .breadcrumb-container {
-    float: left;
+    // float: left;
   }
 
   .errLog-container {
     display: inline-block;
     vertical-align: top;
   }
-
+.app-breadcrumb{
+  height: 30px;
+  line-height: 30px;
+  margin-right: auto;
+}
   .right-menu {
-    float: right;
+    // float: right;
     height: 100%;
-    line-height: 50px;
-
+    width: 150px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: end;
     &:focus {
       outline: none;
     }
 
     .right-menu-item {
-      display: inline-block;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
       padding: 0 8px;
       height: 100%;
       font-size: 18px;
@@ -143,7 +156,6 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
 
         .user-avatar {
@@ -157,7 +169,7 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 15px;
           font-size: 12px;
         }
       }
