@@ -152,7 +152,7 @@ export default {
         const fetches = this.checkedList.map(it => {
           const params = {}
           params.id = it.userId
-          params.no_comment = it.val
+          params.no_comment = val
           return setSchoolUserCommentApi(params)
         })
         axios.all(fetches.filter(it => it.no_comment !== val))
@@ -173,7 +173,7 @@ export default {
         const fetches = this.checkedList.map(it => {
           const params = {}
           params.id = it.userId
-          params.no_access = it.val
+          params.no_access = val
           return setSchoolUserAccessApi(params)
         })
         axios.all(fetches.filter(it => it.no_access !== val))
