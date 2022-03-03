@@ -122,7 +122,7 @@ export default {
         this.temp.end_time = end
       },
       get() {
-        return [this.temp.start_time, this.temp.end_time]
+        return [new Date(this.temp.start_time), new Date(this.temp.end_time)]
       }
     }
   },

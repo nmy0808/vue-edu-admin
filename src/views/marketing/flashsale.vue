@@ -44,10 +44,11 @@
         </el-button>
         <el-button
           size="mini"
-          :type="row.status===3 ? 'success' : 'info'"
+          :type="row.status===1 ? 'danger' : 'info'"
+          :disabled="row.status!==1"
           @click="handleModifyStatus(row, row.status)"
         >
-          {{ row.status===3 ? '上架' : '下架' }}
+          {{ row.status===1 ? '下架' : '上架' }}
         </el-button>
       </template>
     </base-table>
@@ -135,10 +136,10 @@ export default {
     async handleModifyStatus(row, status) {
       const params = {}
       params.id = row.id
-      if (status === 3) {
+      if (status === 0) {
         params.status = 1
       } else {
-        params.status = 3
+        params.status = 0
       }
       await setFlashsaleStatusApi(params)
       const targetRow = this.list.find(it => it.id === row.id) || {}

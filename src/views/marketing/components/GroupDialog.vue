@@ -136,7 +136,7 @@ export default {
         this.temp.end_time = end
       },
       get() {
-        return [this.temp.start_time, this.temp.end_time]
+        return [new Date(this.temp.start_time), new Date(this.temp.end_time)]
       }
     }
   },
@@ -171,6 +171,7 @@ export default {
     show(updateObj) {
       if (updateObj) {
         const cloneOptions = this.temp = clone(updateObj, true)
+        console.log(cloneOptions)
       }
       this.dialogVisible = true
     },
