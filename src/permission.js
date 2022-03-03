@@ -23,22 +23,38 @@ router.beforeEach(async(to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({ path: '/school_select' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
+    } else if (to.path === '/school_select') {
+      // 判断如果是选择学校页
+      await store.dispatch('user/getInfo')
+      next()
+      NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      const hasMenus = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         next()
       } else {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch('user/getInfo')
-
-          // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
+          const { roles, menus } = await store.dispatch('user/getInfo')
+          // const data = await store.dispatch('user/getInfo')
+          // console.log(data)
+          // 动态生成路由
+          const accessRoutes = await store.dispatch(
+            'permission/generateRoutes',
+            roles
+          )
+          if (roles.length === 0 && menus.length === 0) {
+            Message.error('你没有访问权限')
+            next({
+              ...from
+            })
+            return NProgress.done()
+          }
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
 
