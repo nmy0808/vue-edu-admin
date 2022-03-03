@@ -27,7 +27,8 @@
           <!-- :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove" -->
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
             :limit="1"
             list-type="picture-card"
             :file-list="coverFileList"
@@ -42,10 +43,14 @@
         </el-form-item>
         <el-form-item label="视频文件" prop="content">
           <el-upload
+            :on-exceed="handleExceed"
             accept=".mp4,.avi,.wmv,.mov,.flv,.rmvb,.3gp,.m4v,.mkv"
             :multiple="false"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
+            :before-upload="handleBeforeUploadMp4"
             :on-change="handleContentChange"
+            :on-remove="handleRemoveMp4"
             :file-list="contentFileList"
           >
             <el-button size="small" type="primary">点击上传</el-button>
@@ -54,10 +59,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="课程价格">
-          <el-input-number v-model="temp.price" :min="0" />
+          <el-input-number v-model="temp.price" :min="0" :precision="2" :step="0.1" />
         </el-form-item>
         <el-form-item label="划线价格">
-          <el-input-number v-model="temp.t_price" :min="0" />
+          <el-input-number v-model="temp.t_price" :min="0" :precision="2" :step="0.1" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="temp.status">
@@ -72,12 +77,14 @@
 <script>
 import { clone, omit, pick } from 'xe-utils'
 import Tinymce from '@/components/Tinymce'
-
+import { addCourseApi, updateCourseApi } from '@/api/course'
+import uploadOptions from '@/utils/upload.js'
 export default {
   name: 'AudioDialog',
   components: { Tinymce },
   data() {
     return {
+      uploadOptions,
       dialogVisible: false,
       temp: {
         id: null,
@@ -117,16 +124,21 @@ export default {
   methods: {
     // 提交
     handleSubmit() {
-      this.$refs['editFormCom'].validate((valid) => {
+      this.$refs['editFormCom'].validate(async(valid) => {
         if (valid) {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            console.log(this.fetchParams)
+            await updateCourseApi(this.fetchParams)
           } else {
-            console.log(this.fetchParams)
             // 添加提交
+            await addCourseApi(this.fetchParams)
           }
+          this.$message({
+            message: id ? '编辑成功' : '新增成功',
+            type: 'success'
+          })
+          this.getList()
           this.dialogVisible = false
         }
       })
@@ -137,10 +149,20 @@ export default {
     },
     handleRemoveCover(response) {
       this.coverFileList = []
+      this.temp.content = ''
     },
-    //  mp3_文件处理
+    handleBeforeUploadMp4() {
+    },
+    //  mp4_文件处理
     handleUploadContentChange(response) {
-      this.temp.content = response.data
+      const data = response.data
+      this.temp.content = data
+      this.contentFileList = [{ name: data, url: data }]
+      this.$refs['editFormCom'].validateField('content')
+    },
+    handleRemoveMp4() {
+      this.temp.content = ''
+      this.contentFileList = []
     },
     handleContentChange() {
       console.log('change')
@@ -149,6 +171,7 @@ export default {
       if (updateObj) {
         const cloneOptions = this.temp = clone(updateObj, true)
         this.coverFileList = [{ name: cloneOptions.cover, url: cloneOptions.cover }]
+        this.contentFileList = [{ name: cloneOptions.content, url: cloneOptions.content }]
         setTimeout(() => {
           this.$refs.tinymce1.setContent(updateObj.try)
         }, 100)
@@ -164,7 +187,13 @@ export default {
       this.$refs.tinymce1.setContent('')
       this.coverFileList = []
       this.contentFileList = []
-      Object.assign(this.temp, this.$options.data().temp)
+      Object.assign(this.$data.temp, this.$options.data().temp)
+    },
+    handleExceed() {
+      this.$message({
+        message: '最多上传一张图片, 如替换请先删除之前图片再上传',
+        type: 'error'
+      })
     }
   }
 }

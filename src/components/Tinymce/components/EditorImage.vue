@@ -11,8 +11,9 @@
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
+        :action="uploadOptions.action"
+        :headers="uploadOptions.headers"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -31,7 +32,7 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
-
+import uploadOptions from '@/utils/upload.js'
 export default {
   name: 'EditorSlideUpload',
   props: {
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      uploadOptions,
       dialogVisible: false,
       listObj: {},
       fileList: []
@@ -67,7 +69,7 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = response.data
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }

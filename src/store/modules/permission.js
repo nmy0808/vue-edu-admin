@@ -14,23 +14,25 @@ function hasPermission(roles, route) {
 }
 
 /**
- * Filter asynchronous routing tables by recursion
+ * 过滤有效路由
  * @param routes asyncRoutes
- * @param roles
+ * @param menus
  */
-export function filterAsyncRoutes(routes, roles) {
+function filterAsyncRoutes(routes, menus) {
   const res = []
-
-  routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
-      if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+  routes.forEach(r => {
+    menus.forEach(m => {
+      const rName = r.name
+      const mName = m.name
+      if (rName === mName) {
+        res.push(r)
+        if (r.children && r.children.length > 0) {
+          const list = filterAsyncRoutes(r.children, m.children)
+          r.children = list
+        }
       }
-      res.push(tmp)
-    }
+    })
   })
-
   return res
 }
 
@@ -47,14 +49,9 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit }, menus) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
+      const accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })

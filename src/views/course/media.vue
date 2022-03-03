@@ -53,7 +53,7 @@
       </template>
       <template #col_created_time="{ row }">
         <span>{{
-          row.created_time | parseTime('{y}-{m}-{d} {h}:{i}:{m}')
+          conversionTimeFormat(row.created_time)
         }}</span>
       </template>
       <template #col_actions="{ row, $index }">
@@ -89,16 +89,21 @@
 <script>
 import BaseTable from '@/components/BaseTable'
 import MediaDialog from './components/media-dialog.vue'
-import { clone, merge } from 'xe-utils'
+import { clone, merge, toDateString } from 'xe-utils'
 import { deleteCourseByIdApi, getCourseListApi, updateCourseStatusApi } from '@/api/course'
 export default {
-  name: '',
+  provide() {
+    return {
+      getList: this.getList
+    }
+  },
   components: { BaseTable, MediaDialog },
   data() {
     return {
       columns: [{
         field: 'id',
         title: 'id',
+        align: 'center',
         width: 100
       },
       {
@@ -108,11 +113,13 @@ export default {
       },
       {
         field: 'sub_count',
+        align: 'center',
         title: '订阅量',
         width: 120
       },
       {
         field: 'status',
+        align: 'center',
         title: '状态',
         width: 80,
         slots: { default: 'col_status' }
@@ -120,11 +127,13 @@ export default {
       {
         field: 'created_time',
         title: '创建时间',
+        align: 'center',
         width: 180,
         slots: { default: 'col_created_time' }
       },
       {
         title: '操作',
+        align: 'center',
         width: 210,
         slots: { default: 'col_actions' }
       }],
@@ -179,6 +188,7 @@ export default {
     // 删除
     async handleDelete(row, index) {
       await deleteCourseByIdApi([row.id])
+      this.getList()
       this.$notify({
         title: '删除',
         message: '删除成功',
@@ -190,6 +200,10 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

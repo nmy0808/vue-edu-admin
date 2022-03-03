@@ -58,7 +58,7 @@
       </template>
       <template #col_created_time="{ row }">
         <span>{{
-          row.created_time | parseTime('{y}-{m}-{d} {h}:{i}:{m}')
+          conversionTimeFormat(row.created_time)
         }}</span>
       </template>
       <template #col_actions="{ row, $index }">
@@ -97,10 +97,14 @@
 <script>
 import BaseTable from '@/components/BaseTable'
 import ColumnDialog from './components/column-dialog.vue'
-import { clone, merge } from 'xe-utils'
+import { clone, merge, toDateString } from 'xe-utils'
 import { deleteColumnByIdApi, getColumnListApi, updateColumnStatusApi } from '@/api/column'
 export default {
-  name: '',
+  provide() {
+    return {
+      getList: this.getList
+    }
+  },
   components: { BaseTable, ColumnDialog },
   data() {
     return {
@@ -192,6 +196,7 @@ export default {
     // 删除
     async handleDelete(row, index) {
       await deleteColumnByIdApi([row.id])
+      this.getList()
       this.$notify({
         title: '删除',
         message: '删除成功',
@@ -211,6 +216,10 @@ export default {
           column_id
         }
       })
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

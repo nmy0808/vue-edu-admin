@@ -104,13 +104,14 @@ export default {
   methods: {
     init() {
       // dynamic load tinymce from cdn
-      load(tinymceCDN, (err) => {
-        if (err) {
-          this.$message.error(err.message)
-          return
-        }
-        this.initTinymce()
-      })
+      // load(tinymceCDN, (err) => {
+      //   if (err) {
+      //     this.$message.error(err.message)
+      //     return
+      //   }
+      //   this.initTinymce()
+      // })
+      this.initTinymce()
     },
     initTinymce() {
       const _this = this

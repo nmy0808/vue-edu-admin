@@ -139,8 +139,8 @@ export function deleteColumnCourseApi({ ids, column_id }) {
  */
 export function getColumnCourseListApi({ column_id, page }) {
   const params = {}
-  params.schoolid = column_id
   params.page = page
+  params.column_id = column_id
   return request({
     url: '/admin/s/column_course',
     method: 'get',

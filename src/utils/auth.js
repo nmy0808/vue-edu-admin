@@ -13,3 +13,15 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+export function getSchoolId() {
+  return Cookies.get('schoolid')
+}
+
+export function setSchoolId(schoolid) {
+  return Cookies.set('schoolid', schoolid)
+}
+
+export function removeSchoolId() {
+  return Cookies.remove('schoolid')
+}
