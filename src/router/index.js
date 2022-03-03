@@ -89,16 +89,19 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/profile',
+    path: '/user',
     component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
+    redirect: { name: 'User' }, // 重定向地址，在面包屑中点击会重定向去的地址
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        path: 'user',
+        name: 'User',
+        meta: {
+          icon: 'el-icon-user-solid',
+          title: '用户',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/user')
       }
     ]
   }
@@ -162,23 +165,6 @@ export const asyncRoutes = [
           title: '专栏详情',
           activeMenu: '/course/column'
         }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: { name: 'User' }, // 重定向地址，在面包屑中点击会重定向去的地址
-    children: [
-      {
-        path: 'user',
-        name: 'User',
-        meta: {
-          icon: 'el-icon-user-solid',
-          title: '用户',
-          roles: ['admin', 'editor']
-        },
-        component: () => import('@/views/user')
       }
     ]
   },
@@ -427,8 +413,8 @@ export const asyncRoutes = [
       }
     ]
   },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () =>
