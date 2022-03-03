@@ -65,7 +65,7 @@ export function addCourseApi(options) {
   data.type = options.type
   data.status = options.status
   return request({
-    url: '/admin/s/course/update',
+    url: '/admin/s/course/save',
     method: 'post',
     data
   })

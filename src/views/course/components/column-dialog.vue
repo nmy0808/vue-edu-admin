@@ -33,6 +33,7 @@
             :file-list="coverFileList"
             :on-success="handleUploadCoverSuccess"
             :on-remove="handleRemoveCover"
+            :on-exceed="handleExceed"
           >
             <i class="el-icon-plus" />
           </el-upload>
@@ -44,10 +45,10 @@
           <tinymce ref="tinymce2" v-model="temp.content" :height="300" />
         </el-form-item>
         <el-form-item label="课程价格">
-          <el-input-number v-model="temp.price" :min="0" />
+          <el-input-number v-model="temp.price" :min="0" :precision="2" :step="0.1" />
         </el-form-item>
         <el-form-item label="划线价格">
-          <el-input-number v-model="temp.t_price" :min="0" />
+          <el-input-number v-model="temp.t_price" :min="0" :precision="2" :step="0.1" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="temp.status">
@@ -68,8 +69,10 @@
 <script>
 import { clone, omit, pick } from 'xe-utils'
 import Tinymce from '@/components/Tinymce'
+import { addColumnApi, updateColumnApi } from '@/api/column'
 
 export default {
+  inject: ['getList'],
   name: 'ColumnDialog',
   components: { Tinymce },
   data() {
@@ -113,16 +116,21 @@ export default {
   methods: {
     // 提交
     handleSubmit() {
-      this.$refs['editFormCom'].validate((valid) => {
+      this.$refs['editFormCom'].validate(async(valid) => {
         if (valid) {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            console.log(this.fetchParams)
+            await updateColumnApi(this.fetchParams)
           } else {
-            console.log(this.fetchParams)
             // 添加提交
+            await addColumnApi(this.fetchParams)
           }
+          this.$message({
+            message: id ? '编辑成功' : '新增成功',
+            type: 'success'
+          })
+          this.getList()
           this.dialogVisible = false
         }
       })
@@ -155,7 +163,13 @@ export default {
       this.$refs.tinymce2.setContent('')
       this.coverFileList = []
       this.contentFileList = []
-      Object.assign(this.temp, this.$options.data().temp)
+      Object.assign(this.$data.temp, this.$options.data().temp)
+    },
+    handleExceed() {
+      this.$message({
+        message: '最多上传一张图片, 如替换请先删除之前图片再上传',
+        type: 'error'
+      })
     }
   }
 }
