@@ -2,7 +2,7 @@ const Mock = require('mockjs')
 const { param2Obj } = require('./utils')
 
 const user = require('./user')
-const role = require('./role')
+const role = require('./role-mock')
 const article = require('./article')
 const search = require('./remote-search')
 const course = require('./course')
@@ -15,6 +15,13 @@ const renovation = require('./renovation')
 const marketingGroup = require('./marketing-group')
 const marketingFlashsale = require('./marketing-flashsale')
 const marketingCoupon = require('./marketing-coupon')
+const toolQuestion = require('./tool-question')
+const toolTestpaper = require('./tool-testpaper')
+const toolUserTest = require('./tool-user-test')
+const toolBbs = require('./tool-bbs')
+const toolBook = require('./tool-book')
+const school = require('./school')
+const schoolStaff = require('./school-staff')
 
 const mocks = [
   ...user,
@@ -30,7 +37,14 @@ const mocks = [
   ...renovation,
   ...marketingGroup,
   ...marketingFlashsale,
-  ...marketingCoupon
+  ...marketingCoupon,
+  ...toolQuestion,
+  ...toolTestpaper,
+  ...toolUserTest,
+  ...toolBbs,
+  ...toolBook,
+  ...school,
+  ...schoolStaff
 ]
 
 // for front mock

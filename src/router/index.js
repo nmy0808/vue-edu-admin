@@ -71,15 +71,20 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/school_select',
+    meta: { title: '选择网校', icon: 'tree-table' },
+    component: () => import('@/views/school/index')
+  },
+  {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: { name: 'Dashboard' },
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '概览', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -320,7 +325,7 @@ export const asyncRoutes = [
   {
     path: '/tool',
     component: Layout,
-    meta: { title: '工具', icon: 'el-icon-s-order' },
+    meta: { title: '工具', icon: 'el-icon-s-platform' },
     redirect: { name: 'Bbs' }, // 重定向地址，在面包屑中点击会重定向去的地址
     children: [
       {
@@ -330,7 +335,18 @@ export const asyncRoutes = [
           title: '小社群',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/bbs.vue')
+        component: () => import('@/views/tool/bbs/bbs.vue')
+      },
+      {
+        path: 'bbs_post/:id',
+        name: 'BbsPost',
+        hidden: true,
+        meta: {
+          title: '小社群帖子列表',
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/bbs'
+        },
+        component: () => import('@/views/tool/bbs/bbs-post.vue')
       },
       {
         path: 'question',
@@ -348,7 +364,29 @@ export const asyncRoutes = [
           title: '试卷',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/testpaper.vue')
+        component: () => import('@/views/tool/testpaper/index.vue')
+      },
+      {
+        path: 'testpaper_form',
+        name: 'TestpaperForm',
+        hidden: true,
+        meta: {
+          title: '组卷',
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/testpaper'
+        },
+        component: () => import('@/views/tool/testpaper/testpaper_form.vue')
+      },
+      {
+        path: 'testpaper_manage',
+        name: 'TestpaperManage',
+        hidden: true,
+        meta: {
+          title: '考试管理',
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/testpaper'
+        },
+        component: () => import('@/views/tool/testpaper/testpaper_manage.vue')
       },
       {
         path: 'book',
@@ -357,7 +395,54 @@ export const asyncRoutes = [
           title: '电子书',
           roles: ['admin', 'editor']
         },
-        component: () => import('@/views/tool/book.vue')
+        component: () => import('@/views/tool/book/index.vue')
+      },
+      {
+        path: 'book_detail/:id',
+        name: 'BookDetail',
+        hidden: true,
+        meta: {
+          title: '电子书章节管理',
+          roles: ['admin', 'editor'],
+          activeMenu: '/tool/book'
+        },
+        component: () => import('@/views/tool/book/book-detail.vue')
+      }
+    ]
+  },
+  // setting
+  {
+    path: '/setting',
+    component: Layout,
+    meta: { title: '员工设置', icon: 'el-icon-setting' },
+    redirect: { name: 'SettingIndex' }, // 重定向地址，在面包屑中点击会重定向去的地址
+    children: [
+      {
+        path: 'setting_index',
+        name: 'SettingIndex',
+        meta: {
+          title: '店铺设置',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/setting_index.vue')
+      },
+      {
+        path: 'staffs',
+        name: 'Staffs',
+        meta: {
+          title: '员工管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/staffs.vue')
+      },
+      {
+        path: 'role',
+        name: 'Role',
+        meta: {
+          title: '角色管理',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/setting/role.vue')
       }
     ]
   },
