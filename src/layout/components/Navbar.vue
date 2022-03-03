@@ -4,7 +4,7 @@
       <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       <breadcrumb id="breadcrumb-container" class="" />
     </template>
-    <div v-else class="ms-3">
+    <div v-else class="ms-4 fs-5">
       我的网校列表
     </div>
     <div class="right-menu">

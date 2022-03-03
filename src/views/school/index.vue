@@ -1,6 +1,12 @@
 <template>
   <div class="school-page">
     <navbar is-school-page />
+    <el-button
+      class="m-4 my-0 mt-3"
+      type="primary"
+      icon="el-icon-plus"
+      @click="$refs.schoolDialogCom.open()"
+    >新增网校</el-button>
     <div class="app-container d-flex flex-wrap w-100">
       <el-row :gutter="10">
         <el-col
@@ -17,22 +23,36 @@
         </el-col>
       </el-row>
     </div>
+    <pagination
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getSchoolList"
+    />
+    <school-dialog ref="schoolDialogCom" />
   </div>
 
 </template>
 <script>
 import { Navbar } from '@/layout/components'
 import { getSchoolListApi } from '@/api/school'
+import SchoolDialog from './components/SchoolDialog.vue'
+import Pagination from '@/components/Pagination'
 
 export default {
-  components: { Navbar },
+  provide() {
+    return {
+      getList: this.getSchoolList
+    }
+  },
+  components: { Navbar, Pagination, SchoolDialog },
   data() {
     return {
       list: [],
       listLoading: false,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 20
       },
       total: 0
     }
@@ -43,7 +63,7 @@ export default {
   methods: {
     async getSchoolList() {
       this.listLoading = true
-      const { data } = await getSchoolListApi(this.listQuery.page)
+      const { data } = await getSchoolListApi(this.listQuery)
       this.listLoading = false
       this.list = data.items
       this.total = data.total

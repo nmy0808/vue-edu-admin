@@ -3,11 +3,11 @@ import request from '@/utils/request'
 /**
  * 网校列表
  */
-export function getSchoolListApi({ page }) {
+export function getSchoolListApi({ page, limit }) {
   return request({
     url: '/admin/school',
     method: 'get',
-    params: { page }
+    params: { page, limit }
   })
 }
 
