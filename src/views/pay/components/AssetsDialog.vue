@@ -39,7 +39,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleConfirm">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="handleConfirm">{{ loading ?'提现中...' :'确定' }} </el-button>
       </div>
     </el-dialog>
   </div>
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      loading: false,
       temp: {
         // 价格
         price: '',
@@ -107,7 +108,13 @@ export default {
           const params = {}
           params.cash_id = this.temp.cash_id
           params.price = this.temp.price
+          this.loading = true
           await getCashApi(params)
+          this.$message({
+            message: '提现成功',
+            type: 'success'
+          })
+          this.loading = false
           this.close()
           this.$emit('confirm')
         }
