@@ -38,6 +38,7 @@ import { Navbar } from '@/layout/components'
 import { getSchoolListApi } from '@/api/school'
 import SchoolDialog from './components/SchoolDialog.vue'
 import Pagination from '@/components/Pagination'
+import { setSchoolId } from '@/utils/auth'
 
 export default {
   provide() {
@@ -69,6 +70,8 @@ export default {
       this.total = data.total
     },
     toPageHome(item) {
+      const schoolid = item.id
+      setSchoolId(schoolid)
       this.$router.push({ name: 'Dashboard' })
     }
   }

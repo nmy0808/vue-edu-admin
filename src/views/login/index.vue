@@ -224,8 +224,7 @@ export default {
               .dispatch('user/login', this.loginForm)
               .then(() => {
                 this.$router.push({
-                  path: this.redirect || '/school_select',
-                  query: this.otherQuery
+                  path: '/school_select'
                 })
                 this.loading = false
               })

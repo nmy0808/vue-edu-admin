@@ -18,7 +18,7 @@
             icon="el-icon-plus"
             @click="$router.push({name: 'TestpaperForm'})"
           >手动组卷</el-button>
-          <el-button type="primary" @click="$router.push({name: 'TestpaperManage'})">考试管理</el-button>
+          <el-button type="primary" @click="$router.push({name: 'TestpaperTest'})">考试管理</el-button>
           <el-input
             v-model="listQuery.title"
             class="w-25 me-2 ms-auto"

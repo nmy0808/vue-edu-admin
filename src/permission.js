@@ -46,7 +46,7 @@ router.beforeEach(async(to, from, next) => {
           // 动态生成路由
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
-            roles
+            menus
           )
           if (roles.length === 0 && menus.length === 0) {
             Message.error('你没有访问权限')
@@ -65,7 +65,7 @@ router.beforeEach(async(to, from, next) => {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
+          next(`/login`)
           NProgress.done()
         }
       }
@@ -78,7 +78,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      next(`/login`)
       NProgress.done()
     }
   }
