@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" icon="el-icon-plus" :disabled="tempList.length === 8" @click="add">新增轮播图</el-button>
+    <el-button type="primary" icon="el-icon-plus" :disabled="tempList.length === 8" @click="add">新增分类</el-button>
     <p class="mt-1 font-size-12 text-black-50">(最多8张, 以下列表支持拖拽)</p>
     <draggable
       :list="tempList"

@@ -41,6 +41,7 @@
 
 import { getSchoolInfoApi, updateSchoolApi } from '@/api/school'
 import { getSchoolId } from '@/utils/auth'
+import clip from '@/utils/clipboard'
 
 export default {
   components: {},
@@ -84,7 +85,9 @@ export default {
         })
       }).catch(err => err)
     },
-    handleCopy() {}
+    handleCopy(e) {
+      clip(this.school.weburl, e)
+    }
   }
 }
 </script>

@@ -32,7 +32,8 @@
         <div class="list-item d-flex cursor-move">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -85,6 +86,7 @@
 import CourseChoose from '@/components/CourseChoose'
 import draggable from 'vuedraggable'
 import { clone, isEqual } from 'xe-utils'
+import uploadOptions from '@/utils/upload.js'
 const id = 1
 export default {
   name: 'Simple',
@@ -102,6 +104,7 @@ export default {
   },
   data() {
     return {
+      uploadOptions,
       tempList: [],
       type: '',
       enabled: true,

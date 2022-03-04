@@ -102,8 +102,7 @@ export default {
     },
     async handleDeleteOrder(row) {
       const id = row.id
-      const params = { ids: [id] }
-      await deleteRenovationByIdsApi(params)
+      await deleteRenovationByIdsApi([id])
       this.getList()
       this.$message({
         message: '已删除',

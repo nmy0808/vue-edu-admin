@@ -105,11 +105,14 @@
         </div>
       </div>
     </div>
-    <sticky style="width: 450px">
+    <sticky style="width: 450px" v-loading="loading">
       <div class="wrapper-right item">
         <div class="rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
-            <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
+            <div class="p-0 m-0 font-size-14 text-weight-bold d-flex justify-content-between">
+              组件编辑
+              <el-button size="mini" type="primary" @click="handleSubmit">保存</el-button>
+            </div>
           </div>
           <MobileEditComponent
             ref="editComponent"
@@ -129,7 +132,7 @@
   </div>
 </template>
 <script>
-import { getRenovationDetailApi } from '@/api/renovation'
+import { getRenovationDetailApi, updateRenovationApi } from '@/api/renovation'
 import MobileEditComponent from '../components/MobileEditComponent.vue'
 import Search from '../components/Search.vue'
 import List from '../components/List.vue'
@@ -155,6 +158,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       temp: {
         id: null,
         title: '',
@@ -400,6 +404,21 @@ export default {
     },
     handlePromotionChange(newData) {
       this.temp.template[this.activeIndex].data = newData
+    },
+    // 保存
+    async handleSubmit() {
+      this.loading = true
+      try {
+        await updateRenovationApi(this.temp)
+        await this.getRenovationDetail()
+        this.loading = false
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+      } catch (error) {
+        this.loading = false
+      }
     }
   }
 }
