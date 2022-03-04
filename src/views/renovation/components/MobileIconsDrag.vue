@@ -21,7 +21,7 @@
           class="cursor-pointer"
           title="这是一段内容确定删除吗？"
           style="position:absolute;left:37%; bottom: 10px"
-          @onConfirm="deleteItem"
+          @onConfirm="deleteItem(index)"
         >
           <div
             slot="reference"
@@ -165,10 +165,10 @@ export default {
         url: ''
       })
     },
-    deleteItem: function(row) {
-      const index = this.tempList.filter(item => {
-        return isEqual(row, item)
-      })
+    deleteItem: function(index) {
+      // const index = this.tempList.filter(item => {
+      //   return isEqual(row, item)
+      // })
       this.tempList.splice(index, 1)
       this.$emit('change', this.tempList)
     },
