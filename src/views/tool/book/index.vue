@@ -173,8 +173,8 @@ export default {
         }
       })
       this.$message({
-        message: '操作成功',
-        type: 'success'
+        message: params.status ? '已上架' : '已下架',
+        type: params.status ? 'success' : 'error'
       })
     },
     // 搜索

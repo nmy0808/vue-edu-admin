@@ -16,20 +16,24 @@
           <div class="role-title">菜单:</div>
           <div class="role-desc">
             <el-tree
+              v-if="roleData.menus && roleData.menus.length"
               :props="{ children: 'children',
                         label: 'title'}"
               :data="roleData.menus"
             />
+            <span v-else>无</span>
           </div>
         </div>
         <div class="role-row">
           <div class="role-title">权限:</div>
           <div class="role-desc">
             <el-tree
+              v-if="roleData.accesses && roleData.accesses.length"
               :props="{ children: 'children',
                         label: 'title'}"
-              :data="roleData.menus"
+              :data="roleData.accesses"
             />
+            <span v-else>无</span>
           </div>
         </div>
       </div>
@@ -60,7 +64,6 @@ export default {
     // 查看角色权限
     async getRolePermission(id) {
       const { data } = await getRolePermissionApi(id)
-      console.log(data)
       this.roleData = data
     },
     async open(id) {
@@ -84,7 +87,6 @@ export default {
 }
 .role-row{
   display: flex;
-  line-height: 30px;
   margin-bottom: 40px;
   .role-title{
     font-weight: bold;

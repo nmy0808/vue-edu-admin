@@ -27,7 +27,8 @@
           <!-- :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove" -->
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
             :limit="1"
             list-type="picture-card"
             :file-list="coverFileList"
@@ -41,10 +42,20 @@
           <tinymce ref="tinymce1" v-model="temp.try" :height="300" />
         </el-form-item>
         <el-form-item label="课程价格">
-          <el-input-number v-model="temp.price" :min="0" />
+          <el-input-number
+            v-model="temp.price"
+            :min="0"
+            :precision="2"
+            :step="0.1"
+          />
         </el-form-item>
         <el-form-item label="划线价格">
-          <el-input-number v-model="temp.t_price" :min="0" />
+          <el-input-number
+            v-model="temp.t_price"
+            :min="0"
+            :precision="2"
+            :step="0.1"
+          />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="temp.status">
@@ -60,12 +71,13 @@
 import { clone, omit, pick } from 'xe-utils'
 import Tinymce from '@/components/Tinymce'
 import { addBookApi, updateBookApi } from '@/api/tool'
-
+import uploadOptions from '@/utils/upload.js'
 export default {
   inject: ['getList'],
   components: { Tinymce },
   data() {
     return {
+      uploadOptions,
       dialogVisible: false,
       temp: {
         id: null,

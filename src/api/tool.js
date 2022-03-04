@@ -177,8 +177,8 @@ export function getUserTestByIdApi(id) {
 export function getUserTestReadApi({ id, scores }) {
   return request({
     url: '/admin/s/user_test/update_readstatus',
-    method: 'get',
-    params: { id, scores }
+    method: 'post',
+    data: { id, scores }
   })
 }
 // ----------------------------------------------------------------
@@ -326,18 +326,18 @@ export function addBookApi(options) {
  * 	状态：0禁用1启用
  */
 export function updateBookApi(options) {
-  const params = {}
-  params.id = options.id
-  params.title = options.title
-  params.cover = options.cover
-  params.try = options.try
-  params.price = options.price
-  params.t_price = options.t_price
-  params.status = options.status
+  const data = {}
+  data.id = options.id
+  data.title = options.title
+  data.cover = options.cover
+  data.try = options.try
+  data.price = options.price
+  data.t_price = options.t_price
+  data.status = options.status
   return request({
     url: '/admin/s/book/update',
     method: 'post',
-    params
+    data
   })
 }
 /**
