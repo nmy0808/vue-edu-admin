@@ -56,8 +56,7 @@
         <el-button
           style="width: 80px;"
           class="me-2"
-          :plain="!!row.is_top"
-          type="primary"
+          :type="row.is_top ? 'info': 'primary'"
           size="mini"
           @click="setPostTopStatus(row)"
         >{{ row.is_top ? '取消置顶' : '置顶' }}</el-button>
@@ -149,12 +148,16 @@ export default {
     async setPostTopStatus(row) {
       const params = {}
       params.id = row.id
-      params.is_top = !row.is_top
-      await setPostTopStatusApi(params)
-      this.list.find(it => it.id === row.id).is_top = params.is_top
-      this.$message({
-        message: params.is_top ? '已置顶' : '取消置顶',
-        type: params.is_top ? 'success' : 'info'
+      params.is_top = +!row.is_top
+      this.listLoading = true
+      setPostTopStatusApi(params).then(_ => {
+        this.list.find(it => it.id === row.id).is_top = params.is_top
+        this.$message({
+          message: params.is_top ? '已置顶' : '取消置顶',
+          type: params.is_top ? 'success' : 'info'
+        })
+      }).finally(() => {
+        this.listLoading = false
       })
     },
     // 查看回复(帖子评论列表)

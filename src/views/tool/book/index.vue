@@ -62,7 +62,7 @@
         }}</span>
       </template>
       <template #col_actions="{ row, $index }">
-        <el-button type="warning" size="mini" @click="toPageBookDetail(row.id)">
+        <el-button type="warning" size="mini" @click="toPageBookDetail(row)">
           目录
         </el-button>
         <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -182,11 +182,15 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    toPageBookDetail(id) {
+    toPageBookDetail(row) {
+      const id = row.id
       this.$router.push({
         name: 'BookDetail',
         params: {
           id
+        },
+        query: {
+          book_name: row.title
         }
       })
     },

@@ -25,7 +25,7 @@ export function addQuestionApi(options) {
   data.value = options.value
   return request({
     url: '/admin/s/question/save',
-    method: 'get',
+    method: 'post',
     data
   })
 }
@@ -294,11 +294,11 @@ export function getPostCommentApi({ page, post_id }) {
 /**
  * 删除评论
  */
-export function deletePostCommentByIdApi({ ids, bbs_id }) {
+export function deletePostCommentByIdApi({ ids, post_id }) {
   return request({
     url: '/admin/s/post_comment/delete',
     method: 'post',
-    data: { ids, bbs_id }
+    data: { ids, post_id }
   })
 }
 // ----------------------------------------------------------------
@@ -439,7 +439,7 @@ export function sortBookChapterApi(options) {
 export function deleteBookChapterApi(options) {
   const data = {}
   // 章节id组成的一维数组
-  data.id = options.ids
+  data.ids = options.ids
   // 电子书id
   data.book_id = options.book_id
   return request({

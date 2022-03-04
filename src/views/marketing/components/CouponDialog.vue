@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import { clone, get, omit, pick, set } from 'xe-utils'
+import { clone, get, omit, pick, set, toDateString } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
 import { addCouponApi, updateCouponApi } from '@/api/marketing'
@@ -137,14 +137,19 @@ export default {
           })
           return
         }
+        const params = {
+          ...this.temp,
+          start_time: toDateString(this.temp.start_time),
+          end_time: toDateString(this.temp.end_time)
+        }
         if (flag) {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            await updateCouponApi(this.temp)
+            await updateCouponApi(params)
           } else {
           // 添加提交
-            await addCouponApi(this.temp)
+            await addCouponApi(params)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',

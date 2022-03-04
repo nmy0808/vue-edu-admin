@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import { clone } from 'xe-utils'
+import { clone, toDateString } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
 import { addFlashsaleApi, updateFlashsaleApi } from '@/api/marketing'
@@ -138,12 +138,17 @@ export default {
         }
         if (flag) {
           const id = this.temp.id
+          const params = {
+            ...this.temp,
+            start_time: toDateString(this.temp.start_time),
+            end_time: toDateString(this.temp.end_time)
+          }
           // 编辑提交
           if (id) {
-            await updateFlashsaleApi(this.temp)
+            await updateFlashsaleApi(params)
           } else {
           // 添加提交
-            await addFlashsaleApi(this.temp)
+            await addFlashsaleApi(params)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',

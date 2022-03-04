@@ -115,10 +115,10 @@ export default {
     },
     async handleDelete(row, index) {
       const id = row.id
-      const bbs_id = this.$route.params.id
+      const post_id = this.post_id
       const params = {}
       params.ids = [id]
-      params.bbs_id = bbs_id
+      params.post_id = post_id
       await deletePostCommentByIdApi(params)
       this.list.splice(index, 1)
       this.$message({
