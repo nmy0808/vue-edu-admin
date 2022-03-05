@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken , removeSchoolId} from '@/utils/auth'
+import { getToken, setToken, removeToken, removeSchoolId } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -8,7 +8,8 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
-  menus: []
+  menus: [],
+  isplatform: false
 }
 
 const mutations = {
@@ -29,6 +30,9 @@ const mutations = {
   },
   SET_MENUS: (state, menus) => {
     state.menus = menus
+  },
+  SET_ISPLATFORM: (state, isplatform) => {
+    state.isplatform = isplatform
   }
 }
 
@@ -61,7 +65,7 @@ const actions = {
             reject('Verification failed, please Login again.')
           }
 
-          const { roles, name, avatar, introduction, menus } = data
+          const { roles, name, avatar, introduction, menus, isplatform } = data
           // roles must be a non-empty array
           // if (!roles || roles.length <= 0) {
           //   reject('getInfo: roles must be a non-null array!')
@@ -70,7 +74,8 @@ const actions = {
           commit('SET_ROLES', roles)
           commit('SET_MENUS', menus)
           commit('SET_NAME', name)
-          commit('SET_AVATAR', avatar)
+          commit('SET_NAME', name)
+          commit('SET_ISPLATFORM', isplatform)
           commit('SET_INTRODUCTION', introduction)
           resolve(data)
         })

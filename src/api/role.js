@@ -57,3 +57,65 @@ export function getRolePermissionApi(id) {
     params: { id }
   })
 }
+/**
+ * 添加
+ */
+export function addRoleApi({ name, role_id, status, desc }) {
+  return request({
+    url: '/platform/role/save',
+    method: 'post',
+    data: { name, role_id, status, desc }
+  })
+}
+/**
+ * 删除
+ */
+export function deleteRoleByIdApi(ids) {
+  return request({
+    url: '/platform/role/delete',
+    method: 'post',
+    data: { ids }
+  })
+}
+/**
+ * 修改角色权限
+ */
+export function updateRoleByIdApi({ id, name, role_id, status, desc }) {
+  return request({
+    url: '/platform/role/update',
+    method: 'post',
+    data: { id, name, role_id, status, desc }
+  })
+}
+/**
+ * 获取对应角色的权限列表
+ */
+export function getRoleListByIdApi(id) {
+  return request({
+    url: '/platform/role/read',
+    method: 'get',
+    params: { id }
+  })
+}
+/**
+ * 获取权限列表
+ * 类型：rule权限，menu菜单
+ */
+export function getRoleListByTypeApi(type) {
+  return request({
+    url: '/platform/access',
+    method: 'get',
+    params: { type }
+  })
+}
+/**
+ * 给角色设置权限
+ * 类型：rule权限，menu菜单
+ */
+export function setPermissionsToRolesApi({ role_id, access_ids }) {
+  return request({
+    url: '/platform/role/setrules',
+    method: 'post',
+    data: { role_id, access_ids }
+  })
+}

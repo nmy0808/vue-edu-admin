@@ -18,6 +18,7 @@ import router from './router'
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
+import VueLazyload from 'vue-lazyload'
 
 import * as filters from './filters' // global filters
 /**
@@ -34,8 +35,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium', // set element-ui default size
-  locale: enLang // 如果使用中文，无需设置，请删除
+  size: 'medium' // set element-ui default size
+})
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80',
+  loading: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80',
+  attempt: 1
 })
 
 // register global utility filters
