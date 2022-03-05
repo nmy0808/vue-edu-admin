@@ -3,7 +3,7 @@
     class="d-flex justify-content-around renovation-edit-page app-container"
     style="background: #eeeeee; overflow-y: auto"
   >
-    <sticky style="width: 20%; min-width: 295px">
+    <sticky :sticky-top="100" style="width: 20%; min-width: 295px">
       <div>
         <div class="shadow-sm rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
@@ -42,7 +42,7 @@
       class="wrapper-main item edit-item px-3 py-3 pb-5"
       style="width: 500px"
     >
-      <div class="shadow-sm rounded-1 bg-white item-inner">
+      <div v-loading="detailLoading" class="shadow-sm rounded-1 bg-white item-inner">
         <!-- 中间面板区域 -->
         <div
           v-for="(item, index) in temp.template"
@@ -105,7 +105,7 @@
         </div>
       </div>
     </div>
-    <sticky style="width: 450px" v-loading="loading">
+    <sticky v-loading="loading || detailLoading" :sticky-top="100" style="width: 450px">
       <div class="wrapper-right item">
         <div class="rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
@@ -305,12 +305,18 @@ export default {
   methods: {
     // 查看模板详情
     async getRenovationDetail() {
-      const id = this.$route.params.id
-      const { data } = await getRenovationDetailApi(id)
-      this.temp.id = data.id
-      this.temp.title = data.title
-      this.temp.ismobile = data.ismobile
-      this.temp.template = data.template
+      this.detailLoading = true
+      try {
+        const id = this.$route.params.id
+        const { data } = await getRenovationDetailApi(id)
+        this.temp.id = data.id
+        this.temp.title = data.title
+        this.temp.ismobile = data.ismobile
+        this.temp.template = data.template
+      } catch (error) {
+        this.detailLoading = false
+      }
+      this.detailLoading = false
     },
     // 添加组件
     addComponentItem(template) {

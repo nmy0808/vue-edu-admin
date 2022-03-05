@@ -21,7 +21,7 @@
       </template>
       <template #col_content="{ row }">
         <div class="d-flex">
-          <img :src="row.value.cover" alt="" width="100px">
+          <img v-lazy="row.value.cover" alt="" width="100px" class="cover-rectangle">
           <div class="ms-2 d-flex flex-column font-size-12">
             <p class="p-0 m-0 fw-bold">
               {{ row.value.title }}

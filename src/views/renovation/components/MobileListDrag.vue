@@ -27,7 +27,7 @@
         />
       </el-popconfirm>
       <div class="list-item d-flex cursor-move">
-        <img width="140px" height="90px" :src="item.cover" alt="">
+        <img width="140px" height="90px" v-lazy="item.cover" alt="">
         <div class="ps-2">
           <div class="d-flex flex-column items-start justify-content-start">
             <span class="font-size-16 text-weight-bold overtext">{{ item.title }}</span>

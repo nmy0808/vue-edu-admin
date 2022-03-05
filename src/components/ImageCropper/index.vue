@@ -38,7 +38,7 @@
             <div class="vicp-img-container">
               <img
                 ref="img"
-                :src="sourceImgUrl"
+                v-lazy="sourceImgUrl"
                 :style="sourceImgStyle"
                 class="vicp-img"
                 draggable="false"
@@ -93,11 +93,11 @@
           <div v-show="true" class="vicp-crop-right">
             <div class="vicp-preview">
               <div v-if="!noSquare" class="vicp-preview-item">
-                <img :src="createImgUrl" :style="previewStyle">
+                <img v-lazy="createImgUrl" :style="previewStyle">
                 <span>{{ lang.preview }}</span>
               </div>
               <div v-if="!noCircle" class="vicp-preview-item vicp-preview-item-circle">
-                <img :src="createImgUrl" :style="previewStyle">
+                <img v-lazy="createImgUrl" :style="previewStyle">
                 <span>{{ lang.preview }}</span>
               </div>
             </div>

@@ -39,7 +39,7 @@
             />
             <img
               v-else
-              :src="temp.value.cover"
+              v-lazy="temp.value.cover"
               class="card-img-top"
               alt=""
             >

@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <!-- 专栏详情 -->
-    <el-card class="shadow-none" shadow="always">
+    <el-card v-loading="detailLoading" class="shadow-none" shadow="always">
       <div class="d-flex justify-content-between">
         <!-- left -->
         <div style="width: 200px">
           <img
+            v-lazy="detailData.cover"
             class="shadow-sm"
             style="width: 200px; display: inline-block"
-            :src="detailData.cover"
             alt=""
           >
         </div>
@@ -71,7 +71,7 @@
       </template>
       <template #col_content="{row}">
         <div class="d-flex">
-          <img :src="row.cover" alt="" width="100px">
+          <img v-lazy="row.cover" class="cover-rectangle" alt="" width="100px">
           <div class="ms-2 d-flex flex-column h7">
             <p class="p-0 m-0">
               {{ row.title }}
@@ -154,6 +154,7 @@ export default {
         updated_time: ''
       },
       listLoading: false,
+      detailLoading: false,
       list: [],
       listQuery: {
         page: 1,
@@ -185,16 +186,24 @@ export default {
   methods: {
     // 渲染专栏详细信息
     async getColumnDetail() {
+      this.detailLoading = true
       this.detailData = (await getColumnDetailApi(this.column_id)).data
+      this.detailLoading = false
     },
     // 渲染专栏目录列表
     async getList() {
-      const params = {}
-      params.column_id = this.column_id
-      params.page = this.listQuery.page
-      const { items, total } = (await getColumnCourseListApi(params)).data
-      this.list = items
-      this.total = total
+      this.listLoading = true
+      try {
+        const params = {}
+        params.column_id = this.column_id
+        params.page = this.listQuery.page
+        const { items, total } = (await getColumnCourseListApi(params)).data
+        this.list = items
+        this.total = total
+      } catch (error) {
+        this.listLoading = false
+      }
+      this.listLoading = false
     },
     // 修改专栏更新状态
     async updateColumnISendStatus() {
@@ -232,6 +241,7 @@ export default {
     },
     // 处理拖拽
     async handleDragEnd(list) {
+      this.listLoading = true
       const params = {}
       params.column_id = this.column_id
       params.ids = list.map(it => it.id)
@@ -258,19 +268,27 @@ export default {
           type: 'warning'
         })
       }
+      this.listLoading = false
     },
     // 删除专栏目录
     async handleDeleteColumnCourse(id) {
-      const params = {}
-      params.column_id = this.column_id
-      params.ids = [id]
-      await deleteColumnCourseApi(params)
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 600
-      })
+      this.listLoading = true
+      try {
+        const params = {}
+        params.column_id = this.column_id
+        params.ids = [id]
+        await deleteColumnCourseApi(params)
+        await this.getList()
+        this.$message({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 600
+        })
+      } catch (error) {
+        this.listLoading = false
+      }
+      this.listLoading = false
     },
     // 新建目录, 打开窗口选择
     handleOpenAddDialog() {
@@ -278,17 +296,24 @@ export default {
     },
     // 打开窗口后, 触发的确认事件
     async handleConfirmChoose(rows) {
-      const params = []
-      rows.map(it => {
-        const param = {}
-        param.column_id = this.column_id
-        param.course_id = it.id
-        params.push(param)
-      })
-      const fetches = params.map(it => addColumnCourseApi(it))
-      axios.all(fetches).then(res => {
-        this.list = this.list.concat(rows)
-      })
+      this.listLoading = true
+      try {
+        const params = []
+        rows.map(it => {
+          const param = {}
+          param.column_id = this.column_id
+          param.course_id = it.id
+          params.push(param)
+        })
+        const fetches = params.map(it => addColumnCourseApi(it))
+        axios.all(fetches).then(async res => {
+          this.list = this.list.concat(rows)
+          await this.getList()
+        })
+      } catch (error) {
+        this.listLoading = false
+      }
+      this.listLoading = false
       this.$message({
         message: '添加成功',
         type: 'success'

@@ -31,14 +31,14 @@
         >
           <p class="fs-6">{{ item.text }}</p>
           <template v-for="(image,iIndex) in item.images">
-            <img :key="iIndex" height="80px" width="80px" class="me-2 mb-2" :src="image" alt="">
+            <img :key="iIndex" height="80px" width="80px" class="me-2 mb-2" v-lazy="image" alt="">
           </template>
           <el-tag slot="reference" effect="light" class="me-2 cursor-pointer" type="">{{ item.text }}</el-tag>
         </el-popover>
         <!-- <div v-for="(item,index) in row.content" :key="index">
           <div style="height: 50px;">
             <template v-for="(image,iIndex) in item.images">
-              <img :key="iIndex" height="100%" class="me-2" :src="image" alt="">
+              <img :key="iIndex" height="100%" class="me-2" v-lazy="image" alt="">
             </template>
           </div>
         </div> -->

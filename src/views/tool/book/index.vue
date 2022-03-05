@@ -37,7 +37,7 @@
       </template>
       <template #col_title="{ row }">
         <div class="d-flex">
-          <img :src="row.cover" alt="" height="60px" class="my-2">
+          <img v-lazy="row.cover" alt="" height="60px" class="my-2 cover-square">
           <div class="ms-2 d-flex flex-column h7">
             <p class="p-0 m-0 mt-3">
               {{ row.title }}

@@ -16,7 +16,8 @@
           <template slot-scope="{ row }">
             <div style="display: flex">
               <img
-                :src="row.cover"
+                v-lazy="row.cover"
+                class="cover-rectangle"
                 style="width: 100px; height: 60px; margin-right: 10px"
               >
               <div

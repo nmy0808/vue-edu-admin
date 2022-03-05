@@ -7,7 +7,7 @@
       icon="el-icon-plus"
       @click="$refs.schoolDialogCom.open()"
     >新增网校</el-button>
-    <div class="app-container d-flex flex-wrap w-100">
+    <div class="app-container w-100">
       <el-row :gutter="10">
         <el-col
           v-for="item in list"

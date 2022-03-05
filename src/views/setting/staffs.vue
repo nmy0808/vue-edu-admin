@@ -21,7 +21,8 @@
       </template>
       <template #col_title="{ row }">
         <div class="d-flex">
-          <el-avatar size="medium" :src="row.user.avatar" />
+          <img v-lazy="row.user.avatar" alt="" class="el-avatar--circle el-avatar--medium">
+          <!-- <el-avatar size="medium" :src="row.user.avatar" /> -->
           <div class="ms-2 d-flex flex-column h7">
             <p class="p-0 m-0 mt-1">
               {{ row.user.username }}

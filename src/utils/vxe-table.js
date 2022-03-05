@@ -4,7 +4,6 @@ import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 
 import 'vxe-table-plugin-element/dist/style.css'
 
-import XEUtils from 'xe-utils'
 import {
   // 核心
   VXETable,
@@ -50,12 +49,13 @@ import {
   Table
 } from 'vxe-table'
 import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
+import { toFormatString, get } from 'xe-utils'
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginExportXLSX)
 
 // // 按需加载的方式默认是不带国际化的，自定义国际化需要自行解析占位符 '{0}'，例如：
 VXETable.setup({
-  i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
+  i18n: (key, args) => toFormatString(get(zhCN, key), args)
 })
 
 // 表格功能
