@@ -124,7 +124,7 @@ export default {
         })
         this.getList()
       } catch (error) {
-        console.log(error)
+        this.listLoading = false
       }
       this.listLoading = false
     },

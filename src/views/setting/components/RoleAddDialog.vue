@@ -64,7 +64,6 @@ export default {
     },
     async handleConfirm(row) {
       const id = this.temp.id
-      console.log(id)
       try {
         if (id) {
           await updateRoleByIdApi(this.temp)

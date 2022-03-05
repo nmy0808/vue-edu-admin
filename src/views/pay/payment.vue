@@ -111,7 +111,7 @@ export default {
           type: 'success'
         })
       } catch (error) {
-        console.log(error)
+        this.listLoading = false
       }
       this.listLoading = false
     },

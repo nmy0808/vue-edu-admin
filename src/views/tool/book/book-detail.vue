@@ -170,7 +170,6 @@ export default {
         const params = {}
         params.book_id = this.book_id
         params.ids = [item.id]
-        console.log(params)
         const { data } = await deleteBookChapterApi(params)
         if (this.activeIndex === index) {
           this.getList()

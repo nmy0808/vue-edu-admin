@@ -163,7 +163,6 @@ export default {
       const params = {}
       params.id = this.temp.id
       params.scores = this.temp.values.map(item => item.score)
-      console.log(params)
       await getUserTestReadApi(params)
       // 刷新列表
       await this.getList()

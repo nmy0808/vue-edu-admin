@@ -177,7 +177,6 @@ export default {
     show(updateObj) {
       if (updateObj) {
         const cloneOptions = this.temp = clone(updateObj, true)
-        console.log(cloneOptions)
       }
       this.dialogVisible = true
     },

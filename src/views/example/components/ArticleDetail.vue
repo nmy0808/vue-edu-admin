@@ -181,18 +181,13 @@ export default {
     fetchData(id) {
       fetchArticle(id).then(response => {
         this.postForm = response.data
-
         // just for test
         this.postForm.title += `   Article Id:${this.postForm.id}`
         this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
         // set tagsview title
         this.setTagsViewTitle()
-
         // set page title
         this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
       })
     },
     setTagsViewTitle() {
@@ -205,7 +200,6 @@ export default {
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
-      console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
