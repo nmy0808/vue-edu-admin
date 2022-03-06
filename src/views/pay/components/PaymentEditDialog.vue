@@ -127,3 +127,8 @@ export default {
   }
 }
 </script>
+<style>
+.distpicker-address-wrapper select{
+  font-size:12px !important;
+}
+</style>

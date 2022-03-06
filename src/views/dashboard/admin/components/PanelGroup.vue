@@ -7,8 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
+            今日收入
           </div>
-          <count-to :start-val="0" :end-val="detail.today_income" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="detail.today_income" :duration="1600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -21,7 +22,7 @@
           <div class="card-panel-text">
             今日付费用户
           </div>
-          <count-to :start-val="0" :end-val="detail.today_pay_user" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="detail.today_pay_user" :duration="1000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -34,7 +35,7 @@
           <div class="card-panel-text">
             总付费用户
           </div>
-          <count-to :start-val="0" :end-val="detail.total_pay_user" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="detail.total_pay_user" :duration="1200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -47,7 +48,7 @@
           <div class="card-panel-text">
             可提现（元）
           </div>
-          <count-to :start-val="+0" :end-val="+detail.balance" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="+0" :end-val="+detail.balance" :duration="1000" class="card-panel-num" />
         </div>
       </div>
     </el-col>

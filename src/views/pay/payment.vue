@@ -26,6 +26,7 @@
           slot="reference"
           size="mini"
           type="primary"
+          class="me-2"
           @click="handleOpenEdit(row)"
         >
           编辑

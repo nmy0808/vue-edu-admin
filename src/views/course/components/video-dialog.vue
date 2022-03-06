@@ -82,6 +82,7 @@ import Tinymce from '@/components/Tinymce'
 import { addCourseApi, updateCourseApi } from '@/api/course'
 import uploadOptions from '@/utils/upload.js'
 export default {
+  inject: ['getList'],
   name: 'AudioDialog',
   components: { Tinymce },
   data() {
