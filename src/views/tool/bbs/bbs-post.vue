@@ -31,14 +31,14 @@
         >
           <p class="fs-6">{{ item.text }}</p>
           <template v-for="(image,iIndex) in item.images">
-            <img :key="iIndex" height="80px" width="80px" class="me-2 mb-2" :src="image" alt="">
+            <img :key="iIndex" height="80px" width="80px" class="me-2 mb-2" v-lazy="image" alt="">
           </template>
           <el-tag slot="reference" effect="light" class="me-2 cursor-pointer" type="">{{ item.text }}</el-tag>
         </el-popover>
         <!-- <div v-for="(item,index) in row.content" :key="index">
           <div style="height: 50px;">
             <template v-for="(image,iIndex) in item.images">
-              <img :key="iIndex" height="100%" class="me-2" :src="image" alt="">
+              <img :key="iIndex" height="100%" class="me-2" v-lazy="image" alt="">
             </template>
           </div>
         </div> -->
@@ -56,8 +56,7 @@
         <el-button
           style="width: 80px;"
           class="me-2"
-          :plain="!!row.is_top"
-          type="primary"
+          :type="row.is_top ? 'info': 'primary'"
           size="mini"
           @click="setPostTopStatus(row)"
         >{{ row.is_top ? '取消置顶' : '置顶' }}</el-button>
@@ -149,12 +148,16 @@ export default {
     async setPostTopStatus(row) {
       const params = {}
       params.id = row.id
-      params.is_top = !row.is_top
-      await setPostTopStatusApi(params)
-      this.list.find(it => it.id === row.id).is_top = params.is_top
-      this.$message({
-        message: params.is_top ? '已置顶' : '取消置顶',
-        type: params.is_top ? 'success' : 'info'
+      params.is_top = +!row.is_top
+      this.listLoading = true
+      setPostTopStatusApi(params).then(_ => {
+        this.list.find(it => it.id === row.id).is_top = params.is_top
+        this.$message({
+          message: params.is_top ? '已置顶' : '取消置顶',
+          type: params.is_top ? 'success' : 'info'
+        })
+      }).finally(() => {
+        this.listLoading = false
       })
     },
     // 查看回复(帖子评论列表)

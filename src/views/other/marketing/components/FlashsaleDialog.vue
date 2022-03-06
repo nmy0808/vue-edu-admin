@@ -9,7 +9,7 @@
         <el-form-item label="类型" prop="type">
           <el-select
             v-model="temp.type"
-            placeholder="请选择关联类型"
+            placeholder="选择关联类型"
             @change="temp.value = null"
           >
             <el-option label="课程" value="course" />
@@ -39,7 +39,7 @@
             />
             <img
               v-else
-              :src="temp.value.cover"
+              v-lazy="temp.value.cover"
               class="card-img-top"
               alt=""
             >
@@ -49,16 +49,16 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="面值" prop="price">
+        <el-form-item label="秒杀价" prop="price">
           <el-input-number
             v-model="temp.price"
             :min="0"
             :precision="2"
           />
         </el-form-item>
-        <el-form-item label="发行量" prop="c_num">
+        <el-form-item label="秒杀人数" prop="s_num">
           <el-input-number
-            v-model="temp.c_num"
+            v-model="temp.s_num"
             :min="1"
           />
         </el-form-item>
@@ -83,10 +83,10 @@
   </div>
 </template>
 <script>
-import { clone, get, omit, pick, set } from 'xe-utils'
+import { clone, toDateString } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
-import { addCouponApi, updateCouponApi } from '@/api/marketing'
+import { addFlashsaleApi, updateFlashsaleApi } from '@/api/marketing'
 
 export default {
   name: 'MediaDialog',
@@ -99,9 +99,8 @@ export default {
         id: null,
         type: 'course', // 类型：course课程，column专栏
         goods_id: null, // 课程/专栏id
-        price: 0, // 面值
-        condition: 0, // 优惠券条件（满多少元）
-        c_num: 1, // 限制数量
+        price: 0,
+        s_num: 1, //  秒杀人数
         status: 1, // 状态：0禁用1启用
         start_time: '', //
         end_time: '',
@@ -123,7 +122,7 @@ export default {
         this.temp.end_time = end
       },
       get() {
-        return [this.temp.start_time, this.temp.end_time]
+        return [new Date(this.temp.start_time), new Date(this.temp.end_time)]
       }
     }
   },
@@ -139,18 +138,23 @@ export default {
         }
         if (flag) {
           const id = this.temp.id
+          const params = {
+            ...this.temp,
+            start_time: toDateString(this.temp.start_time),
+            end_time: toDateString(this.temp.end_time)
+          }
           // 编辑提交
           if (id) {
-            await updateCouponApi(this.temp)
+            await updateFlashsaleApi(params)
           } else {
           // 添加提交
-            await addCouponApi(this.temp)
+            await addFlashsaleApi(params)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',
             type: 'success'
           })
-          this.getList()
+          await this.getList()
           this.dialogVisible = false
         }
       })

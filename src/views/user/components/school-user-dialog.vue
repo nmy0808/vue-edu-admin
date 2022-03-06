@@ -46,6 +46,13 @@
             <template #col_1_title="{row}">
               <p>{{ row.title }}</p>
             </template>
+            <template #col_1_date="{row}">
+              <p>{{ conversionTimeFormat(row.created_time) }}</p>
+            </template>
+            <!--  -->
+            <template #col_2_date="{row}">
+              <p>{{ conversionTimeFormat(row.created_time) }}</p>
+            </template>
             <!--  -->
             <template #col_3_expand="{row}">
               <el-tag
@@ -65,6 +72,9 @@
                 type="info"
               >未支付</el-tag>
             </template>
+            <template #col_3_date="{row}">
+              <p>{{ conversionTimeFormat(row.pay_time) }}</p>
+            </template>
             <!--  -->
             <template #col_4_total_time="{ row }">
               <el-progress :percentage="parseInt(row.total_time)" />
@@ -75,6 +85,9 @@
             <!--  -->
             <template #col_5_type="{ row }">
               {{ courseMap[row.type] }}
+            </template>
+            <template #col_5_date="{row}">
+              <p>{{ conversionTimeFormat(row.created_time) }}</p>
             </template>
           </base-table>
         </el-tab-pane>
@@ -92,6 +105,7 @@
 <script>
 import BaseTable from '@/components/BaseTable'
 import { getSchoolUserHistoryApi, getSchoolUserOrderListByIdApi, getSchoolUserSubApi } from '@/api/school_user'
+import { toDateString } from 'xe-utils'
 export default {
   name: 'SchoolUserDialog',
   components: { BaseTable },
@@ -135,14 +149,14 @@ export default {
           columns: [
             { title: '课程标题 ', slots: { default: 'col_1_title' }, align: 'center' },
             { title: '购买价格 ', field: 'price', align: 'center', width: 190 },
-            { title: '购买时间 ', field: 'created_time', align: 'center', width: 190 }
+            { title: '购买时间 ', field: 'created_time', align: 'center', width: 190, slots: { default: 'col_1_date' }}
           ] },
         { name: '2', label: '专栏订阅',
           fetchApi: getSchoolUserSubApi,
           columns: [
             { title: '课程标题 ', field: 'title', align: 'center' },
             { title: '购买价格 ', field: 'price', align: 'center', width: 190 },
-            { title: '购买时间 ', field: 'created_time', align: 'center', width: 190 }
+            { title: '购买时间 ', field: 'created_time', align: 'center', width: 190, slots: { default: 'col_2_date' }}
           ]
 
         },
@@ -154,7 +168,7 @@ export default {
             { title: '订单号 ', field: 'no', align: 'center' },
             { title: '购买价格 ', field: 'total_price', align: 'center', width: 100 },
             { title: '状态', align: 'center', width: 87, slots: { default: 'col_3_status' }},
-            { title: '购买时间 ', field: 'pay_time', align: 'center', width: 190 }
+            { title: '购买时间 ', field: 'pay_time', align: 'center', width: 190, slots: { default: 'col_3_date' }}
           ]
 
         },
@@ -171,7 +185,7 @@ export default {
           fetchApi: getSchoolUserSubApi,
           columns: [
             { title: '评论内容', field: 'comment', align: 'center' },
-            { title: '评论时间 ', field: 'comment_time', align: 'center', width: 190 },
+            { title: '评论时间 ', field: 'comment_time', align: 'center', width: 190, slots: { default: 'col_1_date' }},
             { title: '课程标题 ', field: 'title', align: 'center' },
             { title: '类型 ', align: 'center', width: 100, slots: { default: 'col_5_type' }}
           ]
@@ -243,6 +257,10 @@ export default {
       this.$nextTick(() => {
         this.getList()
       })
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

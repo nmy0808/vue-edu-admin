@@ -30,7 +30,8 @@
           >
             <template #col_content="{row}">
               <div class="d-flex align-items-center">
-                <el-avatar class="me-2" size="medium" :src="row.user.avatar" />
+                <img v-lazy="row.user.avatar" alt="" class="el-avatar--circle el-avatar--medium">
+                <!-- <el-avatar class="me-2" size="medium" :src="row.user.avatar" /> -->
                 <div>{{ row.user.username || row.user.nickname }}</div>
               </div>
             </template>

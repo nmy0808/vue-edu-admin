@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" icon="el-icon-plus" :disabled="tempList.length === 8" @click="add">新增轮播图</el-button>
+    <el-button type="primary" icon="el-icon-plus" :disabled="tempList.length === 8" @click="add">新增分类</el-button>
     <p class="mt-1 font-size-12 text-black-50">(最多8张, 以下列表支持拖拽)</p>
     <draggable
       :list="tempList"
@@ -21,7 +21,7 @@
           class="cursor-pointer"
           title="这是一段内容确定删除吗？"
           style="position:absolute;left:37%; bottom: 10px"
-          @onConfirm="deleteItem"
+          @onConfirm="deleteItem(index)"
         >
           <div
             slot="reference"
@@ -38,8 +38,8 @@
             :before-upload="beforeAvatarUpload"
             @click.native="handleClickActiveIndex(index)"
           >
-            <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar"> -->
-            <img v-if="item.src" class="avatar" width="100%" height="100%" :src="item.src" alt="">
+            <!-- <img v-if="imageUrl" v-lazy="imageUrl" class="avatar"> -->
+            <img v-if="item.src" class="avatar" width="100%" height="100%" v-lazy="item.src" alt="">
             <div v-else style="width: 80px; height:80px;" class="d-flex align-items-center justify-content-center">
               <i class="h3 el-icon-plus avatar-uploader-icon" />
             </div>
@@ -165,10 +165,10 @@ export default {
         url: ''
       })
     },
-    deleteItem: function(row) {
-      const index = this.tempList.filter(item => {
-        return isEqual(row, item)
-      })
+    deleteItem: function(index) {
+      // const index = this.tempList.filter(item => {
+      //   return isEqual(row, item)
+      // })
       this.tempList.splice(index, 1)
       this.$emit('change', this.tempList)
     },

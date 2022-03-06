@@ -119,9 +119,7 @@ export default {
         type: 'warning'
       }).then(async() => {
         // 删除fetch
-        const params = {}
-        params.ids = [row.id]
-        await deleteBbsByIdsApi(params)
+        await deleteBbsByIdsApi([row.id])
         this.$message({
           type: 'success',
           message: '删除成功!'

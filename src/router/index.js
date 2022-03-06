@@ -89,16 +89,19 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/profile',
+    path: '/user',
     component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
+    redirect: { name: 'User' }, // 重定向地址，在面包屑中点击会重定向去的地址
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        path: 'user',
+        name: 'User',
+        meta: {
+          icon: 'el-icon-user-solid',
+          title: '用户',
+          roles: ['admin', 'editor']
+        },
+        component: () => import('@/views/user')
       }
     ]
   }
@@ -166,23 +169,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/user',
-    component: Layout,
-    redirect: { name: 'User' }, // 重定向地址，在面包屑中点击会重定向去的地址
-    children: [
-      {
-        path: 'user',
-        name: 'User',
-        meta: {
-          icon: 'el-icon-user-solid',
-          title: '用户',
-          roles: ['admin', 'editor']
-        },
-        component: () => import('@/views/user')
-      }
-    ]
-  },
-  {
     path: '/pay',
     component: Layout,
     name: 'Pay',
@@ -222,6 +208,7 @@ export const asyncRoutes = [
     path: '/renovation',
     component: Layout,
     name: 'Renovation',
+    alwaysShow: true,
     meta: { title: '可视化', icon: 'el-icon-s-open' },
     redirect: { name: 'MobileIndex' }, // 重定向地址，在面包屑中点击会重定向去的地址
     children: [
@@ -240,29 +227,30 @@ export const asyncRoutes = [
         hidden: true,
         meta: {
           title: '移动端装修',
-          roles: ['admin', 'editor']
+          roles: ['admin', 'editor'],
+          activeMenu: '/renovation/mobile'
         },
         component: () => import('@/views/renovation/mobile/edit.vue')
-      },
-      {
-        path: 'pc',
-        name: 'PcIndex',
-        meta: {
-          title: 'PC端',
-          roles: ['admin', 'editor']
-        },
-        component: () => import('@/views/renovation/pc/index.vue')
-      },
-      {
-        path: 'pc/edit/:id',
-        name: 'PcEdit',
-        hidden: true,
-        meta: {
-          title: 'PC端装修',
-          roles: ['admin', 'editor']
-        },
-        component: () => import('@/views/renovation/pc/edit.vue')
       }
+      // ,{
+      //   path: 'pc',
+      //   name: 'PcIndex',
+      //   meta: {
+      //     title: 'PC端',
+      //     roles: ['admin', 'editor']
+      //   },
+      //   component: () => import('@/views/renovation/pc/index.vue')
+      // },
+      // {
+      //   path: 'pc/edit/:id',
+      //   name: 'PcEdit',
+      //   hidden: true,
+      //   meta: {
+      //     title: 'PC端装修',
+      //     roles: ['admin', 'editor']
+      //   },
+      //   component: () => import('@/views/renovation/pc/edit.vue')
+      // }
     ]
   },
   {
@@ -426,9 +414,9 @@ export const asyncRoutes = [
         component: () => import('@/views/setting/role.vue')
       }
     ]
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
+  // // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () =>

@@ -215,14 +215,11 @@ export default {
       this.$emit('update:limit', val)
     },
     handleCurrentChange(val) {
-      console.log(val)
       this.$emit('update:page', val)
     },
     exportMethod(e) {
-      console.log(e)
     },
     importMethod(e) {
-      console.log(e)
     },
     // 导出文件
     exportEvent() {

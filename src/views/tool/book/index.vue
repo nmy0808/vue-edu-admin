@@ -37,7 +37,7 @@
       </template>
       <template #col_title="{ row }">
         <div class="d-flex">
-          <img :src="row.cover" alt="" height="60px" class="my-2">
+          <img v-lazy="row.cover" alt="" height="60px" class="my-2 cover-square">
           <div class="ms-2 d-flex flex-column h7">
             <p class="p-0 m-0 mt-3">
               {{ row.title }}
@@ -62,7 +62,7 @@
         }}</span>
       </template>
       <template #col_actions="{ row, $index }">
-        <el-button type="warning" size="mini" @click="toPageBookDetail(row.id)">
+        <el-button type="warning" size="mini" @click="toPageBookDetail(row)">
           目录
         </el-button>
         <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -173,8 +173,8 @@ export default {
         }
       })
       this.$message({
-        message: '操作成功',
-        type: 'success'
+        message: params.status ? '已上架' : '已下架',
+        type: params.status ? 'success' : 'error'
       })
     },
     // 搜索
@@ -182,11 +182,15 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    toPageBookDetail(id) {
+    toPageBookDetail(row) {
+      const id = row.id
       this.$router.push({
         name: 'BookDetail',
         params: {
           id
+        },
+        query: {
+          book_name: row.title
         }
       })
     },

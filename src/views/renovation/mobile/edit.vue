@@ -3,7 +3,7 @@
     class="d-flex justify-content-around renovation-edit-page app-container"
     style="background: #eeeeee; overflow-y: auto"
   >
-    <sticky style="width: 20%; min-width: 295px">
+    <sticky :sticky-top="100" style="width: 20%; min-width: 295px">
       <div>
         <div class="shadow-sm rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
@@ -42,7 +42,7 @@
       class="wrapper-main item edit-item px-3 py-3 pb-5"
       style="width: 500px"
     >
-      <div class="shadow-sm rounded-1 bg-white item-inner">
+      <div v-loading="detailLoading" class="shadow-sm rounded-1 bg-white item-inner">
         <!-- 中间面板区域 -->
         <div
           v-for="(item, index) in temp.template"
@@ -105,11 +105,14 @@
         </div>
       </div>
     </div>
-    <sticky style="width: 450px">
+    <sticky v-loading="loading || detailLoading" :sticky-top="100" style="width: 450px">
       <div class="wrapper-right item">
         <div class="rounded-1 bg-white item-inner">
           <div class="p-3 py-2" style="border-bottom: 1px solid #eeeeee">
-            <p class="p-0 m-0 font-size-14 text-weight-bold">组件编辑</p>
+            <div class="p-0 m-0 font-size-14 text-weight-bold d-flex justify-content-between">
+              组件编辑
+              <el-button size="mini" type="primary" @click="handleSubmit">保存</el-button>
+            </div>
           </div>
           <MobileEditComponent
             ref="editComponent"
@@ -129,7 +132,7 @@
   </div>
 </template>
 <script>
-import { getRenovationDetailApi } from '@/api/renovation'
+import { getRenovationDetailApi, updateRenovationApi } from '@/api/renovation'
 import MobileEditComponent from '../components/MobileEditComponent.vue'
 import Search from '../components/Search.vue'
 import List from '../components/List.vue'
@@ -155,6 +158,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       temp: {
         id: null,
         title: '',
@@ -301,12 +305,18 @@ export default {
   methods: {
     // 查看模板详情
     async getRenovationDetail() {
-      const id = this.$route.params.id
-      const { data } = await getRenovationDetailApi(id)
-      this.temp.id = data.id
-      this.temp.title = data.title
-      this.temp.ismobile = data.ismobile
-      this.temp.template = data.template
+      this.detailLoading = true
+      try {
+        const id = this.$route.params.id
+        const { data } = await getRenovationDetailApi(id)
+        this.temp.id = data.id
+        this.temp.title = data.title
+        this.temp.ismobile = data.ismobile
+        this.temp.template = data.template
+      } catch (error) {
+        this.detailLoading = false
+      }
+      this.detailLoading = false
     },
     // 添加组件
     addComponentItem(template) {
@@ -400,6 +410,21 @@ export default {
     },
     handlePromotionChange(newData) {
       this.temp.template[this.activeIndex].data = newData
+    },
+    // 保存
+    async handleSubmit() {
+      this.loading = true
+      try {
+        await updateRenovationApi(this.temp)
+        await this.getRenovationDetail()
+        this.loading = false
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+      } catch (error) {
+        this.loading = false
+      }
     }
   }
 }

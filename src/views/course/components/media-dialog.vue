@@ -35,6 +35,7 @@
             :on-success="handleUploadCoverSuccess"
             :on-remove="handleRemoveCover"
             :on-exceed="handleExceed"
+            accept='image/jpeg,image/png,image/gif'
           >
             <i class="el-icon-plus" />
           </el-upload>

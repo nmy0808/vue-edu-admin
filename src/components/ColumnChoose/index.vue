@@ -41,12 +41,12 @@
           >
             <template #col_content="{row}">
               <div class="d-flex">
-                <img :src="row.cover" alt="" width="100px">
+                <img v-lazy="row.cover" class="cover-rectangle" alt="">
                 <div class="ms-2 d-flex flex-column h7">
                   <p class="p-0 m-0">
                     {{ row.title }}
                   </p>
-                  <p class="p-0 m-0 mt-3 text-red">¥ {{row.price }}</p>
+                  <p class="p-0 m-0 mt-3 text-red">¥ {{ row.price }}</p>
                 </div>
               </div>
             </template>

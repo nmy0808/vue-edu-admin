@@ -15,7 +15,7 @@
           class="mb-2"
         >
           <div class="list-item border">
-            <img width="100%" height="90px" :src="item.cover" alt="">
+            <img width="100%" height="90px" v-lazy="item.cover" alt="">
             <div class="p-2">
               <div class="font-size-16 text-weight-bold pb-1 overtext">
                 {{ item.title }}

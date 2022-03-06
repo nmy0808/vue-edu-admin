@@ -25,7 +25,7 @@ export function addQuestionApi(options) {
   data.value = options.value
   return request({
     url: '/admin/s/question/save',
-    method: 'get',
+    method: 'post',
     data
   })
 }
@@ -177,8 +177,8 @@ export function getUserTestByIdApi(id) {
 export function getUserTestReadApi({ id, scores }) {
   return request({
     url: '/admin/s/user_test/update_readstatus',
-    method: 'get',
-    params: { id, scores }
+    method: 'post',
+    data: { id, scores }
   })
 }
 // ----------------------------------------------------------------
@@ -294,11 +294,11 @@ export function getPostCommentApi({ page, post_id }) {
 /**
  * 删除评论
  */
-export function deletePostCommentByIdApi({ ids, bbs_id }) {
+export function deletePostCommentByIdApi({ ids, post_id }) {
   return request({
     url: '/admin/s/post_comment/delete',
     method: 'post',
-    data: { ids, bbs_id }
+    data: { ids, post_id }
   })
 }
 // ----------------------------------------------------------------
@@ -326,18 +326,18 @@ export function addBookApi(options) {
  * 	状态：0禁用1启用
  */
 export function updateBookApi(options) {
-  const params = {}
-  params.id = options.id
-  params.title = options.title
-  params.cover = options.cover
-  params.try = options.try
-  params.price = options.price
-  params.t_price = options.t_price
-  params.status = options.status
+  const data = {}
+  data.id = options.id
+  data.title = options.title
+  data.cover = options.cover
+  data.try = options.try
+  data.price = options.price
+  data.t_price = options.t_price
+  data.status = options.status
   return request({
     url: '/admin/s/book/update',
     method: 'post',
-    params
+    data
   })
 }
 /**
@@ -439,7 +439,7 @@ export function sortBookChapterApi(options) {
 export function deleteBookChapterApi(options) {
   const data = {}
   // 章节id组成的一维数组
-  data.id = options.ids
+  data.ids = options.ids
   // 电子书id
   data.book_id = options.book_id
   return request({

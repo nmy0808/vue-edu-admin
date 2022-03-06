@@ -9,7 +9,7 @@
         <el-form-item label="类型" prop="type">
           <el-select
             v-model="temp.type"
-            placeholder="选择关联类型"
+            placeholder="请选择关联类型"
             @change="temp.value = null"
           >
             <el-option label="课程" value="course" />
@@ -39,7 +39,7 @@
             />
             <img
               v-else
-              :src="temp.value.cover"
+              v-lazy="temp.value.cover"
               class="card-img-top"
               alt=""
             >
@@ -49,18 +49,31 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="秒杀价" prop="price">
+        <el-form-item label="拼团价" prop="price">
           <el-input-number
             v-model="temp.price"
             :min="0"
             :precision="2"
+            :step="0.1"
           />
         </el-form-item>
-        <el-form-item label="秒杀人数" prop="s_num">
+        <el-form-item label="拼团人数" prop="p_num">
           <el-input-number
-            v-model="temp.s_num"
+            v-model="temp.p_num"
             :min="1"
           />
+        </el-form-item>
+        <el-form-item label="拼团时限" prop="expire">
+          <el-radio-group v-model="temp.expire">
+            <el-radio :label="24">24小时</el-radio>
+            <el-radio :label="48">48小时</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否开启凑团" prop="auto">
+          <el-radio-group v-model="temp.auto">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="活动时间范围">
           <el-date-picker
@@ -83,10 +96,10 @@
   </div>
 </template>
 <script>
-import { clone } from 'xe-utils'
+import { clone, get, omit, pick, set, toDateString } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
-import { addFlashsaleApi, updateFlashsaleApi } from '@/api/marketing'
+import { addGroupApi, updateGroupApi } from '@/api/marketing'
 
 export default {
   name: 'MediaDialog',
@@ -100,7 +113,9 @@ export default {
         type: 'course', // 类型：course课程，column专栏
         goods_id: null, // 课程/专栏id
         price: 0,
-        s_num: 1, //  秒杀人数
+        p_num: 1, // 成团人数
+        auto: 1, // 自动成团：0否1是
+        expire: 24, // 拼团时间
         status: 1, // 状态：0禁用1启用
         start_time: '', //
         end_time: '',
@@ -122,7 +137,7 @@ export default {
         this.temp.end_time = end
       },
       get() {
-        return [this.temp.start_time, this.temp.end_time]
+        return [new Date(this.temp.start_time), new Date(this.temp.end_time)]
       }
     }
   },
@@ -136,20 +151,25 @@ export default {
           })
           return
         }
+        const params = {
+          ...this.temp,
+          start_time: toDateString(this.temp.start_time),
+          end_time: toDateString(this.temp.end_time)
+        }
         if (flag) {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            await updateFlashsaleApi(this.temp)
+            await updateGroupApi(params)
           } else {
           // 添加提交
-            await addFlashsaleApi(this.temp)
+            await addGroupApi(params)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',
             type: 'success'
           })
-          await this.getList()
+          this.getList()
           this.dialogVisible = false
         }
       })

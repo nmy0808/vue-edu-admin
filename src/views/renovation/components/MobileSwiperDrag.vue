@@ -32,14 +32,15 @@
         <div class="list-item d-flex cursor-move">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             @click.native="handleClickActiveIndex(index)"
           >
-            <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar"> -->
-            <img v-if="item.src" class="avatar" width="140px" height="90px" :src="item.src" alt="">
+            <!-- <img v-if="imageUrl" v-lazy="imageUrl" class="avatar"> -->
+            <img v-if="item.src" class="avatar" width="140px" height="90px" v-lazy="item.src" alt="">
             <div v-else style="width: 140px; height:90px; background-color: #eee;" class="d-flex align-items-center justify-content-center">
               <i class="h3 el-icon-plus avatar-uploader-icon" />
             </div>
@@ -85,6 +86,7 @@
 import CourseChoose from '@/components/CourseChoose'
 import draggable from 'vuedraggable'
 import { clone, isEqual } from 'xe-utils'
+import uploadOptions from '@/utils/upload.js'
 const id = 1
 export default {
   name: 'Simple',
@@ -102,6 +104,7 @@ export default {
   },
   data() {
     return {
+      uploadOptions,
       tempList: [],
       type: '',
       enabled: true,

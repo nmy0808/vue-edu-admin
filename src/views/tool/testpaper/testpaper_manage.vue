@@ -58,8 +58,8 @@
           @onConfirm="handleDeleteRow(row)"
         >
           <el-button
-           style="width: 70px"
             slot="reference"
+            style="width: 70px"
             size="mini"
             type="danger"
           >

@@ -34,6 +34,7 @@
             :file-list="coverFileList"
             :on-success="handleUploadCoverSuccess"
             :on-remove="handleRemoveCover"
+            accept="image/jpeg,image/png,image/gif"
           >
             <i class="el-icon-plus" />
           </el-upload>
@@ -43,6 +44,7 @@
         </el-form-item>
         <el-form-item label="视频文件" prop="content">
           <el-upload
+            class="w-50"
             :on-exceed="handleExceed"
             accept=".mp4,.avi,.wmv,.mov,.flv,.rmvb,.3gp,.m4v,.mkv"
             :multiple="false"
@@ -80,6 +82,7 @@ import Tinymce from '@/components/Tinymce'
 import { addCourseApi, updateCourseApi } from '@/api/course'
 import uploadOptions from '@/utils/upload.js'
 export default {
+  inject: ['getList'],
   name: 'AudioDialog',
   components: { Tinymce },
   data() {
@@ -165,7 +168,6 @@ export default {
       this.contentFileList = []
     },
     handleContentChange() {
-      console.log('change')
     },
     show(updateObj) {
       if (updateObj) {

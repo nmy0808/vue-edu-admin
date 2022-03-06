@@ -38,14 +38,14 @@
           {{ orderTypeMap[row.type] }}</el-tag>
       </template>
       <template #col_status="{ row }">
-        <span :class="[{pendding:'text-primary',success:'text-success',fail:'text-danger'}[row.status]]">{{ orderStatusMap[row.status] }}</span>
+        <span :class="[{pendding:'text-primary',success:'text-success',fail:'text-danger', closed:'text-danger'}[row.status]]">{{ orderStatusMap[row.status] }}</span>
       </template>
       <template #col_price="{ row }">
         {{ row.total_price }} / <span class="text-danger text-weight-bold">{{ row.price }}</span>
       </template>
       <template #col_date="{ row }">
-        <p class="py-1 m-0">创建时间: {{ row.created_time }}</p>
-        <p class="py-1 m-0">支付时间: {{ row.pay_time }}</p>
+        <p class="py-1 m-0">创建时间: {{ conversionTimeFormat(row.created_time) }}</p>
+        <p v-if="row.pay_time" class="py-1 m-0">支付时间: {{ conversionTimeFormat(row.pay_time) }}</p>
       </template>
       <template #col_actions="{ row }">
         <el-popconfirm
@@ -67,6 +67,7 @@
 <script>
 import BaseTable from '@/components/BaseTable/'
 import { deleteOrderByIdsApi, getOrderListApi } from '@/api/order'
+import { toDateString } from 'xe-utils'
 export default {
   name: '',
   components: { BaseTable },
@@ -79,7 +80,8 @@ export default {
       orderStatusMap: {
         pendding: '待支付',
         success: '成功',
-        fail: '失败'
+        fail: '失败',
+        closed: '已取消'
       },
       list: [],
       listQuery: {
@@ -92,7 +94,7 @@ export default {
       listLoading: false,
       columns: [
         { type: 'checkbox', align: 'center', width: 60 },
-        { title: '订单号 ', field: 'no', align: 'center' },
+        { title: '订单号 ', field: 'no', align: 'center', width: 260 },
         { title: '商品名称 ', field: 'title', align: 'center' },
         { title: '订单类型', slots: { default: 'col_type' }, align: 'center', width: 100 },
         { title: '订单状态 ', slots: { default: 'col_status' }, width: 100, align: 'center' },
@@ -124,8 +126,8 @@ export default {
     },
     async handleDeleteOrder(row) {
       const id = row.id
-      const params = { ids: [id] }
-      await deleteOrderByIdsApi(params)
+      const ids = [id]
+      await deleteOrderByIdsApi(ids)
       this.getList()
       this.$message({
         message: '已删除',
@@ -138,6 +140,10 @@ export default {
     // 打印
     handleExport() {
       this.$refs.baseTableCom.exportEvent()
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

@@ -27,13 +27,13 @@ export function addRenovationApi({ title, ismobile }) {
 /**
  * 更新页面
  */
-export function updateRenovationApi({ id, title, ismobile, type, isdefault }) {
+export function updateRenovationApi({ id, title, ismobile, template }) {
   const data = {
     id,
     title,
     ismobile,
-    type,
-    isdefault
+    template
+
   }
   return request({
     url: '/admin/s/renovation/update',

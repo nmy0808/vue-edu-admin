@@ -27,13 +27,15 @@
           <!-- :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove" -->
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadOptions.action"
+            :headers="uploadOptions.headers"
             :limit="1"
             list-type="picture-card"
             :file-list="coverFileList"
             :on-success="handleUploadCoverSuccess"
             :on-remove="handleRemoveCover"
             :on-exceed="handleExceed"
+            accept="image/jpeg,image/png,image/gif"
           >
             <i class="el-icon-plus" />
           </el-upload>
@@ -70,13 +72,14 @@
 import { clone, omit, pick } from 'xe-utils'
 import Tinymce from '@/components/Tinymce'
 import { addColumnApi, updateColumnApi } from '@/api/column'
-
+import uploadOptions from '@/utils/upload.js'
 export default {
   inject: ['getList'],
   name: 'ColumnDialog',
   components: { Tinymce },
   data() {
     return {
+      uploadOptions,
       dialogVisible: false,
       temp: {
         id: null,

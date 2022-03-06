@@ -16,26 +16,19 @@
             type="primary"
             icon="el-icon-plus"
             @click="handleAdd"
-          >创建拼团</el-button>
+          >创建优惠券</el-button>
         </div>
       </template>
       <template #col_content="{ row }">
-        <div class="d-flex">
-          <img :src="row.value.cover" alt="" width="100px">
-          <div class="ms-2 d-flex flex-column font-size-12">
-            <p class="p-0 m-0 fw-bold">
-              {{ row.value.title }}
-            </p>
-            <div>
-              <p class="p-0 m-0 fs-7 text-decoration-line-through text-secondary opacity-50">原始价格: ¥{{ row.value.price }}</p>
-              <p class="p-0 m-0 fs-7 text-red">拼团价格: ¥{{ row.price }}</p>
-            </div>
-          </div>
-        </div>
+        {{ row.value.title }}
+      </template>
+      <template #col_date_range="{ row }">
+        <div>起始: {{ conversionTimeFormat(row.start_time) }}</div>
+        <div>结束: {{ conversionTimeFormat(row.end_time) }}</div>
       </template>
       <template #col_status="{ row }">
         <el-tag :type="row.status === 1 ? 'danger' : 'info'">
-          {{ row.status === 1 ? '拼团中' : statusMap[row.status] }}
+          {{ row.status === 1 ? '领取中' : statusMap[row.status] }}
         </el-tag>
       </template>
       <template #col_actions="{ row }">
@@ -44,24 +37,25 @@
         </el-button>
         <el-button
           size="mini"
-          :type="row.status===3 ? 'success' : 'info'"
+          :type="row.status===1 ? 'danger' : 'info'"
+          :disabled="row.status!==1"
           @click="handleModifyStatus(row, row.status)"
         >
-          {{ row.status===3 ? '上架' : '下架' }}
+          {{ row.status===1 ? '下架' : '上架' }}
         </el-button>
       </template>
     </base-table>
-    <GroupDialog ref="groupDiaCom" />
+    <CouponDialog ref="couponDialogCom" />
   </div>
 </template>
 <script>
 import BaseTable from '@/components/BaseTable'
-import GroupDialog from './components/GroupDialog.vue'
-import { clone, merge } from 'xe-utils'
-import { getGroupListApi, setGroupStatusApi } from '@/api/marketing'
+import CouponDialog from './components/CouponDialog.vue'
+import { clone, merge, toDateString } from 'xe-utils'
+import { getCouponListApi, setCouponStatusApi } from '@/api/marketing'
 export default {
   name: '',
-  components: { BaseTable, GroupDialog },
+  components: { BaseTable, CouponDialog },
   provide() {
     return {
       getList: this.getList
@@ -71,29 +65,55 @@ export default {
     return {
       statusMap: {
         0: '未开始',
-        1: '拼团中',
+        1: '领取中',
         2: '已结束',
         3: '已下架'
       },
       columns: [
         {
-          title: '拼团内容',
+          field: 'id',
+          title: '优惠券ID',
+          width: 220,
+          align: 'center'
+        },
+        {
+          field: 'price',
+          title: '面值',
+          width: 120,
+          align: 'center'
+        },
+        {
+          title: '适用课程',
+          align: 'center',
           slots: { default: 'col_content' }
         },
         {
-          field: 'p_num',
-          title: '成团人数',
-          width: 120, align: 'center'
+          title: '使用期限',
+          width: 260,
+          align: 'center',
+          slots: { default: 'col_date_range' }
         },
         {
-          field: 'expire',
-          title: '拼团时限(小时)',
-          width: 180, align: 'center'
+          field: 'c_num',
+          title: '发行量',
+          width: 120,
+          align: 'center'
         },
         {
-          field: 'status',
-          title: '拼团状态',
-          width: 80,
+          field: 'received_num',
+          title: '已领取',
+          width: 120,
+          align: 'center'
+        },
+        {
+          field: 'used_num',
+          title: '已使用',
+          width: 120,
+          align: 'center'
+        },
+        {
+          title: '状态',
+          width: 120,
           align: 'center',
           slots: { default: 'col_status' }
         },
@@ -120,27 +140,27 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const response = await getGroupListApi(this.listQuery.page)
+      const response = await getCouponListApi(this.listQuery.page)
       this.list = response.data.items
       this.total = response.data.total
       this.listLoading = false
     },
     handleAdd() {
-      this.$refs.groupDiaCom.show()
+      this.$refs.couponDialogCom.show()
     },
     handleUpdate(row) {
-      this.$refs.groupDiaCom.show(row)
+      this.$refs.couponDialogCom.show(row)
     },
     // 上下架
     async handleModifyStatus(row, status) {
       const params = {}
       params.id = row.id
-      if (status === 3) {
-        params.status = 1
+      if (status === 1) {
+        params.status = 0
       } else {
-        params.status = 3
+        params.status = 1
       }
-      await setGroupStatusApi(params)
+      await setCouponStatusApi(params)
       const targetRow = this.list.find(it => it.id === row.id) || {}
       targetRow.status = params.status
       const message = params.status === 1 ? '已上架' : '已下架'
@@ -149,6 +169,10 @@ export default {
         message,
         type
       })
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

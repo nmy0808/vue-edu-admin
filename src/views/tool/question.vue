@@ -16,9 +16,17 @@
         <div class="d-flex pb-3">
           <el-button type="primary" @click="openQuestionDialog">新增题目</el-button>
           <el-button type="danger" :disabled="checkedList.length === 0" @click="handleBatchDelete">批量删除</el-button>
-          <div class="me-auto ms-2">
-            <el-button type="success">导入项目</el-button>
-            <a class="ms-2 btn-link cursor-pointer align-bottom">下载导入模板</a>
+          <div class="me-auto ms-2 d-flex align-items-center">
+            <el-upload
+              :action="uploadOptions.importExcelAction"
+              :headers="uploadOptions.headers"
+              :show-file-list="false"
+              :on-success="handleUploadSuccess"
+              :on-error="handleUploadError"
+            >
+              <el-button type="success">导入项目</el-button>
+            </el-upload>
+            <a class="ms-2 btn-link cursor-pointer align-bottom" href="/QuestionImportTemplate.xlsx" target="_blank">下载导入模板</a>
           </div>
           <el-select v-model="listQuery.type" placeholder="类型">
             <el-option
@@ -37,7 +45,18 @@
       </template>
       <template #col_actions="{ row }">
         <el-button type="primary" size="mini" @click="openQuestionDialog(row)">编辑</el-button>
-        <el-button type="danger" size="mini">删除</el-button>
+        <el-popconfirm
+          title="这是一段内容确定删除吗？"
+          @onConfirm="handleDelete(row)"
+        >
+          <el-button
+            slot="reference"
+            size="mini"
+            type="danger"
+          >
+            删除
+          </el-button>
+        </el-popconfirm>
       </template>
     </base-table>
     <QuestionDialog ref="userInfoDialogCom" />
@@ -47,7 +66,7 @@
 import BaseTable from '@/components/BaseTable'
 import { deleteQuestionByIdsApi, getQuestionListApi } from '@/api/tool'
 import QuestionDialog from './components/QuestionDialog.vue'
-import axios from 'axios'
+import uploadOptions from '@/utils/upload.js'
 export default {
   name: 'QuestionPage',
   components: { BaseTable, QuestionDialog },
@@ -58,6 +77,7 @@ export default {
   },
   data() {
     return {
+      uploadOptions,
       listLoading: false,
       list: [],
       listQuery: {
@@ -93,6 +113,21 @@ export default {
       this.total = data.total
       this.listLoading = false
     },
+    async handleDelete(row) {
+      const ids = [row.id]
+      this.listLoading = true
+      try {
+        await deleteQuestionByIdsApi(ids)
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        })
+        this.getList()
+      } catch (error) {
+        this.listLoading = false
+      }
+      this.listLoading = false
+    },
     // 批量删除
     async handleBatchDelete() {
       const ids = this.checkedList.map(it => it.id)
@@ -113,6 +148,19 @@ export default {
     handleCheckboxChange({ records }) {
       console.log(records)
       this.checkedList = records
+    },
+    handleUploadSuccess(response) {
+      this.$message({
+        message: '上传成功',
+        type: 'success'
+      })
+      this.getList()
+    },
+    handleUploadError(response) {
+      this.$message({
+        message: '上传失败',
+        type: 'error'
+      })
     }
   }
 }

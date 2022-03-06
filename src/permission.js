@@ -50,6 +50,7 @@ router.beforeEach(async(to, from, next) => {
           )
           if (roles.length === 0 && menus.length === 0) {
             Message.error('你没有访问权限')
+            await store.dispatch('user/resetToken')
             next({
               ...from
             })

@@ -26,6 +26,7 @@
           slot="reference"
           size="mini"
           type="primary"
+          class="me-2"
           @click="handleOpenEdit(row)"
         >
           编辑
@@ -101,13 +102,19 @@ export default {
     },
     async handleDeleteOrder(row) {
       const id = row.id
-      const params = { ids: [id] }
-      await deleteBankAccountByIdsApi(params)
-      this.getList()
-      this.$message({
-        message: '已删除',
-        type: 'success'
-      })
+      const ids = [id]
+      this.listLoading = true
+      try {
+        await deleteBankAccountByIdsApi(ids)
+        await this.getList()
+        this.$message({
+          message: '已删除',
+          type: 'success'
+        })
+      } catch (error) {
+        this.listLoading = false
+      }
+      this.listLoading = false
     },
     // 编辑
     handleOpenEdit(row) {

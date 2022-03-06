@@ -34,6 +34,7 @@
             :file-list="coverFileList"
             :on-success="handleUploadCoverSuccess"
             :on-remove="handleRemoveCover"
+            accept="image/jpeg,image/png,image/gif"
           >
             <i class="el-icon-plus" />
           </el-upload>
@@ -53,6 +54,7 @@
             :before-upload="handleBeforeUploadMp3"
             :on-success="handleUploadContentChange"
             :on-remove="handleRemoveMp3"
+            class="w-50"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">
@@ -166,7 +168,6 @@ export default {
       this.$refs['editFormCom'].validateField('content')
     },
     handleContentChange() {
-      console.log('change')
     },
     show(updateObj) {
       if (updateObj) {

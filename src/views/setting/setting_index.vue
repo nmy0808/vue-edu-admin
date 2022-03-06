@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container settingIndex-page">
+  <div v-loading="loading" class="app-container settingIndex-page">
     <div class="setting-row">
       <div class="setting-col-left">店铺名称</div>
       <div class="setting-col-right border-bottom">
@@ -40,11 +40,14 @@
 <script>
 
 import { getSchoolInfoApi, updateSchoolApi } from '@/api/school'
+import { getSchoolId } from '@/utils/auth'
+import clip from '@/utils/clipboard'
 
 export default {
   components: {},
   data() {
     return {
+      loading: false,
       school: {}
     }
   },
@@ -57,9 +60,13 @@ export default {
      * 获取当前店铺设置
      */
     async getSchoolUserInfo() {
-      const params = {}
-      const { data } = await getSchoolInfoApi(params)
-      this.school = data
+      this.loading = true
+      getSchoolInfoApi(getSchoolId())
+        .then(({ data }) => {
+          this.school = data
+        }).finally(() => {
+          this.loading = false
+        })
     },
     handleSchoolName() {
       this.$prompt('请输入新的网校名称', '修改', {
@@ -69,6 +76,7 @@ export default {
       }).then(async({ value }) => {
         const params = {}
         params.name = value
+        params.id = getSchoolId()
         await updateSchoolApi(params)
         this.school.name = value
         this.$message({
@@ -77,7 +85,9 @@ export default {
         })
       }).catch(err => err)
     },
-    handleCopy() {}
+    handleCopy(e) {
+      clip(this.school.weburl, e)
+    }
   }
 }
 </script>

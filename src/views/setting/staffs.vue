@@ -21,7 +21,8 @@
       </template>
       <template #col_title="{ row }">
         <div class="d-flex">
-          <el-avatar size="medium" :src="row.user.avatar" />
+          <img v-lazy="row.user.avatar" alt="" class="el-avatar--circle el-avatar--medium">
+          <!-- <el-avatar size="medium" :src="row.user.avatar" /> -->
           <div class="ms-2 d-flex flex-column h7">
             <p class="p-0 m-0 mt-1">
               {{ row.user.username }}
@@ -31,7 +32,7 @@
       </template>
       <template #col_role="{ row }">
         <span>{{
-          row.roles ? row.roles.map(it=>it.name).join(", ") :''
+          convertRoleFormats(row.roles)
         }}</span>
       </template>
       <template #col_created_time="{ row }">
@@ -91,14 +92,14 @@ export default {
         {
           align: 'center',
           title: '角色',
-          width: 120,
+          width: 420,
           slots: { default: 'col_role' }
         },
         {
           field: 'created_time',
           title: '创建时间',
           align: 'center',
-          width: 180,
+          width: 280,
           slots: { default: 'col_created_time' }
         },
         {
@@ -143,18 +144,32 @@ export default {
     },
     // 配置权限
     async handleSetRole(row) {
+      this.listLoading = true
       const params = {}
       // 用户id
       params.id = row.id
       // 所有权限列表
-      params.roles = (await getRoleListApi(1)).data.items
-      // 当前用户的权限
-      params.role_ids = row.roles.map(it => it.id)
-      this.$refs.staffsPermissionDialogCom.open(params)
+      // params.roles = (await getRoleListApi(1)).data.items
+      getRoleListApi(1).then((res) => {
+        params.roles = res.data.items
+        // 当前用户的权限
+        params.role_ids = row.roles.map(it => it.id)
+        this.$refs.staffsPermissionDialogCom.open(params)
+      }).finally(() => {
+        this.listLoading = false
+      })
     },
     // 转换时间格式
     conversionTimeFormat(date) {
       return toDateString(date)
+    },
+    // 转换角色格式
+    convertRoleFormats(role) {
+      if (Array.isArray(role) && role.length > 0) {
+        return role.filter(it => it).map(it => it.name).join(', ')
+      } else {
+        return Array.isArray(role) ? '无' : role
+      }
     }
   }
 }

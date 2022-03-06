@@ -25,7 +25,7 @@
         <el-button
           slot="reference"
           size="mini"
-          type="primary"
+          type="success"
           @click="handleToPageRenovation(row.id)"
         >
           装修
@@ -53,6 +53,12 @@
           </el-button>
         </el-popconfirm>
       </template>
+      <template #col_created_time="{ row }">
+        {{ conversionTimeFormat(row.created_time) }}
+      </template>
+      <template #col_updated_time="{ row }">
+        {{ conversionTimeFormat(row.updated_time) }}
+      </template>
     </base-table>
     <title-dialog ref="titleDialogCom" />
   </div>
@@ -61,6 +67,7 @@
 import BaseTable from '@/components/BaseTable/'
 import { deleteRenovationByIdsApi, getRenovationListApi } from '@/api/renovation'
 import TitleDialog from '../components/TitleDialog.vue'
+import { toDateString } from 'xe-utils'
 export default {
   name: '',
   components: { BaseTable, TitleDialog },
@@ -81,8 +88,8 @@ export default {
       listLoading: false,
       columns: [
         { title: '页面名称', field: 'title', align: 'left' },
-        { title: '创建时间 ', field: 'created_time', align: 'center', width: 180 },
-        { title: '更新时间', field: 'updated_time', align: 'center', width: 180 },
+        { title: '创建时间 ', field: 'created_time', align: 'center', width: 180, slots: { default: 'col_created_time' }},
+        { title: '更新时间', field: 'updated_time', align: 'center', width: 180, slots: { default: 'col_updated_time' }},
         { title: '操作', width: 280, slots: { default: 'col_actions' }, align: 'center' }
       ]
     }
@@ -102,8 +109,7 @@ export default {
     },
     async handleDeleteOrder(row) {
       const id = row.id
-      const params = { ids: [id] }
-      await deleteRenovationByIdsApi(params)
+      await deleteRenovationByIdsApi([id])
       this.getList()
       this.$message({
         message: '已删除',
@@ -121,6 +127,10 @@ export default {
     // 跳转到装修页面
     handleToPageRenovation(id) {
       this.$router.push({ name: 'MobileEdit', params: { id }})
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }

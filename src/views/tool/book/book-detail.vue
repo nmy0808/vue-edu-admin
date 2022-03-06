@@ -1,7 +1,10 @@
 <template>
-  <div class="bookDetail-page">
+  <div v-loading="listLoading" class="bookDetail-page">
     <div class="bookDetail-header border-bottom">
-      <div class="me-auto">电子书标题</div>
+      <div class="me-auto">
+        <el-button class="me-2" type="primary" size="mini" icon="el-icon-back" @click="$router.push({name: 'Book'})" />
+        <span class="fs-5">{{ bookName }}</span>
+      </div>
       <div class="d-flex align-items-center">
         <span style="width: 140px;font-size:14px;">章节名称:</span> <el-input v-model="temp.title" class="mx-3" placeholder="请输入章节名称" />
         <el-checkbox
@@ -47,7 +50,8 @@
         </draggable>
 
         <el-button
-          type="primary"
+          type="success"
+          plain
           class="mt-2 mb-2"
           style="width: 360px; margin-left: 20px;"
           icon="el-icon-plus"
@@ -92,6 +96,9 @@ export default {
   computed: {
     book_id() {
       return this.$route.params.id
+    },
+    bookName() {
+      return this.$route.query.book_name
     }
   },
   watch: {
@@ -99,6 +106,7 @@ export default {
       handler() {
         setTimeout(() => {
           const item = this.list[this.activeIndex]
+          if (!item) return
           this.temp.content = item.content
           this.temp.title = item.title
           this.temp.isfree = item.isfree
@@ -127,7 +135,7 @@ export default {
       this.listLoading = true
       const params = {}
       params.page = this.listQuery.page
-      params.book_id = this.listQuery.book_id
+      params.book_id = this.book_id
       const response = await getBookChapterListApi(params)
       this.list = response.data.items
       this.total = response.data.total
@@ -142,15 +150,18 @@ export default {
     },
     // 新增章节
     async handleAddChapter() {
+      this.listLoading = true
       const params = {}
       params.book_id = this.book_id
       params.title = '新章节'
       params.isfree = 0
       const { data } = await addBookChapterApi(params)
+      this.listLoading = false
       this.list.push(data)
     },
     // 删除章节
     async handleDeleteChapter(item, index) {
+      this.listLoading = true
       this.$confirm(`是否删除标题为'${item.title}'的章节?`, '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -158,7 +169,7 @@ export default {
       }).then(async() => {
         const params = {}
         params.book_id = this.book_id
-        params.id = item.id
+        params.ids = [item.id]
         const { data } = await deleteBookChapterApi(params)
         if (this.activeIndex === index) {
           this.getList()
@@ -172,9 +183,11 @@ export default {
           this.list.splice(index, 1)
         }
       }).catch(() => {})
+      this.listLoading = false
     },
     // 提交
     async handleSubmit() {
+      this.listLoading = true
       const params = {}
       // 	章节id
       params.id = this.list[this.activeIndex].id
@@ -186,14 +199,19 @@ export default {
       params.isfree = this.temp.isfree
       // 	章节内容
       params.content = this.temp.content
-      await updateBookChapterApi(params)
-      this.getList()
-      this.$message({
-        message: '保存成功',
-        type: 'success'
-      })
+      updateBookChapterApi(params)
+        .then(_ => {
+          this.getList()
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+        }).finally(() => {
+          this.listLoading = false
+        })
     },
     async handleMove(e) {
+      this.listLoading = true
       const { newIndex, oldIndex } = e
       const params = {}
       params.ids = this.list.map(it => it.id)
@@ -210,6 +228,7 @@ export default {
       } catch (error) {
         await this.getList()
       }
+      this.listLoading = false
     }
   }
 }
@@ -228,7 +247,7 @@ export default {
   }
   .bookDetail-body{
     position:absolute;
-    top: 70px;
+    top: 150px;
     left: 0;
     right: 0;
     bottom: 0;

@@ -39,7 +39,7 @@
             />
             <img
               v-else
-              :src="temp.value.cover"
+              v-lazy="temp.value.cover"
               class="card-img-top"
               alt=""
             >
@@ -49,30 +49,18 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="拼团价" prop="price">
+        <el-form-item label="面值" prop="price">
           <el-input-number
             v-model="temp.price"
             :min="0"
             :precision="2"
           />
         </el-form-item>
-        <el-form-item label="拼团人数" prop="p_num">
+        <el-form-item label="发行量" prop="c_num">
           <el-input-number
-            v-model="temp.p_num"
+            v-model="temp.c_num"
             :min="1"
           />
-        </el-form-item>
-        <el-form-item label="拼团时限" prop="expire">
-          <el-radio-group v-model="temp.expire">
-            <el-radio :label="24">24小时</el-radio>
-            <el-radio :label="48">48小时</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否开启凑团" prop="auto">
-          <el-radio-group v-model="temp.auto">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="活动时间范围">
           <el-date-picker
@@ -95,10 +83,10 @@
   </div>
 </template>
 <script>
-import { clone, get, omit, pick, set } from 'xe-utils'
+import { clone, get, omit, pick, set, toDateString } from 'xe-utils'
 import CourseChoose from '@/components/CourseChoose'
 import ColumnChoose from '@/components/ColumnChoose'
-import { addGroupApi, updateGroupApi } from '@/api/marketing'
+import { addCouponApi, updateCouponApi } from '@/api/marketing'
 
 export default {
   name: 'MediaDialog',
@@ -111,10 +99,9 @@ export default {
         id: null,
         type: 'course', // 类型：course课程，column专栏
         goods_id: null, // 课程/专栏id
-        price: 0,
-        p_num: 1, // 成团人数
-        auto: 1, // 自动成团：0否1是
-        expire: 24, // 拼团时间
+        price: 0, // 面值
+        condition: 0, // 优惠券条件（满多少元）
+        c_num: 1, // 限制数量
         status: 1, // 状态：0禁用1启用
         start_time: '', //
         end_time: '',
@@ -136,7 +123,7 @@ export default {
         this.temp.end_time = end
       },
       get() {
-        return [this.temp.start_time, this.temp.end_time]
+        return [new Date(this.temp.start_time), new Date(this.temp.end_time)]
       }
     }
   },
@@ -150,14 +137,19 @@ export default {
           })
           return
         }
+        const params = {
+          ...this.temp,
+          start_time: toDateString(this.temp.start_time),
+          end_time: toDateString(this.temp.end_time)
+        }
         if (flag) {
           const id = this.temp.id
           // 编辑提交
           if (id) {
-            await updateGroupApi(this.temp)
+            await updateCouponApi(params)
           } else {
           // 添加提交
-            await addGroupApi(this.temp)
+            await addCouponApi(params)
           }
           this.$message({
             message: id ? '编辑成功' : '新增成功',

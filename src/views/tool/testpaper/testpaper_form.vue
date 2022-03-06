@@ -240,7 +240,7 @@ export default {
     // 重置数据
     handleReset() {
       if (this.id) {
-        this.temp = this.infoTemp
+        this.temp = clone(this.infoTemp, true)
       } else {
         Object.assign(this.$data.temp, this.$options.data().temp)
       }

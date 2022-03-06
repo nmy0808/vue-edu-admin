@@ -35,7 +35,8 @@
       </template>
       <template #col_user="{ row }">
         <div class="d-flex align-items-center">
-          <el-avatar :src="row.user.avatar" />
+          <img v-lazy="row.user.avatar" alt="" class="el-avatar--circle el-avatar--medium">
+          <!-- <el-avatar :src="row.user.avatar" /> -->
           <div class="ms-2">
             {{ row.user.username }}
           </div>
@@ -43,6 +44,9 @@
       </template>
       <template #col_total_consume="{ row }">
         <span class="text-danger">¥ {{ row.total_consume }}</span>
+      </template>
+       <template #col_created_date="{ row }">
+        <span>{{ conversionTimeFormat(row.created_time) }}</span>
       </template>
       <template #col_actions="{ row }">
         <el-button type="primary" size="mini" @click="openUserInfoDialog(row)">详情</el-button>
@@ -67,6 +71,7 @@ import BaseTable from '@/components/BaseTable'
 import { getSchoolUserInfoApi, getSchoolUserListApi, setSchoolUserAccessApi, setSchoolUserCommentApi } from '@/api/school_user'
 import SchoolUserDialog from './components/school-user-dialog.vue'
 import axios from 'axios'
+import { toDateString } from 'xe-utils'
 export default {
   name: '',
   components: { BaseTable, SchoolUserDialog },
@@ -85,7 +90,7 @@ export default {
         { type: 'checkbox', width: '40' },
         { title: '用户 ', slots: { default: 'col_user' }},
         { title: '消费总额 ', width: 120, align: 'center', slots: { default: 'col_total_consume' }},
-        { title: '创建时间 ', field: 'created_time', align: 'center', width: 190 },
+        { title: '创建时间 ', field: 'created_time', align: 'center', width: 190, slots: { default: 'col_created_date' }},
         { title: '操作 ', width: 210, align: 'center', slots: { default: 'col_actions' }}
       ]
     }
@@ -152,7 +157,7 @@ export default {
         const fetches = this.checkedList.map(it => {
           const params = {}
           params.id = it.userId
-          params.no_comment = it.val
+          params.no_comment = val
           return setSchoolUserCommentApi(params)
         })
         axios.all(fetches.filter(it => it.no_comment !== val))
@@ -173,7 +178,7 @@ export default {
         const fetches = this.checkedList.map(it => {
           const params = {}
           params.id = it.userId
-          params.no_access = it.val
+          params.no_access = val
           return setSchoolUserAccessApi(params)
         })
         axios.all(fetches.filter(it => it.no_access !== val))
@@ -190,11 +195,11 @@ export default {
     },
     handleCheckboxChange({ records }) {
       this.checkedList = records
+    },
+    // 转换时间格式
+    conversionTimeFormat(data) {
+      return toDateString(data)
     }
   }
 }
 </script>
-<style scoped lang="scss">
-.user-page {
-}
-</style>
